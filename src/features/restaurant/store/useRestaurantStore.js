@@ -1,0 +1,214 @@
+/**
+ * Store de Restaurant con Zustand
+ * Maneja el estado global del feature restaurant
+ */
+
+import { create } from 'zustand'
+import { restaurantService } from '../services/restaurantService.js'
+import { RESTAURANT_DEFAULTS } from '../constants/restaurantConstants.js'
+
+const useRestaurantStore = create((set, get) => ({
+  // State
+  restaurants: [],
+  currentRestaurant: null,
+  loading: false,
+  error: null,
+  pagination: {
+    page: 1,
+    pageSize: RESTAURANT_DEFAULTS.PAGE_SIZE,
+    total: 0,
+  },
+  filters: {
+    search: '',
+    status: null,
+    cuisineType: null,
+  },
+  sortBy: RESTAURANT_DEFAULTS.SORT_BY,
+  sortOrder: RESTAURANT_DEFAULTS.SORT_ORDER,
+
+  // Actions
+  setRestaurants: (restaurants) => set({ restaurants }),
+  setCurrentRestaurant: (restaurant) => set({ currentRestaurant: restaurant }),
+  setLoading: (loading) => set({ loading }),
+  setError: (error) => set({ error }),
+  setPagination: (pagination) =>
+    set((state) => ({
+      pagination: { ...state.pagination, ...pagination },
+    })),
+  setFilters: (filters) =>
+    set((state) => ({
+      filters: { ...state.filters, ...filters },
+    })),
+  setSortBy: (sortBy, sortOrder = 'asc') =>
+    set({ sortBy, sortOrder }),
+
+  clearError: () => set({ error: null }),
+  clearCurrentRestaurant: () => set({ currentRestaurant: null }),
+
+  // Async Actions
+  fetchRestaurants: async (params = {}) => {
+    set({ loading: true, error: null })
+    const result = await restaurantService.getRestaurants(params)
+
+    if (result.success) {
+      set({
+        restaurants: result.data,
+        loading: false,
+      })
+    } else {
+      set({
+        error: result.error,
+        loading: false,
+      })
+    }
+
+    return result
+  },
+
+  fetchRestaurantById: async (id) => {
+    set({ loading: true, error: null })
+    const result = await restaurantService.getRestaurantById(id)
+
+    if (result.success) {
+      set({
+        currentRestaurant: result.data,
+        loading: false,
+      })
+    } else {
+      set({
+        error: result.error,
+        loading: false,
+      })
+    }
+
+    return result
+  },
+
+  createRestaurant: async (restaurantData) => {
+    set({ loading: true, error: null })
+    const result = await restaurantService.createRestaurant(restaurantData)
+
+    if (result.success) {
+      set((state) => ({
+        restaurants: [...state.restaurants, result.data],
+        loading: false,
+      }))
+    } else {
+      set({
+        error: result.error,
+        loading: false,
+      })
+    }
+
+    return result
+  },
+
+  updateRestaurant: async (id, restaurantData) => {
+    set({ loading: true, error: null })
+    const result = await restaurantService.updateRestaurant(
+      id,
+      restaurantData
+    )
+
+    if (result.success) {
+      set((state) => ({
+        restaurants: state.restaurants.map((r) =>
+          r.id === id ? result.data : r
+        ),
+        currentRestaurant:
+          state.currentRestaurant?.id === id
+            ? result.data
+            : state.currentRestaurant,
+        loading: false,
+      }))
+    } else {
+      set({
+        error: result.error,
+        loading: false,
+      })
+    }
+
+    return result
+  },
+
+  deleteRestaurant: async (id) => {
+    set({ loading: true, error: null })
+    const result = await restaurantService.deleteRestaurant(id)
+
+    if (result.success) {
+      set((state) => ({
+        restaurants: state.restaurants.filter((r) => r.id !== id),
+        currentRestaurant:
+          state.currentRestaurant?.id === id ? null : state.currentRestaurant,
+        loading: false,
+      }))
+    } else {
+      set({
+        error: result.error,
+        loading: false,
+      })
+    }
+
+    return result
+  },
+
+  searchRestaurants: async (searchTerm) => {
+    set({ loading: true, error: null })
+    const result = await restaurantService.searchRestaurants(searchTerm)
+
+    if (result.success) {
+      set({
+        restaurants: result.data,
+        filters: { ...get().filters, search: searchTerm },
+        loading: false,
+      })
+    } else {
+      set({
+        error: result.error,
+        loading: false,
+      })
+    }
+
+    return result
+  },
+
+  // Getters
+  getFilteredRestaurants: () => {
+    const state = get()
+    let filtered = state.restaurants
+
+    // Aplicar filtros
+    if (state.filters.search) {
+      filtered = filtered.filter((r) =>
+        r.name.toLowerCase().includes(state.filters.search.toLowerCase())
+      )
+    }
+
+    if (state.filters.status) {
+      filtered = filtered.filter((r) => r.status === state.filters.status)
+    }
+
+    // Aplicar orden
+    filtered.sort((a, b) => {
+      const aVal = a[state.sortBy]
+      const bVal = b[state.sortBy]
+
+      if (typeof aVal === 'string') {
+        return state.sortOrder === 'asc'
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal)
+      }
+
+      return state.sortOrder === 'asc' ? aVal - bVal : bVal - aVal
+    })
+
+    return filtered
+  },
+
+  getTotalCount: () => get().restaurants.length,
+
+  getRestaurantById: (id) =>
+    get().restaurants.find((r) => r.id === id),
+}))
+
+export default useRestaurantStore

@@ -1,10 +1,7 @@
 import { Navigate } from 'react-router-dom'
-import useAuthStore from '../stores/useAuthStore'
+import useAuthStore from '../../shared/stores/useAuthStore.js'
 
-/**
- * Componente ProtectedRoute
- * Protege rutas que requieren autenticación
- */
+// eslint-disable-next-line react/prop-types
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { isAuthenticated, user } = useAuthStore()
 
