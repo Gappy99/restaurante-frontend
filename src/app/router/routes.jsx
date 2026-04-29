@@ -16,6 +16,9 @@ import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
 
+// Página de perfil de usuario
+import ProfilePage from '../../features/users/pages/ProfilePage'
+
 /**
  * Configuración de rutas con protección
  */
@@ -64,6 +67,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole="ADMIN">
             <FieldsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },

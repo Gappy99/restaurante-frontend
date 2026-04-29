@@ -1,7 +1,3 @@
-/**
- * Componente Table reutilizable
- * Muestra datos en tabla con acciones
- */
 const Table = ({ columns, data, onEdit, onDelete }) => {
   return (
     <table className="w-full">

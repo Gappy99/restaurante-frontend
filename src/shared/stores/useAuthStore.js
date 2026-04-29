@@ -1,49 +1,16 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
 
-const useAuthStore = create(
-  persist(
-    (set, get) => ({
-      user: null,
-      token: null,
-      refreshToken: null,
-      isAuthenticated: false,
+const useAuthStore = create((set, get) => ({
+  token: null,
+  user: null,
+  isAuthenticated: false,
 
-      // Acciones
-      setUser: (user) => set({ user, isAuthenticated: !!user }),
-      setTokens: (token, refreshToken) => set({ token, refreshToken }),
-      logout: () => {
-        set({
-          user: null,
-          token: null,
-          refreshToken: null,
-          isAuthenticated: false,
-        })
-      },
-      login: (user, token, refreshToken) => {
-        set({
-          user,
-          token,
-          refreshToken,
-          isAuthenticated: true,
-        })
-      },
+  login: (token, user) => set({ token, user, isAuthenticated: true }),
+  logout: () => set({ token: null, user: null, isAuthenticated: false }),
 
-      // Getters
-      getToken: () => get().token,
-      getUser: () => get().user,
-      isAdmin: () => get().user?.rol === 'ADMIN',
-    }),
-    {
-      name: 'auth-storage', // Key en localStorage
-      partialize: (state) => ({
-        user: state.user,
-        token: state.token,
-        refreshToken: state.refreshToken,
-        isAuthenticated: state.isAuthenticated,
-      }),
-    }
-  )
-)
+  getToken: () => get().token,
+  getUser: () => get().user,
+  isAuthenticated: () => get().isAuthenticated,
+}))
 
 export default useAuthStore

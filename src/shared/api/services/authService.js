@@ -1,4 +1,4 @@
-import authClient from '../api/authClient'
+import authClient from '../../api/authClient'
 import toast from 'react-hot-toast'
 
 /**
