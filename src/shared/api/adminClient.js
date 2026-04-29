@@ -1,0 +1,36 @@
+import axios from 'axios'
+import useAuthStore from '../stores/useAuthStore'
+
+// Instancia cliente para admin/recursos
+const adminClient = axios.create({
+  baseURL: import.meta.env.VITE_ADMIN_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// Interceptor para requests
+adminClient.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().getToken()
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
+
+// Interceptor para responses
+adminClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      useAuthStore.getState().logout()
+      window.location.href = '/login'
+    }
+    return Promise.reject(error)
+  }
+)
+
+export default adminClient
