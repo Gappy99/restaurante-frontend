@@ -1,5 +1,5 @@
-import adminClient from '../api/adminClient'
-import useUserStore from '../stores/useUserStore'
+import adminClient from '../adminClient'
+import useUserStore from '../../stores/useUserStore'
 import toast from 'react-hot-toast'
 
 /**
