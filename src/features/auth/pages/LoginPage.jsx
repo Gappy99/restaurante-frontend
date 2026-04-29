@@ -27,40 +27,40 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-2xl p-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">RestaurantGO</h1>
-      <p className="text-gray-600 mb-8">Inicia sesión en tu cuenta</p>
+    <div className="bg-[var(--surface)] rounded-lg shadow-2xl p-8 border border-[var(--accent-soft)]">
+      <h1 className="text-3xl font-bold text-[var(--text)] mb-2">RestaurantGO</h1>
+      <p className="text-[var(--muted)] mb-8">Inicia sesión en tu cuenta</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--text)] mb-1">
             Email
           </label>
           <input
             type="email"
             placeholder="tu@email.com"
             {...register('email', { required: 'Email requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-[var(--accent-soft)] rounded-lg focus:ring-2 focus:ring-[var(--primary)] outline-none"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            <p className="text-[var(--danger)] text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
 
         {/* Password */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--text)] mb-1">
             Contraseña
           </label>
           <input
             type="password"
             placeholder="••••••••"
             {...register('password', { required: 'Contraseña requerida' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-[var(--accent-soft)] rounded-lg focus:ring-2 focus:ring-[var(--primary)] outline-none"
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-[var(--danger)] text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
 
@@ -68,16 +68,16 @@ const LoginPage = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-2 rounded-lg transition"
+          className="w-full bg-[var(--primary)] hover:bg-[#446b5b] disabled:bg-[var(--accent-soft)] text-[var(--surface)] font-semibold py-2 rounded-lg transition"
         >
           {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
         </button>
       </form>
 
       {/* Register link */}
-      <p className="text-center text-gray-600 mt-4">
+      <p className="text-center text-[var(--muted)] mt-4">
         ¿No tienes cuenta?{' '}
-        <Link to="/register" className="text-blue-600 hover:underline font-semibold">
+        <Link to="/register" className="text-[var(--primary)] hover:underline font-semibold">
           Regístrate
         </Link>
       </p>

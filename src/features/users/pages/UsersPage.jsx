@@ -50,21 +50,21 @@ const UsersPage = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Gestión de Usuarios</h1>
+        <h1 className="text-3xl font-bold text-[var(--text)]">Gestión de Usuarios</h1>
         <button
           onClick={() => handleOpenModal()}
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
+          className="px-6 py-2 bg-[var(--primary)] hover:bg-[#446b5b] text-[var(--surface)] rounded-lg font-semibold transition"
         >
           + Nuevo Usuario
         </button>
       </div>
 
       {/* Tabla de usuarios */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-[var(--surface)] rounded-lg shadow overflow-hidden border border-[var(--accent-soft)]">
         {loading ? (
-          <div className="p-6 text-center text-gray-500">Cargando usuarios...</div>
+          <div className="p-6 text-center text-[var(--muted)]">Cargando usuarios...</div>
         ) : users.length === 0 ? (
-          <div className="p-6 text-center text-gray-500">
+          <div className="p-6 text-center text-[var(--muted)]">
             No hay usuarios registrados
           </div>
         ) : (
@@ -122,36 +122,36 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Nombre */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--text)] mb-1">
             Nombre
           </label>
           <input
             {...register('nombre', { required: 'Nombre requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-[var(--accent-soft)] rounded-lg focus:ring-2 focus:ring-[var(--primary)] outline-none"
           />
-          {errors.nombre && <p className="text-red-500 text-sm mt-1">{errors.nombre.message}</p>}
+          {errors.nombre && <p className="text-[var(--danger)] text-sm mt-1">{errors.nombre.message}</p>}
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--text)] mb-1">
             Email
           </label>
           <input
             {...register('email', { required: 'Email requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-[var(--accent-soft)] rounded-lg focus:ring-2 focus:ring-[var(--primary)] outline-none"
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+          {errors.email && <p className="text-[var(--danger)] text-sm mt-1">{errors.email.message}</p>}
         </div>
 
         {/* Teléfono */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--muted)] mb-1">
             Teléfono
           </label>
           <input
             {...register('telefono')}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 border border-[var(--accent-soft)] rounded-lg focus:ring-2 focus:ring-[var(--primary)] outline-none bg-[var(--surface)] text-[var(--text)]"
           />
         </div>
 
@@ -160,14 +160,14 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            className="px-4 py-2 text-[var(--text)] border border-[var(--accent-soft)] rounded-lg hover:bg-[var(--surface)] transition"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition"
+            className="px-4 py-2 bg-[var(--primary)] hover:bg-[#446b5b] disabled:bg-[#9aa79a] text-[var(--surface)] rounded-lg transition"
           >
             {isSubmitting ? 'Guardando...' : user ? 'Actualizar' : 'Crear'}
           </button>

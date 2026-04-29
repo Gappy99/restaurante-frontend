@@ -16,53 +16,48 @@ const Sidebar = () => {
   const isAdmin = user?.rol === 'ADMIN'
 
   return (
-    <aside className="w-64 bg-gray-900 text-white flex flex-col">
-      {/* Logo */}
-      <div className="p-6 border-b border-gray-800">
-        <h1 className="text-2xl font-bold">RestaurantGO</h1>
-        <p className="text-sm text-gray-400 mt-1">Gestor de Restaurante</p>
+    <aside className="w-72 bg-[var(--surface)] border-r border-[var(--accent-soft)] text-[var(--text)] flex flex-col">
+      <div className="p-6">
+        <div className="rounded-3xl overflow-hidden bg-[var(--accent-soft)] shadow-sm">
+          <img
+            src="https://images.unsplash.com/photo-1541544180-2a4c2b2aec51?auto=format&fit=crop&w=600&q=80"
+            alt="Restaurante"
+            className="w-full h-48 object-cover"
+          />
+        </div>
+
+        <div className="mt-5">
+          <h1 className="text-2xl font-bold text-[var(--text)]">Restaurantes</h1>
+          <p className="mt-2 text-sm text-[var(--muted)]">Gestión de restaurantes</p>
+        </div>
       </div>
 
-      {/* Menú de navegación */}
-      <nav className="flex-1 p-6 space-y-3">
+      <nav className="flex-1 px-6 pb-6 space-y-3">
         <Link
-          to="/"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+          to="/information"
+          className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[var(--primary)] text-[var(--surface)] hover:bg-[#446b5b] transition"
         >
-          <span>📊</span>
-          <span>Dashboard</span>
+          <span className="text-xl">🍽️</span>
+          <span className="font-medium">Restaurantes</span>
         </Link>
 
-        {isAdmin && (
-          <>
-            <Link
-              to="/users"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
-            >
-              <span>👥</span>
-              <span>Usuarios</span>
-            </Link>
-
-            <Link
-              to="/fields"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
-            >
-              <span>🏷️</span>
-              <span>Campos</span>
-            </Link>
-          </>
-        )}
+        <Link
+          to="/menu"
+          className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[var(--primary)] text-[var(--surface)] hover:bg-[#446b5b] transition"
+        >
+          <span className="text-xl">📄</span>
+          <span className="font-medium">Menu</span>
+        </Link>
       </nav>
 
-      {/* Usuario y logout */}
-      <div className="p-6 border-t border-gray-800 space-y-3">
-        <div className="text-sm">
-          <p className="text-gray-400">Usuario</p>
-          <p className="font-semibold truncate">{user?.nombre || user?.email}</p>
+      <div className="px-6 pb-6">
+        <div className="rounded-2xl bg-[var(--bg)] p-4 border border-[var(--accent-soft)]">
+          <p className="text-xs text-[var(--muted)]">Usuario conectado</p>
+          <p className="mt-2 font-semibold text-[var(--text)] truncate">{user?.nombre || user?.email}</p>
         </div>
         <button
           onClick={handleLogout}
-          className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
+          className="mt-4 w-full px-4 py-2 bg-[var(--accent)] text-[var(--surface)] rounded-xl hover:bg-[#8a5c4f] transition"
         >
           Cerrar Sesión
         </button>
