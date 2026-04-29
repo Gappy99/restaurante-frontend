@@ -37,104 +37,104 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-2xl p-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">RestaurantGO</h1>
-      <p className="text-gray-600 mb-8">Crea tu cuenta</p>
+    <div className="rounded-3xl border border-white/60 bg-[#FFFFFD] p-8 shadow-[0_20px_60px_rgba(47,47,47,0.18)] backdrop-blur-sm">
+      <h1 className="text-3xl font-bold text-[#2F2F2F] mb-2">Restauraante</h1>
+      <p className="text-[#517360] mb-8">Crea tu cuenta</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         {/* Nombre */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
             Nombre Completo
           </label>
           <input
             type="text"
             placeholder="Tu nombre"
             {...register('nombre', { required: 'Nombre requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
           />
           {errors.nombre && (
-            <p className="text-red-500 text-sm mt-1">{errors.nombre.message}</p>
+            <p className="mt-1 text-sm text-[#A66F5B]">{errors.nombre.message}</p>
           )}
         </div>
 
         {/* Username */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
             Usuario
           </label>
           <input
             type="text"
             placeholder="nombre_usuario"
             {...register('username', { required: 'Usuario requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
           />
           {errors.username && (
-            <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+            <p className="mt-1 text-sm text-[#A66F5B]">{errors.username.message}</p>
           )}
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
             Email
           </label>
           <input
             type="email"
             placeholder="tu@email.com"
             {...register('email', { required: 'Email requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            <p className="mt-1 text-sm text-[#A66F5B]">{errors.email.message}</p>
           )}
         </div>
 
         {/* Teléfono */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
             Teléfono
           </label>
           <input
             type="tel"
             placeholder="123456789"
             {...register('telefono', { required: 'Teléfono requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
           />
           {errors.telefono && (
-            <p className="text-red-500 text-sm mt-1">{errors.telefono.message}</p>
+            <p className="mt-1 text-sm text-[#A66F5B]">{errors.telefono.message}</p>
           )}
         </div>
 
         {/* Password */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
             Contraseña
           </label>
           <input
             type="password"
             placeholder="••••••••"
             {...register('password', { required: 'Contraseña requerida' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="mt-1 text-sm text-[#A66F5B]">{errors.password.message}</p>
           )}
         </div>
 
         {/* Confirm Password */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
             Confirmar Contraseña
           </label>
           <input
             type="password"
             placeholder="••••••••"
             {...register('confirmPassword', { required: 'Confirmar contraseña' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
           />
           {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+            <p className="mt-1 text-sm text-[#A66F5B]">{errors.confirmPassword.message}</p>
           )}
         </div>
 
@@ -142,16 +142,16 @@ const RegisterPage = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-2 rounded-lg transition mt-4"
+          className="mt-4 w-full rounded-xl bg-[#517360] py-2 font-semibold text-white transition hover:bg-[#466353] disabled:cursor-not-allowed disabled:bg-[#E2DFCE] disabled:text-[#2F2F2F]"
         >
           {isLoading ? 'Cargando...' : 'Registrarse'}
         </button>
       </form>
 
       {/* Login link */}
-      <p className="text-center text-gray-600 mt-4">
+      <p className="mt-4 text-center text-[#2F2F2F]">
         ¿Ya tienes cuenta?{' '}
-        <Link to="/login" className="text-blue-600 hover:underline font-semibold">
+        <Link to="/login" className="font-semibold text-[#A66F5B] hover:underline">
           Inicia Sesión
         </Link>
       </p>
