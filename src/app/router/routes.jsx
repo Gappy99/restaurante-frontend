@@ -15,6 +15,7 @@ import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
+import MenuPage from '../../features/menus/pages/MenuPage'
 
 /**
  * Configuración de rutas con protección
@@ -64,6 +65,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole="ADMIN">
             <FieldsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'menus',
+        element: (
+          <ProtectedRoute>
+            <MenuPage />
           </ProtectedRoute>
         ),
       },

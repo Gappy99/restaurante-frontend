@@ -4,10 +4,10 @@ import {
     createMenu as createMenuRequest, 
     updateMenu as updateMenuRequest, 
     deleteMenu as deleteMenuRequest 
-} from "../../menus/Api/menuAdmin.js"; 
-import { showError } from "../../../shared/utils/toast";
+} from "../Api/menuAdmin.js"; 
+import toast from "react-hot-toast";
 
-export const useAuthStore = create((set, get) => ({
+export const useMenuStore = create((set, get) => ({
     menus: [],
     loading: false,
     error: null,
@@ -16,11 +16,13 @@ export const useAuthStore = create((set, get) => ({
         try {
             set({ loading: true, error: null });
             const response = await getMenusRequest();
-            set({ menus: response.data, loading: false });
+            set({ menus: response.data || [], loading: false });
+            return { success: true, data: response.data };
         } catch (err) {
             const message = err.response?.data?.message || "Error al cargar los menús";
-            set({ error: message, loading: false });
-            showError(message);
+            set({ error: message, loading: false, menus: [] });
+            toast.error(message);
+            return { success: false, error: message };
         }
     },
 
@@ -30,8 +32,10 @@ export const useAuthStore = create((set, get) => ({
             
             if (id) {
                 await updateMenuRequest(id, formData);
+                toast.success("Menú actualizado exitosamente");
             } else {
                 await createMenuRequest(formData);
+                toast.success("Menú creado exitosamente");
             }
 
             await get().fetchMenus();
@@ -40,7 +44,7 @@ export const useAuthStore = create((set, get) => ({
         } catch (err) {
             const message = err.response?.data?.message || "Error al guardar el menú";
             set({ error: message, loading: false });
-            showError(message);
+            toast.error(message);
             return { success: false, error: message };
         }
     },
@@ -49,14 +53,36 @@ export const useAuthStore = create((set, get) => ({
         try {
             set({ loading: true, error: null });
             await deleteMenuRequest(id);
+            toast.success("Menú desactivado exitosamente");
             await get().fetchMenus();
             set({ loading: false });
             return { success: true };
         } catch (err) {
             const message = err.response?.data?.message || "Error al desactivar el menú";
             set({ error: message, loading: false });
-            showError(message);
+            toast.error(message);
             return { success: false };
         }
-    }
+    },
+
+    addMenu: (menu) => {
+        set(state => ({ menus: [...state.menus, menu] }));
+    },
+
+    updateMenuLocal: (id, updatedMenu) => {
+        set(state => ({
+            menus: state.menus.map(menu => 
+                (menu._id || menu.id) === id ? { ...menu, ...updatedMenu } : menu
+            )
+        }));
+    },
+
+    deleteMenuLocal: (id) => {
+        set(state => ({
+            menus: state.menus.filter(menu => (menu._id || menu.id) !== id)
+        }));
+    },
+
+    setLoading: (loading) => set({ loading }),
+    setError: (error) => set({ error }),
 }));
