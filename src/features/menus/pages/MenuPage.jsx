@@ -26,13 +26,13 @@ export default function MenuPage() {
     <div className="max-w-7xl mx-auto p-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div>
-          <h1 className="text-3xl font-extrabold text-[#2F2F2F]">Gestión de Menús</h1>
-          <p className="text-[#A66F5B]">Personaliza la oferta de hoy</p>
+          <h1 className="text-3xl font-extrabold text-[#2E160C]">Gestión de Menús</h1>
+          <p className="text-[#7F532C]">Personaliza la oferta de hoy</p>
         </div>
         
         <button 
           onClick={() => { setSelectedMenu(null); setIsModalOpen(true); }}
-          className="bg-[#517360] text-white px-6 py-3 rounded-xl font-bold shadow-md hover:bg-[#2F2F2F] transition-all"
+          className="bg-[#5B300E] text-white px-6 py-3 rounded-xl font-bold shadow-md hover:bg-[#2E160C] transition-all"
         >
           + Nuevo Platillo
         </button>
@@ -40,7 +40,7 @@ export default function MenuPage() {
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#517360]"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#5B300E]"></div>
         </div>
       ) : menus && menus.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -57,7 +57,7 @@ export default function MenuPage() {
         </div>
       ) : (
         <div className="text-center py-20">
-          <p className="text-[#A66F5B] text-lg">No hay menús disponibles</p>
+          <p className="text-[#7F532C] text-lg">No hay menús disponibles</p>
         </div>
       )}
 
