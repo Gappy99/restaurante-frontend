@@ -33,6 +33,7 @@ pnpm install
 pnpm dev
 # o
 npm start
+
 ```
 
 **Verificar que el backend está corriendo:**
