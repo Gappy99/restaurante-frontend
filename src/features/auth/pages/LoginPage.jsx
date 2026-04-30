@@ -27,61 +27,70 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="rounded-3xl border-full border-white/60 bg-[#FFFFFD] p-8 shadow-[0_40px_120px_rgba(50,50,50,0,18)] ">
-      <h1 className="text-3xl font-bold text-[#265C26] mb-2">Restaurant-GO</h1>
-      <p className="font-medium mb-8 border-white/10 text-[#DDB7A2]">Inicia sesión en tu cuenta</p>
+    <section className="relative overflow-hidden rounded-3xl border border-[#7F532C]/25 bg-[#FCF0CA]/95 p-8 shadow-[0_24px_60px_rgba(46,22,12,0.25)] backdrop-blur-sm">
+      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#946841]/15 blur-2xl" />
+      <div className="pointer-events-none absolute -left-10 bottom-10 h-24 w-24 rounded-full bg-[#5B300E]/20 blur-2xl" />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
-            Email
+      <div className="mb-8">
+        <span className="inline-flex rounded-full border border-[#7F532C]/30 bg-[#946841]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#5B300E]">
+          Bienvenido
+        </span>
+        <h1 className="mt-4 text-3xl font-bold text-[#2E160C]">Restaurant-Go</h1>
+        <p className="mt-2 text-sm text-[#7F532C]">
+          Accede a tu cuenta para continuar con la experiencia.
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        {/* Campo de correo */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-medium text-[#5B300E]">
+            Correo electrónico
           </label>
           <input
             type="email"
             placeholder="tu@email.com"
             {...register('email', { required: 'Email requerido' })}
-            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
+            className="w-full rounded-xl border border-[#7F532C]/30 bg-[#FCF0CA] px-4 py-2.5 text-[#2E160C] outline-none transition placeholder:text-[#946841]/70 focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/30"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-[#A66F5B]">{errors.email.message}</p>
+            <p className="text-sm text-[#5B300E]">{errors.email.message}</p>
           )}
         </div>
 
-        {/* Password */}
-        <div>
-          <label className="block text-sm font-medium text-[#2F2F2F] mb-1">
+        {/* Campo de contraseña */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-medium text-[#5B300E]">
             Contraseña
           </label>
           <input
             type="password"
             placeholder="••••••••"
             {...register('password', { required: 'Contraseña requerida' })}
-            className="w-full rounded-xl border border-[#E2DFCE] px-4 py-2 outline-none transition focus:border-[#517360] focus:ring-2 focus:ring-[#517360]/30"
+            className="w-full rounded-xl border border-[#7F532C]/30 bg-[#FCF0CA] px-4 py-2.5 text-[#2E160C] outline-none transition placeholder:text-[#946841]/70 focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/30"
           />
           {errors.password && (
-            <p className="mt-1 text-sm ">{errors.password.message}</p>
+            <p className="text-sm text-[#5B300E]">{errors.password.message}</p>
           )}
         </div>
 
-        {/* Submit */}
+        {/* Botón de envío */}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full rounded-xl bg-[#517360] py-2 font-semibold text-white transition hover:bg-[#466353] disabled:cursor-not-allowed disabled:bg-[#E2DFCE] disabled:text-[#2F2F2F]"
+          className="w-full rounded-xl bg-[#5B300E] py-2.5 font-semibold text-[#FCF0CA] transition hover:bg-[#7F532C] disabled:cursor-not-allowed disabled:bg-[#946841]/60 disabled:text-[#FCF0CA]/80"
         >
-          {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
+          {isLoading ? 'Cargando...' : 'Iniciar sesión'}
         </button>
       </form>
 
-      {/* Register link */}
-      <p className="mt-4 text-center text-[#2F2F2F]">
+      <p className="mt-5 text-center text-sm text-[#5B300E]">
         ¿No tienes cuenta?{' '}
-        <Link to="/register" className="font-semibold text-[#A66F5B] hover:underline">
+        <Link to="/register" className="font-semibold text-[#2E160C] transition hover:text-[#7F532C] hover:underline">
           Regístrate
         </Link>
       </p>
-    </div>
+    </section>
   )
 }
 
