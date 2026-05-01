@@ -19,6 +19,11 @@ import RestaurantMiniMenuPage from '../../features/restaurant/pages/RestaurantMi
 import RestaurantTablesPage from '../../features/tables/pages/RestaurantTablesPage'
 import AllTablesPage from '../../features/tables/pages/AllTablesPage'
 
+import ProtectedRoute from './ProtectedRoute'
+
+// Página de perfil de usuario
+import ProfilePage from '../../features/users/pages/ProfilePage'
+
 /**
  * Configuración de rutas
  */
@@ -77,6 +82,14 @@ const router = createBrowserRouter([
       {
         path: 'tables/all',
         element: <AllTablesPage />,
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

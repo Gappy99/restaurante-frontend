@@ -1,10 +1,6 @@
 import authClient from '../authClient'
 import toast from 'react-hot-toast'
 
-/**
- * Servicio de Autenticación
- * Maneja login, registro, logout y renovación de token
- */
 
 export const authService = {
   // Login usuario

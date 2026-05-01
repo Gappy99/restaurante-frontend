@@ -1,7 +1,7 @@
 import axios from 'axios'
 import useAuthStore from '../stores/useAuthStore'
 
-// Instancia cliente para admin/recursos
+
 const adminClient = axios.create({
   baseURL: import.meta.env.VITE_ADMIN_URL,
   headers: {
@@ -27,7 +27,7 @@ adminClient.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Interceptor para responses
+
 adminClient.interceptors.response.use(
   (response) => response,
   async (error) => {
