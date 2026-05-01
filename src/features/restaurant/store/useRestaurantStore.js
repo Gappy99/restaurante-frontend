@@ -45,6 +45,8 @@ const useRestaurantStore = create((set, get) => ({
   clearError: () => set({ error: null }),
   clearCurrentRestaurant: () => set({ currentRestaurant: null }),
 
+  resolveRestaurantId: (restaurant) => restaurant?._id || restaurant?.id,
+
   // Async Actions
   fetchRestaurants: async (params = {}) => {
     set({ loading: true, error: null })
@@ -110,13 +112,16 @@ const useRestaurantStore = create((set, get) => ({
       restaurantData
     )
 
+    // Debug: ensure updated data (including images) arrives from service
+    console.log('🔁 useRestaurantStore.updateRestaurant result.data:', result?.data)
+
     if (result.success) {
       set((state) => ({
         restaurants: state.restaurants.map((r) =>
-          r.id === id ? result.data : r
+          (r._id || r.id) === id ? result.data : r
         ),
         currentRestaurant:
-          state.currentRestaurant?.id === id
+          (state.currentRestaurant?._id || state.currentRestaurant?.id) === id
             ? result.data
             : state.currentRestaurant,
         loading: false,
@@ -137,9 +142,11 @@ const useRestaurantStore = create((set, get) => ({
 
     if (result.success) {
       set((state) => ({
-        restaurants: state.restaurants.filter((r) => r.id !== id),
+        restaurants: state.restaurants.filter((r) => (r._id || r.id) !== id),
         currentRestaurant:
-          state.currentRestaurant?.id === id ? null : state.currentRestaurant,
+          (state.currentRestaurant?._id || state.currentRestaurant?.id) === id
+            ? null
+            : state.currentRestaurant,
         loading: false,
       }))
     } else {
@@ -208,7 +215,7 @@ const useRestaurantStore = create((set, get) => ({
   getTotalCount: () => get().restaurants.length,
 
   getRestaurantById: (id) =>
-    get().restaurants.find((r) => r.id === id),
+    get().restaurants.find((r) => (r._id || r.id) === id),
 }))
 
 export default useRestaurantStore

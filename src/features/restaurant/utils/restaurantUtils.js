@@ -5,25 +5,31 @@
 /**
  * Formatea los datos del formulario al formato esperado por la API del backend
  * Mapea campos del frontend a nombres del backend
+ * Si hay imagen nueva, devuelve FormData; sino, devuelve JSON plano
  */
 export const formatRestaurantData = (formData) => {
-  const data = new FormData()
-
-  // Mapear campos del frontend a backend
-  data.append('restaurant_name', formData.name?.trim() || '')
-  data.append('restaurant_type', formData.type || '')
-  data.append('restaurant_type_gastronomic', formData.gastronomicType || '')
-  data.append('restaurant_direction', formData.address?.trim() || '')
-  data.append('restaurant_time_start', formData.timeStart || '10:00')
-  data.append('restaurant_time_close', formData.timeClose || '23:00')
-  data.append('restaurant_mean_price', formData.meanPrice || 0)
-
-  // Si hay archivo de imagen
-  if (formData.image instanceof File) {
-    data.append('restaurant_images', formData.image)
+  const jsonData = {
+    restaurant_name: formData.name?.trim() || '',
+    restaurant_type: formData.type || '',
+    restaurant_type_gastronomic: formData.gastronomicType || '',
+    restaurant_direction: formData.address?.trim() || '',
+    restaurant_time_start: formData.timeStart || '10:00',
+    restaurant_time_close: formData.timeClose || '23:00',
+    restaurant_mean_price: formData.meanPrice || 0,
   }
 
-  return data
+  // Si hay archivo de imagen, usar FormData
+  if (formData.image instanceof File) {
+    const data = new FormData()
+    Object.keys(jsonData).forEach((key) => {
+      data.append(key, jsonData[key])
+    })
+    data.append('restaurant_images', formData.image)
+    return data
+  }
+
+  // Si no hay imagen, devolver JSON plano
+  return jsonData
 }
 
 /**

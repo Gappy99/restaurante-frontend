@@ -138,12 +138,9 @@ export const useRestaurantDelete = () => {
   const { loading, error, deleteRestaurant } = useRestaurantStore()
 
   const handleDelete = useCallback(
-    async (id) => {
-      if (window.confirm('¿Estás seguro que deseas eliminar este restaurante?')) {
+      async (id) => {
         return await deleteRestaurant(id)
-      }
-      return { success: false }
-    },
+      },
     [deleteRestaurant]
   )
 

@@ -15,13 +15,13 @@ export const RESTAURANT_MESSAGES = {
 }
 
 export const RESTAURANT_API_ENDPOINTS = {
-  BASE: '/restaurants',
-  LIST: '/restaurants',
-  CREATE: '/restaurants',
-  DETAIL: (id) => `/restaurants/${id}`,
-  UPDATE: (id) => `/restaurants/${id}`,
-  DELETE: (id) => `/restaurants/${id}`,
-  SEARCH: '/restaurants/search',
+  BASE: '/restaurant',
+  LIST: '/restaurant',
+  CREATE: '/restaurant',
+  DETAIL: (id) => `/restaurant/${id}`,
+  UPDATE: (id) => `/restaurant/${id}`,
+  DELETE: (id) => `/restaurant/${id}`,
+  SEARCH: '/restaurant/search',
 }
 
 export const RESTAURANT_DEFAULTS = {

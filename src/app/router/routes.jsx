@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom'
-import ProtectedRoute from './ProtectedRoute'
 
 // Layouts
 import MainLayout from '../layouts/MainLayout'
@@ -9,16 +8,19 @@ import AuthLayout from '../layouts/AuthLayout'
 import LoginPage from '../../features/auth/pages/LoginPage'
 import RegisterPage from '../../features/auth/pages/RegisterPage'
 import NotFoundPage from '../../features/common/pages/NotFoundPage'
-import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
 
-// Páginas protegidas
+// Páginas principales
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
 import RestaurantPage from '../../features/restaurant/pages/RestaurantPage'
+import TablesPage from '../../features/tables/pages/TablesPage'
+import RestaurantMiniMenuPage from '../../features/restaurant/pages/RestaurantMiniMenuPage'
+import RestaurantTablesPage from '../../features/tables/pages/RestaurantTablesPage'
+import AllTablesPage from '../../features/tables/pages/AllTablesPage'
 
 /**
- * Configuración de rutas con protección
+ * Configuración de rutas
  */
 const router = createBrowserRouter([
   // Rutas públicas
@@ -39,14 +41,10 @@ const router = createBrowserRouter([
     ),
   },
 
-  // Rutas protegidas
+  // Rutas principales sin protección por ahora
   {
     path: '/',
-    element: (
-      <ProtectedRoute>
-        <MainLayout />
-      </ProtectedRoute>
-    ),
+    element: <MainLayout />,
     children: [
       {
         index: true,
@@ -54,35 +52,33 @@ const router = createBrowserRouter([
       },
       {
         path: 'users',
-        element: (
-          <ProtectedRoute requiredRole="ADMIN">
-            <UsersPage />
-          </ProtectedRoute>
-        ),
+        element: <UsersPage />,
       },
       {
         path: 'restaurants',
-        element: (
-          <ProtectedRoute requiredRole="ADMIN">
-            <RestaurantPage />
-          </ProtectedRoute>
-        ),
+        element: <RestaurantPage />,
+      },
+      {
+        path: 'restaurants/:id',
+        element: <RestaurantMiniMenuPage />,
+      },
+      {
+        path: 'restaurants/:id/tables',
+        element: <RestaurantTablesPage />,
       },
       {
         path: 'fields',
-        element: (
-          <ProtectedRoute requiredRole="ADMIN">
-            <FieldsPage />
-          </ProtectedRoute>
-        ),
+        element: <FieldsPage />,
+      },
+      {
+        path: 'tables',
+        element: <TablesPage />,
+      },
+      {
+        path: 'tables/all',
+        element: <AllTablesPage />,
       },
     ],
-  },
-
-  // Páginas de error
-  {
-    path: '/unauthorized',
-    element: <UnauthorizedPage />,
   },
   {
     path: '*',

@@ -15,7 +15,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/GestorRestaurante': {
-        target: process.env.VITE_API_URL || 'http://localhost:3000',
+        target: process.env.VITE_API_URL || 'http://localhost:3006',
         changeOrigin: true,
         secure: false,
       },
