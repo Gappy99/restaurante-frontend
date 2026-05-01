@@ -15,6 +15,7 @@ import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
+import ContactsPage from '../../features/contacts/pages/ContactsPage'
 
 /**
  * Configuración de rutas con protección
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
             <FieldsPage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'contacts',
+        element: <ContactsPage />,
       },
     ],
   },
