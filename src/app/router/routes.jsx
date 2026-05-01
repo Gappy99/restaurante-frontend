@@ -8,6 +8,8 @@ import AuthLayout from '../layouts/AuthLayout'
 import LoginPage from '../../features/auth/pages/LoginPage'
 import RegisterPage from '../../features/auth/pages/RegisterPage'
 import NotFoundPage from '../../features/common/pages/NotFoundPage'
+import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
+import MenuPage from '../../features/common/pages/MenuPage'
 
 // Páginas principales
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
@@ -18,6 +20,7 @@ import TablesPage from '../../features/tables/pages/TablesPage'
 import RestaurantMiniMenuPage from '../../features/restaurant/pages/RestaurantMiniMenuPage'
 import RestaurantTablesPage from '../../features/tables/pages/RestaurantTablesPage'
 import AllTablesPage from '../../features/tables/pages/AllTablesPage'
+import InformationPage from '../../features/Information/pages/InformationPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
@@ -45,6 +48,10 @@ const router = createBrowserRouter([
       </AuthLayout>
     ),
   },
+  {
+    path: '/information',
+    element: <InformationPage />,
+  },
 
   // Rutas principales sin protección por ahora
   {
@@ -54,6 +61,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardPage />,
+      },
+      {
+        path: 'information',
+        element: <InformationPage />,
+      },
+      {
+        path: 'menu',
+        element: <MenuPage />,
       },
       {
         path: 'users',

@@ -16,14 +16,19 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true)
-    const result = await authService.login(data.email, data.password)
+    try {
+      const result = await authService.login(data.email, data.password)
 
-    if (result.success) {
-      login(result.user, result.token, result.refreshToken)
-      toast.success('Sesión iniciada correctamente')
-      navigate('/')
+      if (result.success) {
+        login(result.user, result.token, result.refreshToken)
+        toast.success('Sesión iniciada correctamente')
+        navigate('/')
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return (
@@ -44,9 +49,7 @@ const LoginPage = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Campo de correo */}
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#5B300E]">
-            Correo electrónico
-          </label>
+          <label className="block text-sm font-medium text-[#5B300E]">Correo electrónico</label>
           <input
             type="email"
             placeholder="tu@email.com"
@@ -60,9 +63,7 @@ const LoginPage = () => {
 
         {/* Campo de contraseña */}
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#5B300E]">
-            Contraseña
-          </label>
+          <label className="block text-sm font-medium text-[#5B300E]">Contraseña</label>
           <input
             type="password"
             placeholder="••••••••"
