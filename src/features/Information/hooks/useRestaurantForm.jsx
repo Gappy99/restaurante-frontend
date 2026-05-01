@@ -1,0 +1,27 @@
+export const useRestaurantForm = (restaurant) => {
+  return {
+    nombre: restaurant?.nombre || '',
+    descripcion: restaurant?.descripcion || '',
+    logo: restaurant?.logo || '',
+    telefono: restaurant?.telefono || '',
+    email: restaurant?.email || '',
+    direccion: restaurant?.direccion || '',
+    ciudad: restaurant?.ciudad || '',
+    categoria: restaurant?.categoria || '',
+    tipoCocina: restaurant?.tipoCocina || '',
+    facebook: restaurant?.redes?.facebook || '',
+    instagram: restaurant?.redes?.instagram || '',
+    whatsapp: restaurant?.redes?.whatsapp || '',
+    pedidosOnline: restaurant?.pedidosOnline || false,
+    delivery: restaurant?.delivery || false,
+    moneda: restaurant?.moneda || 'USD',
+    impuestos: restaurant?.impuestos || 0,
+    lunes: restaurant?.horarios?.lunes || '8:00 – 18:00',
+    martes: restaurant?.horarios?.martes || '8:00 – 18:00',
+    miercoles: restaurant?.horarios?.miercoles || '8:00 – 18:00',
+    jueves: restaurant?.horarios?.jueves || '8:00 – 18:00',
+    viernes: restaurant?.horarios?.viernes || '8:00 – 18:00',
+    sabado: restaurant?.horarios?.sabado || '9:00 – 14:00',
+    domingo: restaurant?.horarios?.domingo || 'Cerrado',
+  }
+}
