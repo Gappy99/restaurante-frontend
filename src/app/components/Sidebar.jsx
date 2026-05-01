@@ -33,6 +33,14 @@ const Sidebar = () => {
           <span>Dashboard</span>
         </Link>
 
+        <Link
+          to="/contacts"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          <span>📇</span>
+          <span>Contactos</span>
+        </Link>
+
         {isAdmin && (
           <>
             <Link
