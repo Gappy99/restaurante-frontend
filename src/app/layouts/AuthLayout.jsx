@@ -4,10 +4,18 @@
  */
 const AuthLayout = ({ children }) => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(135deg,#517360_0%,#E2DFCE_55%,#DDB7A2_100%)] flex items-center justify-center p-4">
-      <div className="absolute -left-20 -top-16 h-48 w-48 rounded-full bg-[#517360]/20 blur-3xl" />
-      <div className="absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-[#517360]/20 blur-3xl" />
-      <div className="relative w-full max-w-md">{children}</div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#2E160C] px-4 py-8">
+      {/* Corte exacto al centro entre café oscuro y café claro */}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,#5B300E_0%,#5B300E_50%,#946841_50%,#946841_100%)]" />
+
+      {/* Acentos sutiles para profundidad sin recargar */}
+      <div className="absolute left-8 top-10 h-16 w-16 rounded-full border border-[#FCF0CA]/25" />
+      <div className="absolute bottom-12 right-10 h-20 w-20 rounded-full bg-[#FCF0CA]/12" />
+
+      {/* División central suave para mantener estilo minimalista */}
+      <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[#FCF0CA]/20" />
+
+      <div className="relative w-full max-w-md sm:max-w-lg">{children}</div>
     </div>
   )
 }
