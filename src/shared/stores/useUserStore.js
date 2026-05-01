@@ -1,16 +1,20 @@
 import { create } from 'zustand'
 
-const useUserStore = create((set, get) => ({
-  users: [],
+const useUserStore = create((set) => ({
+  users: [
+    { _id: '1', nombre: 'Juan Pérez', email: 'juan@example.com', rol: 'ADMIN', telefono: '123-456-7890' },
+    { _id: '2', nombre: 'Ana López', email: 'ana@example.com', rol: 'CLIENTE', telefono: '987-654-3210' },
+    { _id: '3', nombre: 'Carlos García', email: 'carlos@example.com', rol: 'ADMIN', telefono: '555-666-7777' },
+  ],
   loading: false,
   error: null,
 
-  // Acciones
+  // Funciones
   setUsers: (users) => set({ users }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
 
-  // CRUD
+  // Simulación de CRUD
   addUser: (user) =>
     set((state) => ({
       users: [...state.users, { ...user, _id: Date.now().toString() }],

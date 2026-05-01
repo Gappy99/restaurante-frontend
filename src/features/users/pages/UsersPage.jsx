@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+
 import useUserStore from '../../../shared/stores/useUserStore'
-import { userService } from '../../../shared/api/services/userService'
+import userService from '../../../shared/api/services/userService'
+
 import Modal from '../../../shared/components/Modal'
 import Table from '../../../shared/components/Table'
 
@@ -14,13 +16,13 @@ const UsersPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
 
-  // Cargar usuarios al montar
   useEffect(() => {
     loadUsers()
   }, [])
 
   const loadUsers = async () => {
-    await userService.getUsers()
+    const usersData = await userService.getUsers()
+    useUserStore.getState().setUsers(usersData) // Guarda los usuarios en el store
   }
 
   const handleOpenModal = (user = null) => {
@@ -59,7 +61,6 @@ const UsersPage = () => {
         </button>
       </div>
 
-      {/* Tabla de usuarios */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
           <div className="p-6 text-center text-gray-500">Cargando usuarios...</div>
@@ -77,7 +78,6 @@ const UsersPage = () => {
         )}
       </div>
 
-      {/* Modal de creación/edición */}
       <UserModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -91,13 +91,11 @@ const UsersPage = () => {
   )
 }
 
-/**
- * Modal de Usuario
- */
 const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: user || {},
   })
+
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -120,55 +118,32 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={user ? 'Editar Usuario' : 'Nuevo Usuario'}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Nombre */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre
-          </label>
-          <input
-            {...register('nombre', { required: 'Nombre requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-          {errors.nombre && <p className="text-red-500 text-sm mt-1">{errors.nombre.message}</p>}
-        </div>
+        <input
+          {...register('nombre', { required: 'Nombre requerido' })}
+          placeholder="Nombre"
+          className="w-full px-4 py-2 border rounded-lg"
+        />
+        {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre.message}</p>}
 
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            {...register('email', { required: 'Email requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-        </div>
+        <input
+          {...register('email', { required: 'Email requerido' })}
+          placeholder="Email"
+          className="w-full px-4 py-2 border rounded-lg"
+        />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
-        {/* Teléfono */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Teléfono
-          </label>
-          <input
-            {...register('telefono')}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
+        <input
+          {...register('telefono')}
+          placeholder="Teléfono"
+          className="w-full px-4 py-2 border rounded-lg"
+        />
 
-        {/* Botones */}
-        <div className="flex gap-3 justify-end mt-6">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-          >
+        <div className="flex justify-end gap-3">
+          <button type="button" onClick={onClose}>
             Cancelar
           </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition"
-          >
+
+          <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Guardando...' : user ? 'Actualizar' : 'Crear'}
           </button>
         </div>
