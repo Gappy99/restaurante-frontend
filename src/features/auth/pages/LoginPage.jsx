@@ -20,9 +20,9 @@ const LoginPage = () => {
       const result = await authService.login(data.email, data.password)
 
       if (result.success) {
-        login(result.user, result.token, result.refreshToken)
+        login(result.token, result.user)
         toast.success('Sesión iniciada correctamente')
-        navigate('/')
+        navigate('/loby')
       }
     } catch (err) {
       console.error(err)
@@ -40,7 +40,7 @@ const LoginPage = () => {
         <span className="inline-flex rounded-full border border-[#7F532C]/30 bg-[#946841]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#5B300E]">
           Bienvenido
         </span>
-        <h1 className="mt-4 text-3xl font-bold text-[#2E160C]">Restaurant-Go</h1>
+        <h1 className="mt-4 text-3xl font-bold text-[#2E160C]">Omakase</h1>
         <p className="mt-2 text-sm text-[#7F532C]">
           Accede a tu cuenta para continuar con la experiencia.
         </p>

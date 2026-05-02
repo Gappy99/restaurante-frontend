@@ -1,8 +1,3 @@
-/**
- * Tables
- * Componente para mostrar la lista de mesas
- */
-
 import TableCard from './TableCard.jsx'
 
 /* eslint-disable react/prop-types */

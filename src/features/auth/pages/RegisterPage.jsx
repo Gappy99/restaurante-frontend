@@ -30,7 +30,7 @@ const RegisterPage = () => {
       })
 
       if (res.success) {
-        toast.success('Cuenta creada correctamente')
+        toast.success('Cuenta creada exitosamente')
         navigate('/login')
       }
     } catch (err) {

@@ -1,7 +1,3 @@
-/**
- * Custom Hooks del feature Tables
- */
-
 import { useCallback } from 'react'
 import useTableStore from '../store/useTableStore.js'
 

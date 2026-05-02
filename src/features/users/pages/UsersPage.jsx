@@ -26,7 +26,19 @@ const UsersPage = () => {
   }
 
   const handleOpenModal = (user = null) => {
-    setEditingUser(user)
+    if (user) {
+      // Mapear campos del backend al formato del formulario
+      setEditingUser({
+        _id: user._id || user.contact_id,
+        nombre: user.contact_name || user.nombre || '',
+        email: user.contact_email || user.email || '',
+        telefono: user.contact_phone_number || user.telefono || '',
+        rol: user.contact_position || user.rol || 'CLIENTE',
+        contact_type: user.contact_type || 'CLIENTE'
+      })
+    } else {
+      setEditingUser(null)
+    }
     setIsModalOpen(true)
   }
 

@@ -1,8 +1,3 @@
-/**
- * TablesDisplay
- * Componente para mostrar el listado general de mesas en formato de tarjetas
- */
-
 import TableCardDisplay from './TableCardDisplay.jsx'
 
 /* eslint-disable react/prop-types */

@@ -1,96 +1,191 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import RestaurantCard from '../components/RestaurantCard'
-import RestaurantModal from '../components/RestaurantModal'
-import useRestaurantStore from '../stores/useRestaurantStore'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import InformationCard from '../components/InformationCard'
+import InformationModal from '../components/InformationModal'
+import useInformationStore from '../store/useInformationStore'
 
 const InformationPage = () => {
-  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const restaurantId = searchParams.get('restaurantId') || ''
+
   const {
+    informations,
     restaurants,
     loading,
     error,
+    loadInformations,
     loadRestaurants,
-    addRestaurant,
-    updateRestaurant,
-    deleteRestaurant,
-  } = useRestaurantStore()
-  const [openModal, setOpenModal] = useState(false)
-  const [editingRestaurant, setEditingRestaurant] = useState(null)
+    createInformation,
+    updateInformation,
+    deleteInformation,
+  } = useInformationStore()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingInformation, setEditingInformation] = useState(null)
 
   useEffect(() => {
     loadRestaurants()
   }, [loadRestaurants])
 
-  const handleOpenModal = (restaurant = null) => {
-    setEditingRestaurant(restaurant)
-    setOpenModal(true)
+  useEffect(() => {
+    loadInformations(restaurantId)
+  }, [loadInformations, restaurantId])
+
+  const restaurantMap = useMemo(() => {
+    return restaurants.reduce((accumulator, restaurant) => {
+      const id = restaurant._id || restaurant.id
+      if (id) {
+        accumulator[id] =
+          restaurant.restaurant_name ||
+          restaurant.nombre ||
+          restaurant.name ||
+          'Restaurante sin nombre'
+      }
+      return accumulator
+    }, {})
+  }, [restaurants])
+
+  const handleOpenModal = (information = null) => {
+    setEditingInformation(information)
+    setIsModalOpen(true)
   }
 
   const handleCloseModal = () => {
-    setEditingRestaurant(null)
-    setOpenModal(false)
+    setEditingInformation(null)
+    setIsModalOpen(false)
   }
 
-  const handleDelete = (id) => {
-    if (window.confirm('¿Eliminar este restaurante?')) {
-      deleteRestaurant(id)
-    }
+  const handleFilterChange = (event) => {
+    const value = event.target.value
+    setSearchParams(value ? { restaurantId: value } : {})
   }
 
-  const handleSave = (restaurantData) => {
-    if (editingRestaurant) {
-      updateRestaurant(editingRestaurant._id, restaurantData)
-    } else {
-      addRestaurant(restaurantData)
+  const handleDelete = async (id) => {
+    if (!window.confirm('¿Eliminar esta información?')) {
+      return
     }
-    handleCloseModal()
+
+    const result = await deleteInformation(id)
+    if (result.success) {
+      toast.success('Información eliminada')
+      return
+    }
+
+    toast.error(result.error || 'No se pudo eliminar la información')
+  }
+
+  const handleSave = async (informationData) => {
+    const editId = editingInformation?._id || editingInformation?.id
+    const isEditing = Boolean(editingInformation && editId)
+
+    if (editingInformation && !editId) {
+      toast.error('No se puede actualizar: falta el ID de la información')
+      return { success: false, error: 'MISSING_INFORMATION_ID' }
+    }
+
+    const result = isEditing
+      ? await updateInformation(editId, informationData)
+      : await createInformation(informationData)
+
+    if (result.success) {
+      toast.success(isEditing ? 'Información actualizada' : 'Información creada')
+      handleCloseModal()
+      await loadInformations(restaurantId)
+      return result
+    }
+
+    toast.error(result.error || 'No se pudo guardar la información')
+    return result
   }
 
   return (
-    <div className="p-4">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
-        <div>
-          <button
-            onClick={() => navigate(-1)}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent-soft)] bg-[var(--surface)] px-4 py-2 text-[var(--text)] hover:bg-[var(--accent-soft)] transition"
-          >
-            ← Regresar
-          </button>
-          <h1 className="text-3xl font-bold text-[var(--text)]">Gestión de Restaurantes</h1>
-          <p className="text-[var(--muted)] text-sm">Administra los restaurantes registrados</p>
+    <div className="p-4 md:p-6 space-y-6">
+      <div className="flex flex-col gap-4 rounded-3xl border border-[var(--accent-soft)] bg-[var(--surface)] p-6 shadow-sm lg:flex-row lg:items-end lg:justify-between">
+        <div className="space-y-2">
+          <span className="inline-flex rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text)]">
+            Information
+          </span>
+          <h1 className="text-3xl font-bold text-[var(--text)]">Información por restaurante</h1>
+          <p className="text-sm text-[var(--muted)]">
+            El backend exige restaurantId, así que aquí puedes crear, filtrar y administrar la información por restaurante.
+          </p>
         </div>
 
-        <button
-          onClick={() => handleOpenModal()}
-          className="bg-[var(--primary)] px-4 py-2 rounded text-[var(--surface)] hover:bg-[#446b5b] transition"
-        >
-          + Agregar Restaurante
-        </button>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="min-w-72">
+            <label className="mb-1 block text-sm font-semibold text-[var(--text)]">Filtrar por restaurante</label>
+            <select
+              value={restaurantId}
+              onChange={handleFilterChange}
+              className="w-full rounded-xl border border-[var(--accent-soft)] bg-[var(--surface)] px-4 py-3 text-[var(--text)] outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20"
+            >
+              <option value="">Todos los restaurantes</option>
+              {restaurants.map((restaurant) => {
+                const id = restaurant._id || restaurant.id
+                return (
+                  <option key={id} value={id}>
+                    {restaurant.restaurant_name || restaurant.nombre || restaurant.name || 'Restaurante sin nombre'}
+                  </option>
+                )
+              })}
+            </select>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleOpenModal()}
+            className="h-fit rounded-xl bg-[var(--primary)] px-5 py-3 font-medium text-[var(--surface)] transition hover:bg-[#446b5b]"
+          >
+            + Agregar información
+          </button>
+        </div>
       </div>
 
       {loading ? (
-        <div className="rounded-3xl bg-[var(--surface)] p-8 text-center text-[var(--muted)] border border-[var(--accent-soft)]">Cargando restaurantes...</div>
+        <div className="rounded-3xl border border-[var(--accent-soft)] bg-[var(--surface)] p-8 text-center text-[var(--muted)]">
+          Cargando información...
+        </div>
       ) : error ? (
-        <div className="rounded-3xl bg-[var(--accent-soft)] p-8 text-[var(--accent)]">{error}</div>
+        <div className="rounded-3xl border border-[var(--accent-soft)] bg-[var(--bg)] p-8 text-[var(--accent)]">
+          {error}
+        </div>
+      ) : informations.length === 0 ? (
+        <div className="rounded-3xl border border-dashed border-[var(--accent-soft)] bg-[var(--surface)] p-10 text-center text-[var(--muted)]">
+          No hay información registrada{restaurantId ? ' para este restaurante' : ''}.
+        </div>
       ) : (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {restaurants.map((restaurant) => (
-            <RestaurantCard
-              key={restaurant._id}
-              restaurant={restaurant}
-              onEdit={handleOpenModal}
-              onDelete={handleDelete}
-            />
-          ))}
+        <div className="grid gap-6 lg:grid-cols-2 2xl:grid-cols-3">
+          {informations.map((information, index) => {
+            const infoId = information._id || information.id || `info-${index}`
+            const restaurantIdValue = information.restaurantId?._id || information.restaurantId?.id || information.restaurantId
+            const restaurantNameValue =
+              restaurantMap[restaurantIdValue] ||
+              information.restaurantId?.restaurant_name ||
+              information.restaurantId?.nombre ||
+              information.restaurantId?.name ||
+              'No disponible'
+            return (
+              <InformationCard
+                key={infoId}
+                information={information}
+                restaurantName={restaurantNameValue}
+                onEdit={handleOpenModal}
+                onDelete={handleDelete}
+              />
+            )
+          })}
         </div>
       )}
 
-      <RestaurantModal
-        isOpen={openModal}
+      <InformationModal
+        isOpen={isModalOpen}
         onClose={handleCloseModal}
-        restaurant={editingRestaurant}
         onSave={handleSave}
+        information={editingInformation}
+        restaurants={restaurants}
+        defaultRestaurantId={restaurantId}
+        isSaving={loading}
       />
     </div>
   )

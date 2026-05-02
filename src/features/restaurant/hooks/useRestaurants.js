@@ -1,7 +1,3 @@
-/**
- * Custom Hooks del feature Restaurant
- */
-
 import { useCallback } from 'react'
 import useRestaurantStore from '../store/useRestaurantStore.js'
 

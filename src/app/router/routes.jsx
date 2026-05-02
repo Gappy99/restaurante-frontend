@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 // Layouts
 import MainLayout from '../layouts/MainLayout'
@@ -9,7 +9,7 @@ import LoginPage from '../../features/auth/pages/LoginPage'
 import RegisterPage from '../../features/auth/pages/RegisterPage'
 import NotFoundPage from '../../features/common/pages/NotFoundPage'
 import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
-import MenuPage from '../../features/common/pages/MenuPage'
+import MenuPage from '../../features/menus/pages/MenuPage'
 
 // Páginas principales
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
@@ -31,6 +31,11 @@ import ProfilePage from '../../features/users/pages/ProfilePage'
  * Configuración de rutas
  */
 const router = createBrowserRouter([
+  // Ruta raíz redirige al login
+  {
+    path: '/',
+    element: <Navigate to="/login" replace />,
+  },
   // Rutas públicas
   {
     path: '/login',
@@ -48,15 +53,14 @@ const router = createBrowserRouter([
       </AuthLayout>
     ),
   },
+  // Rutas principales protegidas
   {
-    path: '/information',
-    element: <InformationPage />,
-  },
-
-  // Rutas principales sin protección por ahora
-  {
-    path: '/',
-    element: <MainLayout />,
+    path: '/loby',
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,

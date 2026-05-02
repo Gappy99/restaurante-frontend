@@ -1,9 +1,3 @@
-/**
- * Barrel export principal del feature Restaurant
- * Exporta solo lo que otros features necesitan
- */
-
-// Hooks
 export {
   useRestaurants,
   useRestaurant,

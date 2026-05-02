@@ -1,6 +1,3 @@
-/**
- * Modal de confirmación para eliminar mesa
- */
 const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, loading, tableName }) => {
   if (!isOpen) return null
 

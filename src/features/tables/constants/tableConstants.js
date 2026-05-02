@@ -1,7 +1,3 @@
-/**
- * Constantes del feature Tables
- */
-
 export const TABLE_MESSAGES = {
 	FETCH_SUCCESS: 'Mesas cargadas exitosamente',
 	FETCH_ERROR: 'Error al cargar mesas',

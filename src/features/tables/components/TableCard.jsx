@@ -1,8 +1,3 @@
-/**
- * TableCard
- * Componente de tarjeta para una mesa individual
- */
-
 import {
 	getTableRestaurantLabel,
 	getTableStateLabel,

@@ -1,8 +1,3 @@
-/**
- * Store de Restaurant con Zustand
- * Maneja el estado global del feature restaurant
- */
-
 import { create } from 'zustand'
 import { restaurantService } from '../services/restaurantService.js'
 import { RESTAURANT_DEFAULTS } from '../constants/restaurantConstants.js'
@@ -113,7 +108,7 @@ const useRestaurantStore = create((set, get) => ({
     )
 
     // Debug: ensure updated data (including images) arrives from service
-    console.log('🔁 useRestaurantStore.updateRestaurant result.data:', result?.data)
+    console.log(' useRestaurantStore.updateRestaurant result.data:', result?.data)
 
     if (result.success) {
       set((state) => ({

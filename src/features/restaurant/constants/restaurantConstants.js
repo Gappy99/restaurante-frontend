@@ -1,7 +1,3 @@
-/**
- * Constantes del feature Restaurant
- */
-
 export const RESTAURANT_MESSAGES = {
   FETCH_SUCCESS: 'Restaurantes cargados exitosamente',
   FETCH_ERROR: 'Error al cargar restaurantes',

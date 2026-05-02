@@ -1,7 +1,3 @@
-/**
- * Layout para páginas de autenticación
- * Sin sidebar ni navbar
- */
 const AuthLayout = ({ children }) => {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#2E160C] px-4 py-8">

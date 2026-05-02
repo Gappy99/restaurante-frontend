@@ -1,7 +1,3 @@
-/**
- * Barrel export principal del feature Tables
- */
-
 export {
 	useTables,
 	useTable,
