@@ -13,8 +13,8 @@ const RestaurantPage = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const [restaurantToDelete, setRestaurantToDelete] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
 
-  // --- Lógica intacta ---
   useEffect(() => { fetchRestaurants() }, [fetchRestaurants])
   useEffect(() => { if (error) { toast.error(error) } }, [error])
 
@@ -58,6 +58,16 @@ const RestaurantPage = () => {
     setRestaurantToDelete(null)
   }
 
+  const normalizedSearch = searchTerm.trim().toLowerCase()
+  const filteredRestaurants = restaurants.filter((restaurant) => {
+    if (!normalizedSearch) return true
+
+    const name = (restaurant.restaurant_name || restaurant.name || '').toLowerCase()
+    const direction = (restaurant.restaurant_direction || '').toLowerCase()
+
+    return name.includes(normalizedSearch) || direction.includes(normalizedSearch)
+  })
+
   return (
     // Fondo principal en el marrón más oscuro según tu paleta
     <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] p-4 md:p-8 font-sans">
@@ -72,14 +82,27 @@ const RestaurantPage = () => {
             Sistema de Administración Gastronómica Premium
           </p>
         </div>
-        
-        <button
-          onClick={handleCreateNew}
-          className="mt-8 md:mt-0 px-10 py-4 bg-[#7F532C] hover:bg-[#946841] text-[#FCF0CA] hover:scale-105 active:scale-95 transition-all duration-300 rounded-2xl font-bold shadow-lg shadow-black/20 flex items-center gap-3 border border-[#FCF0CA]/10"
-          disabled={loading}
-        >
-          <span className="text-xl">+</span> Nuevo Restaurante
-        </button>
+
+        <div className="mt-8 md:mt-0 flex w-full md:w-auto flex-col md:flex-row gap-4 items-stretch md:items-center">
+          <div className="relative w-full md:w-96">
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#946841]">🔎</span>
+            <input
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Buscar restaurante o dirección"
+              className="w-full rounded-2xl border border-[#7F532C]/30 bg-[#2E160C]/80 py-4 pl-12 pr-4 text-[#FCF0CA] placeholder:text-[#946841]/80 outline-none transition focus:border-[#FCF0CA]/60 focus:ring-2 focus:ring-[#946841]/25"
+            />
+          </div>
+
+          <button
+            onClick={handleCreateNew}
+            className="px-10 py-4 bg-[#7F532C] hover:bg-[#946841] text-[#FCF0CA] hover:scale-105 active:scale-95 transition-all duration-300 rounded-2xl font-bold shadow-lg shadow-black/20 flex items-center gap-3 border border-[#FCF0CA]/10"
+            disabled={loading}
+          >
+            <span className="text-xl">+</span> Nuevo Restaurante
+          </button>
+        </div>
       </header>
 
       <main className="max-w-7xl mx-auto relative">
@@ -87,7 +110,7 @@ const RestaurantPage = () => {
         {/* Sección de visualización - El componente Restaurants ya maneja el grid */}
         <section className="relative z-10">
           <Restaurants
-            restaurants={restaurants}
+            restaurants={filteredRestaurants}
             loading={loading}
             onDelete={handleDeleteClick}
             onEdit={handleEdit}

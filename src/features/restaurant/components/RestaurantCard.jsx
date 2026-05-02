@@ -67,7 +67,7 @@ const RestaurantCard = ({ restaurant, onEdit, onDelete }) => {
             ✏️ Editar
           </button>
           <Link
-            to={`/restaurants/${restaurant._id || restaurant.id}`}
+            to={`/loby/restaurants/${restaurant._id || restaurant.id}`}
             className="px-3 py-2 rounded-xl border border-[#946841]/60 bg-[#946841]/10 text-black hover:bg-[#946841]/20 transition-all flex items-center justify-center font-medium"
           >
             🍽️ Ver

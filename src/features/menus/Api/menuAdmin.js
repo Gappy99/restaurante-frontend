@@ -1,21 +1,21 @@
 import { axiosAdmin } from "../Api/api.js"
 
 export const getMenus = async () => {
-    return axiosAdmin.get("/menus");
+    const response = await axiosAdmin.get("/menu");
+    return response.data;
 }
 
 export const createMenu = async (data) => {
-    return await axiosAdmin.post("/menus", data, {
-        headers: { "Content-Type": "multipart/form-data"}
-    })
+    const response = await axiosAdmin.post("/menu", data);
+    return response.data;
 }
 
 export const updateMenu = async (id, data) => {
-    return await axiosAdmin.put(`/menus/${id}`, data, {
-        headers: { "Content-Type": "multipart/form-data"}
-    })
+    const response = await axiosAdmin.put(`/menu/${id}`, data);
+    return response.data;
 }
 
 export const deleteMenu = async (id) => {
-    return await axiosAdmin.put(`/menus/${id}/desactivate`)
+    const response = await axiosAdmin.delete(`/menu/${id}`)
+    return response.data;
 }

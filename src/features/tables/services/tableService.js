@@ -1,8 +1,3 @@
-/**
- * Servicio de Table
- * Maneja todas las llamadas API relacionadas con mesas
- */
-
 import adminClient from '../../../shared/api/adminClient.js'
 import { TABLE_API_ENDPOINTS } from '../constants/tableConstants.js'
 

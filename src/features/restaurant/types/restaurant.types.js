@@ -1,8 +1,3 @@
-/**
- * Types y constantes para el dominio Restaurant
- * Alineados con el backend MongoDB
- */
-
 export const RESTAURANT_STATUS = {
   ACTIVE: true,
   INACTIVE: false,

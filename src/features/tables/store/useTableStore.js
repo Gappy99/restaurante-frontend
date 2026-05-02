@@ -1,8 +1,3 @@
-/**
- * Store de Table con Zustand
- * Maneja el estado global del feature tables
- */
-
 import { create } from 'zustand'
 import { tableService } from '../services/tableService.js'
 import { TABLE_DEFAULTS } from '../constants/tableConstants.js'

@@ -1,6 +1,3 @@
-/**
- * Modal de confirmación para eliminar restaurante
- */
 const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, loading, restaurantName }) => {
   if (!isOpen) return null
 

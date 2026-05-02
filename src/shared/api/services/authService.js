@@ -7,7 +7,7 @@ export const authService = {
       const response = await authClient.post('/login', { email, password })
       const data = response.data || {}
       const token = data.token
-      const userDetails = data.userDetails || data.user || {}
+      const userDetails = data.data || data.userDetails || data.user || {}
 
       if (!token) {
         throw new Error('El backend no devolvió un token de autenticación')
@@ -15,8 +15,10 @@ export const authService = {
 
       const user = {
         id: userDetails.id || userDetails._id || null,
+        nombre: userDetails.nombre || userDetails.name || userDetails.username || '',
         username: userDetails.username || userDetails.nombre || '',
         email: userDetails.email || '',
+        telefono: userDetails.telefono || userDetails.phone || userDetails.contact_phone_number || '',
         profilePicture: userDetails.profilePicture || null,
         rol: userDetails.role || userDetails.rol || 'USER_ROLE',
       }
@@ -29,6 +31,7 @@ export const authService = {
       }
     } catch (error) {
       console.error('Login error:', error)
+
       toast.error(
         error.response?.data?.message || error.message || 'Error al iniciar sesión'
       )

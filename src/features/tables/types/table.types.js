@@ -1,7 +1,3 @@
-/**
- * Tipos y definiciones JSDoc para Table
- */
-
 export const TABLE_STATUS_VALUES = {
 	ACTIVE: true,
 	INACTIVE: false,

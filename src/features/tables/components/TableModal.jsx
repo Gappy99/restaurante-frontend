@@ -1,8 +1,3 @@
-/**
- * TableModal
- * Modal para crear/editar mesas
- */
-
 import { useState } from 'react'
 import { useTableForm } from '../hooks/useTables.js'
 import { validateTableForm, formatTableData } from '../utils/tableUtils.js'
