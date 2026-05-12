@@ -26,7 +26,19 @@ const UsersPage = () => {
   }
 
   const handleOpenModal = (user = null) => {
-    setEditingUser(user)
+    if (user) {
+      // Mapear campos del backend al formato del formulario
+      setEditingUser({
+        _id: user._id || user.contact_id,
+        nombre: user.contact_name || user.nombre || '',
+        email: user.contact_email || user.email || '',
+        telefono: user.contact_phone_number || user.telefono || '',
+        rol: user.contact_position || user.rol || 'CLIENTE',
+        contact_type: user.contact_type || 'CLIENTE'
+      })
+    } else {
+      setEditingUser(null)
+    }
     setIsModalOpen(true)
   }
 
@@ -52,20 +64,19 @@ const UsersPage = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Gestión de Usuarios</h1>
+        <h1 className="text-3xl font-bold text-[var(--text)]">Gestión de Usuarios</h1>
         <button
           onClick={() => handleOpenModal()}
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
+          className="px-6 py-2 bg-[var(--primary)] hover:bg-[#446b5b] text-[var(--surface)] rounded-lg font-semibold transition"
         >
           + Nuevo Usuario
         </button>
       </div>
-
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="p-6 text-center text-gray-500">Cargando usuarios...</div>
+          <div className="p-6 text-center text-[var(--muted)]">Cargando usuarios...</div>
         ) : users.length === 0 ? (
-          <div className="p-6 text-center text-gray-500">
+          <div className="p-6 text-center text-[var(--muted)]">
             No hay usuarios registrados
           </div>
         ) : (
@@ -105,45 +116,57 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
   const onSubmit = async (data) => {
     setIsSubmitting(true)
 
-    if (user?._id) {
-      await userService.updateUser(user._id, data)
-    } else {
-      await userService.createUser({ ...data, rol: 'CLIENTE' })
-    }
+    try {
+      if (user?._id) {
+        await userService.updateUser(user._id, data)
+      } else {
+        await userService.createUser({ ...data, rol: 'CLIENTE' })
+      }
 
-    setIsSubmitting(false)
-    onSuccess()
+      onSuccess()
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={user ? 'Editar Usuario' : 'Nuevo Usuario'}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <input
-          {...register('nombre', { required: 'Nombre requerido' })}
-          placeholder="Nombre"
-          className="w-full px-4 py-2 border rounded-lg"
-        />
-        {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre.message}</p>}
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1">Nombre</label>
+          <input
+            {...register('nombre', { required: 'Nombre requerido' })}
+            placeholder="Nombre"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre.message}</p>}
+        </div>
 
-        <input
-          {...register('email', { required: 'Email requerido' })}
-          placeholder="Email"
-          className="w-full px-4 py-2 border rounded-lg"
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1">Email</label>
+          <input
+            {...register('email', { required: 'Email requerido' })}
+            placeholder="Email"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        </div>
 
-        <input
-          {...register('telefono')}
-          placeholder="Teléfono"
-          className="w-full px-4 py-2 border rounded-lg"
-        />
+        <div>
+          <label className="block text-sm font-medium text-[var(--muted)] mb-1">Teléfono</label>
+          <input
+            {...register('telefono')}
+            placeholder="Teléfono"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+        </div>
 
         <div className="flex justify-end gap-3">
-          <button type="button" onClick={onClose}>
+          <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg border">
             Cancelar
           </button>
 
-          <button type="submit" disabled={isSubmitting}>
+          <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-[#5B300E] text-[#FCF0CA] rounded-lg">
             {isSubmitting ? 'Guardando...' : user ? 'Actualizar' : 'Crear'}
           </button>
         </div>

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import useAuthStore from '../../../shared/stores/useAuthStore'
 import { authService } from '../../../shared/api/services/authService'
+import '../LoginPage.css'
 
 /**
  * Página de Login
@@ -16,71 +17,64 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true)
-    const result = await authService.login(data.email, data.password)
+    try {
+      const result = await authService.login(data.email, data.password)
 
-    if (result.success) {
-      login(result.token, result.user, result.refreshToken)
-      toast.success('Sesión iniciada correctamente')
-      navigate('/')
+      if (result.success) {
+        login(result.token, result.user, result.refreshToken)
+        toast.success('Sesión iniciada correctamente')
+        navigate('/loby')
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-2xl p-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">RestaurantGO</h1>
-      <p className="text-gray-600 mb-8">Inicia sesión en tu cuenta</p>
+    <div className="container">
+      {/* Puntos animados alrededor del círculo */}
+      {Array.from({ length: 50 }).map((_, i) => (
+        <span key={i} style={{ '--i': i }} />
+      ))}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            placeholder="tu@email.com"
-            {...register('email', { required: 'Email requerido' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
+      <div className="login-box">
+        <h2>Omakase</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="input-box">
+            <input
+              type="email"
+              placeholder=" "
+              {...register('email', { required: 'Email requerido' })}
+            />
+            <label>Email</label>
+            {errors.email && <p className="error-text">{errors.email.message}</p>}
+          </div>
 
-        {/* Password */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            {...register('password', { required: 'Contraseña requerida' })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-          )}
-        </div>
+          <div className="input-box">
+            <input
+              type="password"
+              placeholder=" "
+              {...register('password', { required: 'Contraseña requerida' })}
+            />
+            <label>Contraseña</label>
+            {errors.password && <p className="error-text">{errors.password.message}</p>}
+          </div>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-2 rounded-lg transition"
-        >
-          {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
-        </button>
-      </form>
+          <div className="forgot-pass">
+            <a href="#">¿Olvidaste tu contraseña?</a>
+          </div>
 
-      {/* Register link */}
-      <p className="text-center text-gray-600 mt-4">
-        ¿No tienes cuenta?{' '}
-        <Link to="/register" className="text-blue-600 hover:underline font-semibold">
-          Regístrate
-        </Link>
-      </p>
+          <button className="btn" type="submit" disabled={isLoading}>
+            {isLoading ? 'Cargando...' : 'Iniciar sesión'}
+          </button>
+
+          <div className="signup-link">
+            <Link to="/register">Regístrate</Link>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

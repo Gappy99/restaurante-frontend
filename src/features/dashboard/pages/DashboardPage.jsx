@@ -1,103 +1,73 @@
-import { useEffect, useState } from 'react'
-import useUserStore from '../../../shared/stores/useUserStore'
-import useAuthStore from '../../../shared/stores/useAuthStore'
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+// Datos del Menú Principal (ahora son rutas reales)
+const menuItems = [
+  { id: 1, label: 'Restaurantes', path: '/loby/restaurants', specialClass: 'font-bold text-lg' },
+  { id: 2, label: 'Mesas', path: '/loby/tables' },
+  { id: 3, label: 'Todas las Mesas', path: '/loby/tables/all' },
+  { id: 4, label: 'Información', path: '/loby/information', specialClass: 'italic' },
+  { id: 5, label: 'Menú', path: '/loby/menu', specialClass: 'italic' },
+  { id: 6, label: 'Mi Perfil', path: '/loby/profile' },
+  { id: 7, label: 'Contactos', path: '/loby/users', specialClass: 'italic' },
+];
 
 /**
- * Página de Dashboard
+ * Página de Dashboard - Menú Principal (Hero)
  */
 const DashboardPage = () => {
-  const { user } = useAuthStore()
-  const { users } = useUserStore()
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    activeUsers: 0,
-    totalOrders: 0,
-    revenue: 0,
-  })
-
-  useEffect(() => {
-    // Simular carga de estadísticas
-    setStats({
-      totalUsers: users.length || 42,
-      activeUsers: Math.floor((users.length || 42) * 0.75),
-      totalOrders: 156,
-      revenue: 45230,
-    })
-  }, [users.length])
-
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
+    <div className="min-h-screen bg-black text-white font-sans">
+      {/* Menú Principal (Barra Superior) */}
+      <header className="border-b border-gray-800 py-10 px-6">
+        <nav className="flex flex-col items-center gap-6 max-w-7xl mx-auto">
+          {/* Título superior */}
+          <span className="text-gray-400 text-xs uppercase tracking-widest mb-4">
+            Conozca nuestras ramas
+          </span>
 
-      {/* Tarjetas de estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard
-          title="Total de Usuarios"
-          value={stats.totalUsers}
-          icon="👥"
-          color="bg-blue-500"
-        />
-        <StatCard
-          title="Usuarios Activos"
-          value={stats.activeUsers}
-          icon="✓"
-          color="bg-green-500"
-        />
-        <StatCard
-          title="Órdenes"
-          value={stats.totalOrders}
-          icon="🛒"
-          color="bg-yellow-500"
-        />
-        <StatCard
-          title="Ingresos"
-          value={`$${stats.revenue.toLocaleString()}`}
-          icon="💰"
-          color="bg-purple-500"
-        />
-      </div>
+          {/* Fila de Logos */}
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
+            {menuItems.map((item) => (
+              <Link
+                key={item.id}
+                to={item.path}
+                className={`text-gray-200 hover:text-white transition-colors duration-200 ${item.specialClass || 'text-sm'}`}>
+                <span className="tracking-wider uppercase">{item.label}</span>
+              </Link>
+            ))}
+          </div>
+        </nav>
+      </header>
 
-      {/* Información adicional */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Información del Usuario
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InfoItem label="Nombre" value={user?.nombre || 'N/A'} />
-          <InfoItem label="Email" value={user?.email || 'N/A'} />
-          <InfoItem label="Rol" value={user?.rol || 'N/A'} />
-          <InfoItem label="Teléfono" value={user?.telefono || 'N/A'} />
+      {/* Sección Hero */}
+      <main className="relative">
+        <div className="w-full h-screen md:h-[70vh] bg-[#2E160C] flex flex-col items-center justify-center pt-24 relative overflow-hidden">
+          {/* Imagen de Fondo */}
+          <img
+            src="https://static.wixstatic.com/media/00fb00_858f44146f614385a542ac5de52678a4~mv2.jpg/v1/fill/w_980,h_653,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/00fb00_858f44146f614385a542ac5de52678a4~mv2.jpg"
+            alt="Interior del restaurante elegante"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+
+          {/* Overlay oscuro para mejorar legibilidad del texto */}
+          <div className="absolute inset-0 bg-black/40"></div>
+
+          {/* Contenido superpuesto */}
+          <div className="relative z-10 flex flex-col items-center gap-6 text-center px-4">
+            <h1 className="text-white text-5xl md:text-7xl font-extrabold tracking-tight">Omakase</h1>
+
+            {/* Botón de Reserva */}
+            <Link
+              to="/loby/restaurants"
+              className="bg-white hover:bg-gray-200 text-black font-mono text-xs uppercase tracking-widest px-10 py-4 transition-all duration-300 font-semibold">
+              Explorar Restaurantes
+            </Link>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
-
-/**
- * Componente de tarjeta de estadística
- */
-const StatCard = ({ title, value, icon, color }) => (
-  <div className="bg-white rounded-lg shadow p-6">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-gray-600 text-sm mb-1">{title}</p>
-        <p className="text-3xl font-bold text-gray-900">{value}</p>
-      </div>
-      <div className={`${color} text-white text-4xl rounded-full w-16 h-16 flex items-center justify-center`}>
-        {icon}
-      </div>
-    </div>
-  </div>
-)
-
-/**
- * Componente de item de información
- */
-const InfoItem = ({ label, value }) => (
-  <div>
-    <p className="text-gray-600 text-sm">{label}</p>
-    <p className="text-gray-900 font-semibold">{value}</p>
-  </div>
-)
 
 export default DashboardPage
