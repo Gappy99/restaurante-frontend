@@ -19,7 +19,7 @@ const LoginPage = () => {
     const result = await authService.login(data.email, data.password)
 
     if (result.success) {
-      login(result.user, result.token, result.refreshToken)
+      login(result.token, result.user, result.refreshToken)
       toast.success('Sesión iniciada correctamente')
       navigate('/')
     }

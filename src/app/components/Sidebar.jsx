@@ -41,6 +41,22 @@ const Sidebar = () => {
           <span>Mi Perfil</span>
         </Link>
 
+        <Link
+          to="/reservations"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          <span>📅</span>
+          <span>Reservaciones</span>
+        </Link>
+
+        <Link
+          to="/notifications"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          <span>🔔</span>
+          <span>Notificaciones</span>
+        </Link>
+
         {isAdmin && (
           <>
             <Link

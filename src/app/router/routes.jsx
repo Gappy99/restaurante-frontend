@@ -15,6 +15,8 @@ import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
+import ReservationsPage from '../../features/reservations/pages/ReservationsPage'
+import NotificationsPage from '../../features/notifications/pages/NotificationsPage'
 
 // Página de perfil de usuario
 import ProfilePage from '../../features/users/pages/ProfilePage'
@@ -67,6 +69,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole="ADMIN">
             <FieldsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'reservations',
+        element: (
+          <ProtectedRoute>
+            <ReservationsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'notifications',
+        element: (
+          <ProtectedRoute>
+            <NotificationsPage />
           </ProtectedRoute>
         ),
       },
