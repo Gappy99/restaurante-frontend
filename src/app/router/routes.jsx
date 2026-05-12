@@ -16,6 +16,7 @@ import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
 import MenuPage from '../../features/menus/pages/MenuPage'
+import ReviewPage from '../../features/Review/pages/ReviewPage'
 
 /**
  * Configuración de rutas con protección
@@ -73,6 +74,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <MenuPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'reviews',
+        element: (
+          <ProtectedRoute>
+            <ReviewPage />
           </ProtectedRoute>
         ),
       },

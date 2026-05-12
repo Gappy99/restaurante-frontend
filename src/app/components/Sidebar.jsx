@@ -33,6 +33,14 @@ const Sidebar = () => {
           <span>Dashboard</span>
         </Link>
 
+        <Link
+          to="/reviews"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          <span>⭐</span>
+          <span>Reseñas</span>
+        </Link>
+
         {isAdmin && (
           <>
             <Link
