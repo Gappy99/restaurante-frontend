@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useRestaurantForm } from '../hooks/useRestaurants.js'
+import { useRestaurantForm } from '../hooks/useRestaurants.jsx'
 import { validateRestaurantForm, formatRestaurantData } from '../utils/restaurantUtils.js'
 import {
   RESTAURANT_TYPES,

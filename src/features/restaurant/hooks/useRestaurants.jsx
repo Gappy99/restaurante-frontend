@@ -93,7 +93,7 @@ export const useRestaurantForm = () => {
 }
 
 /**
- * Hook para búsqueda de restaurantes
+ * Hook para busqueda de restaurantes
  */
 export const useRestaurantSearch = () => {
   const {

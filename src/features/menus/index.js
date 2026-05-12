@@ -1,15 +1,15 @@
 // Menus Pages
-export { default as MenuPage } from './pages/MenuPage'
+export { default as MenuPage } from './pages/MenuPage.js'
 
 // Menus Components
-export { MenuCard } from './components/MenuCard'
-export { MenuModal } from './components/MenuModal'
+export { MenuCard } from './components/MenuCard.js'
+export { MenuModal } from './components/MenuModal.js'
 
 // Menus Hooks
-// export {} from './hooks'
+export { useMenus, useMenu } from './hooks/index.js'
 
 // Menus Services
-// export {} from './api/menuAdmin'
+export { getMenusRequest, createMenuRequest, updateMenuRequest, deleteMenuRequest } from './services/MenuService.js'
 
 // Menus Store
-export { useMenuStore } from './store/useMenuStore'
+export { default as useMenuStore } from './store/useMenuStore.js'

@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 export const MenuCard = ({ menu, onEdit, onDelete, onView, isAdmin }) => {
     const menuId = menu._id || menu.id || menu.Menu_id
     const menuName = menu.Menu_Plate || menu.name || "Sin nombre"
@@ -89,3 +91,18 @@ export const MenuCard = ({ menu, onEdit, onDelete, onView, isAdmin }) => {
         </div>
     );
 };
+
+MenuCard.propTypes = {
+    menu: PropTypes.object.isRequired,
+    onEdit: PropTypes.func,
+    onDelete: PropTypes.func,
+    onView: PropTypes.func,
+    isAdmin: PropTypes.bool,
+}
+
+MenuCard.defaultProps = {
+    onEdit: () => {},
+    onDelete: () => {},
+    onView: () => {},
+    isAdmin: false,
+}

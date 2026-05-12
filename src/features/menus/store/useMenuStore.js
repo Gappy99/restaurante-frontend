@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import { 
-    getMenus as getMenusRequest, 
-    createMenu as createMenuRequest, 
-    updateMenu as updateMenuRequest, 
-    deleteMenu as deleteMenuRequest 
-} from "../api/menuAdmin.js"; 
+    getMenusRequest, 
+    createMenuRequest, 
+    updateMenuRequest, 
+    deleteMenuRequest 
+} from "../services/MenuService.js"; 
 import toast from "react-hot-toast";
 
 const normalizeMenuList = (payload) => {
@@ -15,10 +15,33 @@ const normalizeMenuList = (payload) => {
 };
 
 export const useMenuStore = create((set, get) => ({
+    // State
     menus: [],
+    currentMenu: null,
     loading: false,
     error: null,
+    filters: {
+        search: '',
+        restaurant: null,
+        available: null,
+    },
 
+    // Setters
+    setMenus: (menus) => set({ menus }),
+    setCurrentMenu: (menu) => set({ currentMenu: menu }),
+    setLoading: (loading) => set({ loading }),
+    setError: (error) => set({ error }),
+    setFilters: (filters) =>
+        set((state) => ({
+            filters: { ...state.filters, ...filters },
+        })),
+
+    clearError: () => set({ error: null }),
+    clearCurrentMenu: () => set({ currentMenu: null }),
+
+    resolveMenuId: (menu) => menu?._id || menu?.id,
+
+    // Async Actions
     fetchMenus: async () => {
         try {
             set({ loading: true, error: null });
@@ -30,6 +53,24 @@ export const useMenuStore = create((set, get) => ({
             const message = err.response?.data?.message || "Error al cargar los menús";
             set({ error: message, loading: false, menus: [] });
             toast.error(message);
+            return { success: false, error: message };
+        }
+    },
+
+    fetchMenuById: async (id) => {
+        try {
+            set({ loading: true, error: null });
+            // Buscar en la lista local
+            const menu = get().menus.find(m => (m._id || m.id) === id);
+            if (menu) {
+                set({ currentMenu: menu, loading: false });
+                return { success: true, data: menu };
+            }
+            set({ loading: false, error: "Menú no encontrado" });
+            return { success: false, error: "Menú no encontrado" };
+        } catch (err) {
+            const message = err.response?.data?.message || "Error al cargar el menú";
+            set({ error: message, loading: false });
             return { success: false, error: message };
         }
     },
@@ -69,10 +110,11 @@ export const useMenuStore = create((set, get) => ({
             const message = err.response?.data?.message || "Error al desactivar el menú";
             set({ error: message, loading: false });
             toast.error(message);
-            return { success: false };
+            return { success: false, error: message };
         }
     },
 
+    // Local mutations
     addMenu: (menu) => {
         set(state => ({ menus: [...state.menus, menu] }));
     },
@@ -91,6 +133,37 @@ export const useMenuStore = create((set, get) => ({
         }));
     },
 
-    setLoading: (loading) => set({ loading }),
-    setError: (error) => set({ error }),
+    // Getters
+    getFilteredMenus: () => {
+        const state = get();
+        let filtered = state.menus;
+
+        if (state.filters.search) {
+            filtered = filtered.filter((m) =>
+                (m.name || m.Menu_Plate || '')
+                    .toLowerCase()
+                    .includes(state.filters.search.toLowerCase())
+            );
+        }
+
+        if (state.filters.available !== null) {
+            filtered = filtered.filter((m) => m.available === state.filters.available);
+        }
+
+        if (state.filters.restaurant) {
+            filtered = filtered.filter((m) => 
+                (m.restaurant_id || m.Restaurant_id) === state.filters.restaurant
+            );
+        }
+
+        return filtered;
+    },
+
+    getTotalCount: () => get().menus.length,
+
+    getMenuById: (id) =>
+        get().menus.find((m) => (m._id || m.id) === id),
 }));
+
+export default useMenuStore;
+

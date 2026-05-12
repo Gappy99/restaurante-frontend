@@ -12,7 +12,7 @@ src/features/restaurant/
 │   ├── RestaurantModal.jsx     # Modal para crear/editar
 │   └── index.js                # Barrel export
 ├── hooks/                      # Custom hooks
-│   ├── useRestaurants.js       # Todos los hooks del feature
+│   ├── useRestaurants.jsx      # Todos los hooks del feature
 │   └── index.js                # Barrel export
 ├── store/                      # Gestión de estado (Zustand)
 │   └── useRestaurantStore.js   # Store global
@@ -200,7 +200,7 @@ const sorted = sortRestaurants(filtered, 'name', 'asc')
 ## ✅ Checklist para Expandir el Feature
 
 - [ ] Crear componentes adicionales en `components/`
-- [ ] Agregar más hooks en `hooks/useRestaurants.js`
+- [ ] Agregar más hooks en `hooks/useRestaurants.jsx`
 - [ ] Ampliar validaciones en `utils/restaurantUtils.js`
 - [ ] Agregar constantes nuevas en `constants/restaurantConstants.js`
 - [ ] Crear nuevas páginas en `pages/`

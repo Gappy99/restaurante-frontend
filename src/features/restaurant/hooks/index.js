@@ -4,4 +4,4 @@ export {
   useRestaurantForm,
   useRestaurantSearch,
   useRestaurantDelete,
-} from './useRestaurants.js'
+} from './useRestaurants.jsx'

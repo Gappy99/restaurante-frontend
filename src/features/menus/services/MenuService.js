@@ -1,4 +1,4 @@
-import { axiosAdmin } from "../../menus/Api/api.js";
+import { axiosAdmin } from "../Api/api.js";
 
 export const getMenusRequest = async () => {
     try {
@@ -11,10 +11,12 @@ export const getMenusRequest = async () => {
 
 export const createMenuRequest = async (menuData) => {
     try {
+        console.debug("[MenuService] createMenu payload:", menuData);
         const response = await axiosAdmin.post("/menu", menuData);
         return response.data;
     } catch (error) {
-        throw error.response?.data?.message || "Error al crear menú";
+        console.error("[MenuService] createMenu error response:", error.response?.data || error.message || error);
+        throw error.response?.data?.message || error.response?.data || "Error al crear menú";
     }
 };
 
