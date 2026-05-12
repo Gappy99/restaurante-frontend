@@ -1,5 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
-import ProtectedRoute from './ProtectedRoute'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 // Layouts
 import MainLayout from '../layouts/MainLayout'
@@ -10,18 +9,33 @@ import LoginPage from '../../features/auth/pages/LoginPage'
 import RegisterPage from '../../features/auth/pages/RegisterPage'
 import NotFoundPage from '../../features/common/pages/NotFoundPage'
 import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
+import MenuPage from '../../features/menus/pages/MenuPage'
 
-// Páginas protegidas
+// Páginas principales
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
-import MenuPage from '../../features/menus/pages/MenuPage'
-import ReviewPage from '../../features/Review/pages/ReviewPage'
+import RestaurantPage from '../../features/restaurant/pages/RestaurantPage'
+import TablesPage from '../../features/tables/pages/TablesPage'
+import RestaurantMiniMenuPage from '../../features/restaurant/pages/RestaurantMiniMenuPage'
+import RestaurantTablesPage from '../../features/tables/pages/RestaurantTablesPage'
+import AllTablesPage from '../../features/tables/pages/AllTablesPage'
+import InformationPage from '../../features/Information/pages/InformationPage'
+
+import ProtectedRoute from './ProtectedRoute'
+
+// Página de perfil de usuario
+import ProfilePage from '../../features/users/pages/ProfilePage'
 
 /**
- * Configuración de rutas con protección
+ * Configuración de rutas
  */
 const router = createBrowserRouter([
+  // Ruta raíz redirige al login
+  {
+    path: '/',
+    element: <Navigate to="/login" replace />,
+  },
   // Rutas públicas
   {
     path: '/login',
@@ -39,10 +53,9 @@ const router = createBrowserRouter([
       </AuthLayout>
     ),
   },
-
-  // Rutas protegidas
+  // Rutas principales protegidas
   {
-    path: '/',
+    path: '/loby',
     element: (
       <ProtectedRoute>
         <MainLayout />
@@ -54,44 +67,50 @@ const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
+        path: 'information',
+        element: <InformationPage />,
+      },
+      {
+        path: 'menu',
+        element: <MenuPage />,
+      },
+      {
         path: 'users',
-        element: (
-          <ProtectedRoute requiredRole="ADMIN">
-            <UsersPage />
-          </ProtectedRoute>
-        ),
+        element: <UsersPage />,
+      },
+      {
+        path: 'restaurants',
+        element: <RestaurantPage />,
+      },
+      {
+        path: 'restaurants/:id',
+        element: <RestaurantMiniMenuPage />,
+      },
+      {
+        path: 'restaurants/:id/tables',
+        element: <RestaurantTablesPage />,
       },
       {
         path: 'fields',
-        element: (
-          <ProtectedRoute requiredRole="ADMIN">
-            <FieldsPage />
-          </ProtectedRoute>
-        ),
+        element: <FieldsPage />,
       },
       {
-        path: 'menus',
-        element: (
-          <ProtectedRoute>
-            <MenuPage />
-          </ProtectedRoute>
-        ),
+        path: 'tables',
+        element: <TablesPage />,
       },
       {
-        path: 'reviews',
+        path: 'tables/all',
+        element: <AllTablesPage />,
+      },
+      {
+        path: 'profile',
         element: (
           <ProtectedRoute>
-            <ReviewPage />
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },
     ],
-  },
-
-  // Páginas de error
-  {
-    path: '/unauthorized',
-    element: <UnauthorizedPage />,
   },
   {
     path: '*',

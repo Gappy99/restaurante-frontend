@@ -6,7 +6,8 @@ import useAuthStore from '../../shared/stores/useAuthStore'
  * Protege rutas que requieren autenticación
  */
 const ProtectedRoute = ({ children, requiredRole = null }) => {
-  const { isAuthenticated, user } = useAuthStore()
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const user = useAuthStore((state) => state.user)
 
   // No autenticado
   if (!isAuthenticated) {

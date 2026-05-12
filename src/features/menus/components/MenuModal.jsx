@@ -12,59 +12,67 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
         formState: { errors },
     } = useForm();
 
-    const saveMenu = useMenuStore((state) => state.saveMenu); // Cambiamos a la acción del store
+    const saveMenu = useMenuStore((state) => state.saveMenu);
     const loading = useMenuStore((state) => state.loading);
-    const [preview, setPreview] = useState(null);
 
-    const photoFile = watch("photo");
+    const menuId = menu?._id || menu?.id || menu?.Menu_id || ""
 
     useEffect(() => {
         if (isOpen) {
             if (menu) {
                 reset({
-                    name: menu.name,
-                    category: menu.category,
-                    price: menu.price,
-                    description: menu.description,
+                    Menu_id: menu.Menu_id || menu.menu_id || menuId,
+                    Menu_Plate: menu.Menu_Plate || menu.name || "",
+                    Menu_Price: menu.Menu_Price ?? menu.price ?? "",
+                    Menu_Drink: menu.Menu_Drink || menu.drink || "",
+                    Menu_type_plate: menu.Menu_type_plate || menu.category || "",
+                    Menu_type_drink: menu.Menu_type_drink || "",
+                    Menu_Promotion: menu.Menu_Promotion || "",
+                    Menu_description_plate: menu.Menu_description_plate || menu.description || "",
+                    Menu_ingredients: Array.isArray(menu.Menu_ingredients) ? menu.Menu_ingredients.join(", ") : (menu.Menu_ingredients || ""),
+                    Menu_available: menu.Menu_available ?? true,
+                    Restaurant_id: menu.Restaurant_id || menu.restaurant_id || "",
                 });
-                setPreview(menu.photo);
             } else {
                 reset({
-                    name: "",
-                    category: "",
-                    price: "",
-                    description: "",
-                    photo: null
+                    Menu_id: "",
+                    Menu_Plate: "",
+                    Menu_Price: "",
+                    Menu_Drink: "",
+                    Menu_type_plate: "",
+                    Menu_type_drink: "",
+                    Menu_Promotion: "",
+                    Menu_description_plate: "",
+                    Menu_ingredients: "",
+                    Menu_available: true,
+                    Restaurant_id: "",
                 });
-                setPreview(null);
             }
         }
     }, [isOpen, menu, reset]);
 
-    useEffect(() => {
-        if (photoFile && photoFile.length > 0) {
-            const file = photoFile[0];
-            setPreview(URL.createObjectURL(file));
-        }
-    }, [photoFile]);
-
     const onSubmit = async (data) => {
-        // Preparamos el FormData porque enviamos imagen (multipart/form-data)
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("category", data.category);
-        formData.append("price", data.price);
-        formData.append("description", data.description);
-        
-        if (data.photo && data.photo[0]) {
-            formData.append("photo", data.photo[0]);
-        }
+        const payload = {
+            Menu_id: Number(data.Menu_id),
+            Menu_Plate: data.Menu_Plate,
+            Menu_Price: Number(data.Menu_Price),
+            Menu_Drink: data.Menu_Drink,
+            Menu_type_plate: data.Menu_type_plate,
+            Menu_type_drink: data.Menu_type_drink,
+            Menu_Promotion: data.Menu_Promotion || undefined,
+            Menu_description_plate: data.Menu_description_plate,
+            Menu_ingredients: data.Menu_ingredients
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean),
+            Menu_available: Boolean(data.Menu_available),
+            Restaurant_id: data.Restaurant_id,
+        };
 
-        const result = await saveMenu(formData, menu?._id || menu?.id);
+        const result = await saveMenu(payload, menuId);
         
         if (result.success) {
             reset();
-            setPreview(null);
             onClose();
         }
     };
@@ -73,89 +81,102 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
 
     return (
         <div className="fixed inset-0 bg-[#2E160C]/60 backdrop-blur-sm flex justify-center items-center z-50 px-3">
-            <div className="bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-[#FCF0CA]">
+            <div className="bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto overflow-hidden border border-[#FCF0CA]">
                 
-                {/* HEADER CON TU PALETA VERDE */}
                 <div className="p-6 text-white bg-[#5B300E]">
                     <h2 className="text-2xl font-bold">
                         {menu ? "Editar Menú" : "Nuevo Platillo"}
                     </h2>
                     <p className="text-sm opacity-90">
-                        {menu ? "Actualiza los detalles del plato" : "Agrega una nueva delicia a la carta"}
+                        {menu ? "Actualiza los datos del menú" : "Agrega un nuevo menú al sistema"}
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-                    
-                    {/* PREVIEW CIRCULAR */}
-                    <div className="flex justify-center mb-2">
-                        <div className="w-32 h-32 rounded-2xl bg-[#FCF0CA] border-2 border-dashed border-[#5B300E] flex items-center justify-center overflow-hidden shadow-inner relative group">
-                            {preview ? (
-                                <img src={preview} className="w-full h-full object-cover" alt="Preview" />
-                            ) : (
-                                <span className="text-[#5B300E] text-xs font-bold text-center p-2">Sube una foto deliciosa</span>
-                            )}
-                        </div>
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Nombre del Plato */}
-                        <div className="md:col-span-2">
-                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Nombre del Menú</label>
-                            <input
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50"
-                                placeholder="Ej. Hamburguesa Artesanal"
-                                {...register("name", { required: "El nombre es obligatorio" })}
-                            />
-                            {errors.name && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.name.message}</p>}
+                        <div>
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">ID del Menú</label>
+                            <input className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" type="number" {...register("Menu_id", { required: "El ID es obligatorio" })} />
+                            {errors.Menu_id && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_id.message}</p>}
                         </div>
 
-                        {/* Categoría */}
+                        <div className="md:col-span-2">
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Nombre del Plato</label>
+                            <input className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="Ej. Hamburguesa Artesanal" {...register("Menu_Plate", { required: "El nombre es obligatorio" })} />
+                            {errors.Menu_Plate && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_Plate.message}</p>}
+                        </div>
+
                         <div>
-                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Categoría</label>
-                            <select
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50"
-                                {...register("category", { required: "Selecciona una categoría" })}
-                            >
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Precio (Q)</label>
+                            <input className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" type="number" step="0.01" {...register("Menu_Price", { required: "Precio necesario", min: 1 })} />
+                            {errors.Menu_Price && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_Price.message}</p>}
+                        </div>
+
+                        <div>
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Tipo de Plato</label>
+                            <select className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" {...register("Menu_type_plate", { required: "Selecciona un tipo de plato" })}>
                                 <option value="">Elegir...</option>
-                                <option value="Entradas">Entradas</option>
-                                <option value="Plato Fuerte">Plato Fuerte</option>
-                                <option value="Postres">Postres</option>
-                                <option value="Bebidas">Bebidas</option>
+                                <option value="Entrada">Entrada</option>
+                                <option value="Plato_fuerte">Plato fuerte</option>
+                                <option value="Postre">Postre</option>
+                                <option value="Bebida">Bebida</option>
+                            </select>
+                            {errors.Menu_type_plate && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_type_plate.message}</p>}
+                        </div>
+
+                        <div>
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Nombre de la Bebida</label>
+                            <input className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="Ej. Cerveza artesanal" {...register("Menu_Drink", { required: "La bebida es obligatoria" })} />
+                            {errors.Menu_Drink && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_Drink.message}</p>}
+                        </div>
+
+                        <div>
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Tipo de Bebida</label>
+                            <select className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" {...register("Menu_type_drink", { required: "Selecciona un tipo de bebida" })}>
+                                <option value="">Elegir...</option>
+                                <option value="Cerveza">Cerveza</option>
+                                <option value="Vinos">Vinos</option>
+                                <option value="Licores">Licores</option>
+                                <option value="Cocteles">Cocteles</option>
+                                <option value="shots">shots</option>
+                                <option value="Bebidas_sin_alcohol">Bebidas sin alcohol</option>
+                                <option value="Bebidas_calientes">Bebidas calientes</option>
+                            </select>
+                            {errors.Menu_type_drink && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_type_drink.message}</p>}
+                        </div>
+
+                        <div>
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Promoción</label>
+                            <select className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" {...register("Menu_Promotion")}>
+                                <option value="">Sin promoción</option>
+                                <option value="Promoción_Familiar">Promoción familiar</option>
+                                <option value="Promoción_de_Quincena">Promoción de quincena</option>
+                                <option value="Promoción_de_Cliente_frecuente">Cliente frecuente</option>
+                                <option value="Promoción_de_Temporada">Promoción de temporada</option>
+                                <option value="Promoción_de_Aniversario">Promoción de aniversario</option>
                             </select>
                         </div>
 
-                        {/* Precio */}
                         <div>
-                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Precio (Q)</label>
-                            <input
-                                type="number"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50"
-                                placeholder="0.00"
-                                {...register("price", { required: "Precio necesario", min: 1 })}
-                            />
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Restaurant ID</label>
+                            <input className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="ID del restaurante" {...register("Restaurant_id", { required: "El restaurante es obligatorio" })} />
+                            {errors.Restaurant_id && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Restaurant_id.message}</p>}
                         </div>
 
-                        {/* Descripción */}
                         <div className="md:col-span-2">
-                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Descripción e Ingredientes</label>
-                            <textarea
-                                rows="3"
-                                className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50 resize-none"
-                                placeholder="Describe el sabor..."
-                                {...register("description", { required: "Cuéntanos sobre el plato" })}
-                            />
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Descripción del Plato</label>
+                            <textarea rows="3" className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50 resize-none" placeholder="Describe el plato..." {...register("Menu_description_plate", { required: "La descripción es obligatoria" })} />
+                            {errors.Menu_description_plate && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_description_plate.message}</p>}
                         </div>
 
-                        {/* Input Foto */}
                         <div className="md:col-span-2">
-                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Cambiar Imagen</label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#946841] file:text-[#7F532C] hover:file:bg-[#7F532C] hover:file:text-white cursor-pointer w-full"
-                                {...register("photo")}
-                            />
+                            <label className="text-xs font-bold text-[#2E160C] uppercase mb-1 block">Ingredientes</label>
+                            <textarea rows="2" className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50 resize-none" placeholder="Ingresa los ingredientes separados por comas" {...register("Menu_ingredients")} />
+                        </div>
+
+                        <div className="md:col-span-2 flex items-center gap-3 rounded-xl border border-[#FCF0CA] px-4 py-3 bg-[#FCF0CA]/40">
+                            <input type="checkbox" className="h-4 w-4 accent-[#5B300E]" {...register("Menu_available")} />
+                            <label className="text-sm font-semibold text-[#2E160C]">Disponible</label>
                         </div>
                     </div>
 

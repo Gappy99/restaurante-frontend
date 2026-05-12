@@ -4,8 +4,15 @@ import {
     createMenu as createMenuRequest, 
     updateMenu as updateMenuRequest, 
     deleteMenu as deleteMenuRequest 
-} from "../Api/menuAdmin.js"; 
+} from "../api/menuAdmin.js"; 
 import toast from "react-hot-toast";
+
+const normalizeMenuList = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.data)) return payload.data;
+    if (Array.isArray(payload?.menus)) return payload.menus;
+    return [];
+};
 
 export const useMenuStore = create((set, get) => ({
     menus: [],
@@ -16,8 +23,9 @@ export const useMenuStore = create((set, get) => ({
         try {
             set({ loading: true, error: null });
             const response = await getMenusRequest();
-            set({ menus: response.data || [], loading: false });
-            return { success: true, data: response.data };
+            const menus = normalizeMenuList(response);
+            set({ menus, loading: false });
+            return { success: true, data: menus };
         } catch (err) {
             const message = err.response?.data?.message || "Error al cargar los menús";
             set({ error: message, loading: false, menus: [] });

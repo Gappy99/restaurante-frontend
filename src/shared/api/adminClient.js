@@ -1,9 +1,11 @@
 import axios from 'axios'
 import useAuthStore from '../stores/useAuthStore'
 
-// Instancia cliente para admin/recursos
+
 const adminClient = axios.create({
-  baseURL: import.meta.env.VITE_ADMIN_URL,
+  baseURL:
+    import.meta.env.VITE_ADMIN_URL ||
+    'http://localhost:3006/GestorRestaurante/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -16,12 +18,18 @@ adminClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    
+    // Si es FormData, no establecer Content-Type (axios lo hace automáticamente)
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']
+    }
+    
     return config
   },
   (error) => Promise.reject(error)
 )
 
-// Interceptor para responses
+
 adminClient.interceptors.response.use(
   (response) => response,
   async (error) => {
