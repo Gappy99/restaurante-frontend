@@ -12,7 +12,8 @@ export const createDishService = async (data) => {
         const response = await createDishRequest(data);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al crear platillo";
+        // Rethrow the full backend response object so callers can inspect validation details
+        throw error.response?.data || error.response || error;
     }
 };
 

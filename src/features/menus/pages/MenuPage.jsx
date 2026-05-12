@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { useMenuStore } from '../store/useMenuStore'
 import { MenuCard } from '../components/MenuCard'
 import { MenuModal } from '../components/MenuModal'
+import { MenuViewModal } from '../components/MenuViewModal'
 
 export default function MenuPage() {
   const { menus, fetchMenus, loading, removeMenu } = useMenuStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false)
   const [selectedMenu, setSelectedMenu] = useState(null)
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export default function MenuPage() {
 
   const handleViewClick = (menu) => {
     setSelectedMenu(menu)
-    setIsModalOpen(true)
+    setIsViewModalOpen(true)
   }
 
   return (

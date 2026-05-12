@@ -15,8 +15,12 @@ export const createMenuRequest = async (menuData) => {
         const response = await axiosAdmin.post("/menu", menuData);
         return response.data;
     } catch (error) {
-        console.error("[MenuService] createMenu error response:", error.response?.data || error.message || error);
-        throw error.response?.data?.message || error.response?.data || "Error al crear menú";
+        const backendError = error.response?.data;
+        console.error("[MenuService] createMenu error response:", backendError || error.message || error);
+        const detailMessage = backendError?.errors?.length
+            ? `${backendError.message || "Error de validación"}: ${backendError.errors.map((item) => item?.msg || item?.message || item?.path || JSON.stringify(item)).join(" | ")}`
+            : backendError?.message || "Error al crear menú";
+        throw detailMessage;
     }
 };
 

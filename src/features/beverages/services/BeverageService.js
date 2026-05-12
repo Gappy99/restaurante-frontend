@@ -12,7 +12,8 @@ export const createBeverageService = async (data) => {
         const response = await createBeverageRequest(data);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al crear bebida";
+        // Rethrow full backend response to surface validation details
+        throw error.response?.data || error.response || error;
     }
 };
 

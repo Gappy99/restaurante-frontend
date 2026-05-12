@@ -63,19 +63,19 @@ export const MenuCard = ({ menu, onEdit, onDelete, onView, isAdmin }) => {
                                 onClick={() => onView(menu)}
                                 className="flex-1 flex items-center justify-center py-3 bg-[#FCF0CA] text-[#5B300E] rounded-2xl font-bold text-sm hover:bg-[#946841] transition-all active:scale-95"
                             >
-                                👁️
+                                Ver
                             </button>
                             <button
                                 onClick={() => onEdit(menu)}
                                 className="flex-[2] flex items-center justify-center gap-2 py-3 bg-[#5B300E] text-white rounded-2xl font-bold text-sm hover:bg-[#2E160C] transition-all active:scale-95 shadow-md"
                             >
-                                ✏️ Editar
+                                Editar
                             </button>
                             <button
                                 onClick={handleDeleteClick}
                                 className="flex-1 flex items-center justify-center py-3 border-2 border-[#946841] text-[#7F532C] rounded-2xl font-bold text-sm hover:bg-[#7F532C] hover:text-white transition-all active:scale-95"
                             >
-                                🗑️
+                                Eliminar
                             </button>
                         </>
                     ) : (
@@ -83,7 +83,7 @@ export const MenuCard = ({ menu, onEdit, onDelete, onView, isAdmin }) => {
                             onClick={() => onView(menu)}
                             className="w-full flex items-center justify-center gap-2 py-3 bg-[#5B300E] text-white rounded-2xl font-bold text-sm hover:bg-[#2E160C] transition-all active:scale-95 shadow-md"
                         >
-                            👁️ Ver Detalles
+                            Ver Detalles
                         </button>
                     )}
                 </div>
