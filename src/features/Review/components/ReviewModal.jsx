@@ -25,7 +25,7 @@ const StarSelector = ({ value, onChange }) => {
   )
 }
 
-export const ReviewModal = ({ isOpen, onClose, review }) => {
+export const ReviewModal = ({ isOpen, onClose, review, restaurants = [] }) => {
   const currentUser = useAuthStore((state) => state.user)
   const currentUserId = currentUser?._id || currentUser?.id || currentUser?.user_id || ''
   const saveReview = useReviewStore((state) => state.saveReview)
@@ -106,22 +106,26 @@ export const ReviewModal = ({ isOpen, onClose, review }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 p-6">
           {!review && (
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-[#5B300E]">ID del restaurante</label>
-              <input
-                type="text"
-                placeholder="Ej. 66b6f2c9..."
+              <label className="text-sm font-semibold text-[#5B300E]">Restaurante</label>
+              <select
                 className="w-full rounded-xl border border-[#E8D8B5] bg-[#FFFDF8] px-4 py-3 text-[#2E160C] outline-none transition focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/20"
                 {...register('restaurant_id', {
-                  required: 'El ID del restaurante es obligatorio',
-                  minLength: { value: 8, message: 'Ingresa un ID válido' },
+                  required: 'Selecciona un restaurante',
                 })}
-              />
+              >
+                <option value="">Selecciona un restaurante</option>
+                {restaurants.map((restaurant) => {
+                  const restaurantId = restaurant?._id || restaurant?.id
+                  return (
+                    <option key={restaurantId} value={restaurantId}>
+                      {restaurant?.restaurant_name || restaurant?.name || `Restaurante ${restaurantId}`}
+                    </option>
+                  )
+                })}
+              </select>
               {errors.restaurant_id && (
                 <p className="text-sm text-red-600">{errors.restaurant_id.message}</p>
               )}
-              <p className="text-xs text-[#7F532C]">
-                El backend no expone listado de restaurantes en esta pantalla, por eso se usa el ID.
-              </p>
             </div>
           )}
 

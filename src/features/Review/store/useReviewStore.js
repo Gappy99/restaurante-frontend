@@ -8,6 +8,12 @@ import {
 } from '../api/reviewApi'
 
 const normalizeId = (value) => value?._id || value?.id || value || null
+const toReviewArray = (payload) => {
+  if (Array.isArray(payload)) return payload
+  if (Array.isArray(payload?.data)) return payload.data
+  if (Array.isArray(payload?.reviews)) return payload.reviews
+  return []
+}
 
 export const useReviewStore = create((set, get) => ({
   reviews: [],
@@ -19,7 +25,7 @@ export const useReviewStore = create((set, get) => ({
     try {
       set({ loading: true, error: null, restaurantFilter: restaurantId })
       const response = await getReviewsRequest(restaurantId || null)
-      const payload = response.data?.data || response.data?.reviews || response.data || []
+      const payload = toReviewArray(response.data)
       set({ reviews: payload, loading: false })
       return { success: true, data: payload }
     } catch (error) {
