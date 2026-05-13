@@ -53,9 +53,9 @@ const RestaurantCard = ({ restaurant, onEdit, onDelete }) => {
         </div>
 
         <div className="space-y-2 text-sm text-black font-light border-t border-[#946841]/20 pt-4">
-          <p className="truncate"><span className="text-[#946841] mr-1">📍</span> {restaurant.restaurant_direction}</p>
-          <p><span className="text-[#946841] mr-1">🕐</span> {restaurant.restaurant_time_start} - {restaurant.restaurant_time_close}</p>
-          <p className="text-black font-semibold"><span className="text-[#946841] mr-1">💰</span> ${restaurant.restaurant_mean_price}</p>
+          <p className="truncate">{restaurant.restaurant_direction}</p>
+          <p>{restaurant.restaurant_time_start} - {restaurant.restaurant_time_close}</p>
+          <p className="text-black font-semibold">${restaurant.restaurant_mean_price}</p>
         </div>
 
         {/* Acciones */}
@@ -64,19 +64,19 @@ const RestaurantCard = ({ restaurant, onEdit, onDelete }) => {
             onClick={() => onEdit(restaurant)}
             className="flex-1 py-2 rounded-xl bg-[#946841] hover:bg-[#7F532C] text-[#FCF0CA] text-sm font-medium transition-colors"
           >
-            ✏️ Editar
+            Editar
           </button>
           <Link
             to={`/loby/restaurants/${restaurant._id || restaurant.id}`}
             className="px-3 py-2 rounded-xl border border-[#946841]/60 bg-[#946841]/10 text-black hover:bg-[#946841]/20 transition-all flex items-center justify-center font-medium"
           >
-            🍽️ Ver
+            Ver
           </Link>
           <button
             onClick={handleDelete}
             className="px-3 py-2 rounded-xl border border-red-400/60 hover:bg-red-400/20 text-red-600 transition-all font-medium"
           >
-            🗑️
+            Eliminar
           </button>
         </div>
       </div>
