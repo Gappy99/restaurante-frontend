@@ -128,7 +128,6 @@ const RestaurantTablesPage = () => {
 
         {error && (
           <div className="mb-10 p-5 bg-red-900/20 border border-red-500/40 rounded-2xl text-red-300 text-sm flex items-center gap-3 animate-pulse">
-            <span className="text-lg">⚠️</span>
             <span><strong>Estado del Sistema:</strong> {error}</span>
           </div>
         )}

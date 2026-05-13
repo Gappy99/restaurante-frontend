@@ -6,7 +6,6 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, loading, restaurantNam
       <div className="bg-[#2E160C] rounded-2xl shadow-2xl max-w-md w-full border border-[#7F532C]/50 p-6">
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="text-4xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-[#FCF0CA]">Eliminar Restaurante</h2>
         </div>
 
@@ -33,7 +32,7 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, loading, restaurantNam
             disabled={loading}
             className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {loading ? '⏳ Eliminando...' : '🗑️ Eliminar'}
+            {loading ? ' Eliminando...' : ' Eliminar'}
           </button>
         </div>
       </div>

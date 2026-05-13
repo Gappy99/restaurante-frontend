@@ -85,7 +85,6 @@ const RestaurantPage = () => {
 
         <div className="mt-8 md:mt-0 flex w-full md:w-auto flex-col md:flex-row gap-4 items-stretch md:items-center">
           <div className="relative w-full md:w-96">
-            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#946841]">🔎</span>
             <input
               type="search"
               value={searchTerm}
