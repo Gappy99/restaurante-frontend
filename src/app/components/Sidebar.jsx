@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import useAuthStore from '../../shared/stores/useAuthStore'
-import logoRestaurant from '../../shared/assets/img/logo-restaurants.png'
+import logoRestaurant from '../../shared/assets/img/logo.png'
 
 /**
  * Componente Sidebar - Navegación lateral
@@ -19,9 +19,9 @@ const Sidebar = ({ isOpen = true }) => {
   return (
     <aside
       className={`
-        shrink-0 h-full overflow-hidden bg-black text-white flex flex-col
-        transition-all duration-300
-        ${isOpen ? 'w-72 border-r border-white/10 opacity-100' : 'w-0 border-r-0 opacity-0'}
+        fixed left-0 top-0 h-full overflow-hidden bg-black text-white flex flex-col z-40
+        transition-all duration-300 ease-in-out
+        ${isOpen ? 'w-72 border-r border-white/10 opacity-100 translate-x-0' : 'w-72 opacity-0 -translate-x-full'}
       `}
     >
       <div className="p-6">

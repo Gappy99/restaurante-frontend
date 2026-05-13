@@ -18,15 +18,6 @@ const Navbar = ({ isSidebarOpen = true, onToggleSidebar }) => {
         >
           {isSidebarOpen ? '⟨' : '⟩'}
         </button>
-
-        <div>
-        <h2 className="text-xl font-semibold text-white">
-          Bienvenido, {user?.nombre || 'Usuario'}
-        </h2>
-        <p className="text-sm text-[#FCF0CA]">
-          Rol: <span className="font-semibold text-white">{user?.rol || 'Usuario'}</span>
-        </p>
-        </div>
       </div>
 
       <div className="flex items-center gap-4">
