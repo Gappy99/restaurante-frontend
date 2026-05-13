@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 // Layouts
 import MainLayout from '../layouts/MainLayout'
 import AuthLayout from '../layouts/AuthLayout'
+import FullLayout from '../layouts/FullLayout'
 
 // Páginas públicas
 import LoginPage from '../../features/auth/pages/LoginPage'
@@ -79,18 +80,6 @@ const router = createBrowserRouter([
         element: <UsersPage />,
       },
       {
-        path: 'restaurants',
-        element: <RestaurantPage />,
-      },
-      {
-        path: 'restaurants/:id',
-        element: <RestaurantMiniMenuPage />,
-      },
-      {
-        path: 'restaurants/:id/tables',
-        element: <RestaurantTablesPage />,
-      },
-      {
         path: 'fields',
         element: <FieldsPage />,
       },
@@ -109,6 +98,29 @@ const router = createBrowserRouter([
             <ProfilePage />
           </ProtectedRoute>
         ),
+      },
+    ],
+  },
+  // Rutas de Restaurantes a pantalla completa
+  {
+    path: '/loby/restaurants',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <RestaurantPage />,
+      },
+      {
+        path: ':id',
+        element: <RestaurantMiniMenuPage />,
+      },
+      {
+        path: ':id/tables',
+        element: <RestaurantTablesPage />,
       },
     ],
   },

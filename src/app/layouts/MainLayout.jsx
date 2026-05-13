@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
-import Navbar from '../components/Navbar'
+import NavbarBlack from '../components/NavbarBlack'
 
 /**
- * Layout principal con Sidebar y Navbar
+ * Layout principal con Sidebar y NavbarBlack
  * Usado en rutas protegidas
  */
 const MainLayout = () => {
@@ -21,8 +21,8 @@ const MainLayout = () => {
 
       {/* Contenido principal */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Navbar */}
-        <Navbar isSidebarOpen={isSidebarOpen} onToggleSidebar={handleToggleSidebar} />
+        {/* NavbarBlack */}
+        <NavbarBlack isSidebarOpen={isSidebarOpen} onToggleSidebar={handleToggleSidebar} />
 
         {/* Página */}
         <main className="flex-1 overflow-auto p-6">
