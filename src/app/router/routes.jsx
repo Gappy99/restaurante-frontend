@@ -68,36 +68,12 @@ const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: 'information',
-        element: <InformationPage />,
-      },
-      {
-        path: 'menu',
-        element: <MenuPage />,
-      },
-      {
         path: 'users',
         element: <UsersPage />,
       },
       {
         path: 'fields',
         element: <FieldsPage />,
-      },
-      {
-        path: 'tables',
-        element: <TablesPage />,
-      },
-      {
-        path: 'tables/all',
-        element: <AllTablesPage />,
-      },
-      {
-        path: 'profile',
-        element: (
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
-        ),
       },
     ],
   },
@@ -121,6 +97,85 @@ const router = createBrowserRouter([
       {
         path: ':id/tables',
         element: <RestaurantTablesPage />,
+      },
+    ],
+  },
+  // Rutas de Mesas a pantalla completa
+  {
+    path: '/loby/tables',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <TablesPage />,
+      },
+      {
+        path: 'all',
+        element: <AllTablesPage />,
+      },
+    ],
+  },
+  // Rutas de Menú a pantalla completa
+  {
+    path: '/loby/menu',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <MenuPage />,
+      },
+    ],
+  },
+  // Rutas de Información a pantalla completa
+  {
+    path: '/loby/information',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <InformationPage />,
+      },
+    ],
+  },
+  // Rutas de Perfil a pantalla completa
+  {
+    path: '/loby/profile',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <ProfilePage />,
+      },
+    ],
+  },
+  // Rutas de Contactos a pantalla completa
+  {
+    path: '/loby/users',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <UsersPage />,
       },
     ],
   },
