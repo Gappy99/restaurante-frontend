@@ -21,6 +21,7 @@ import RestaurantMiniMenuPage from '../../features/restaurant/pages/RestaurantMi
 import RestaurantTablesPage from '../../features/tables/pages/RestaurantTablesPage'
 import AllTablesPage from '../../features/tables/pages/AllTablesPage'
 import InformationPage from '../../features/Information/pages/InformationPage'
+import EventsPage from '../../features/events/pages/EventsPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: 'information',
         element: <InformationPage />,
+      },
+      {
+        path: 'events',
+        element: <EventsPage />,
       },
       {
         path: 'menu',
