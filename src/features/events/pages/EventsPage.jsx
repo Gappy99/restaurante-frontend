@@ -56,97 +56,97 @@ const EventsPage = () => {
   })
 
   return (
-    <div className="min-h-screen bg-[#1E1914] text-[#FCF0CA] p-4 md:p-8">
-      <header className="max-w-7xl mx-auto mb-12 rounded-[2rem] bg-[#2E160C]/80 border border-[#7F532C]/30 p-8 shadow-2xl shadow-black/30 backdrop-blur-xl">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
-            <h1 className="text-4xl font-black uppercase tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-[#FCF0CA] via-[#E3C797] to-[#946841]">
-              Eventos
-            </h1>
-            <p className="mt-3 text-[#D8C5A3] max-w-2xl">
-              Administra los eventos del restaurante con creación, edición, búsqueda y eliminación.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center w-full sm:w-auto">
-            <div className="relative w-full sm:w-80">
-              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#946841]">🔎</span>
-              <input
-                type="search"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Buscar evento o ubicación"
-                className="w-full rounded-3xl border border-[#7F532C]/40 bg-[#2E160C]/90 py-4 pl-12 pr-4 text-[#FCF0CA] placeholder:text-[#946841]/80 outline-none transition focus:border-[#FCF0CA]/60 focus:ring-2 focus:ring-[#946841]/25"
-              />
-            </div>
-            <button
-              onClick={() => handleOpenModal()}
-              className="inline-flex items-center justify-center rounded-3xl bg-[#7F532C] px-6 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-[#FCF0CA] shadow-lg shadow-black/20 transition hover:bg-[#946841]"
-            >
-              + Nuevo evento
-            </button>
-          </div>
+    <div className="min-h-screen w-screen bg-[#2E160C] text-[#FCF0CA] font-sans overflow-x-hidden -m-0">
+      
+      {/* Header con estilo sofisticado y bordes bronce */}
+      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-16 p-4 md:p-8 rounded-[2.5rem] bg-[#5B300E]/20 border border-[#7F532C]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
+        <div className="text-center md:text-left">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic bg-gradient-to-r from-[#FCF0CA] via-[#946841] to-[#7F532C] bg-clip-text text-transparent">
+            Gestión de Eventos
+          </h1>
+          <p className="text-[#946841] mt-2 font-medium tracking-widest text-xs uppercase">
+            Administra los eventos del restaurante
+          </p>
         </div>
+
+        <button 
+          onClick={() => handleOpenModal()}
+          className="mt-8 md:mt-0 px-10 py-4 bg-[#7F532C] hover:bg-[#946841] text-[#FCF0CA] hover:scale-105 active:scale-95 transition-all duration-300 rounded-2xl font-bold shadow-lg shadow-black/20 flex items-center gap-3 border border-[#FCF0CA]/10"
+          disabled={loading}
+        >
+          <span className="text-xl">+</span> Nuevo Evento
+        </button>
       </header>
 
-      <main className="max-w-7xl mx-auto">
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <main className="max-w-7xl mx-auto relative px-4 md:px-8">
+
+        {/* Sección de visualización */}
+        <section className="relative z-10">
           {loading ? (
-            <div className="col-span-full rounded-3xl bg-[#2E160C]/90 border border-[#7F532C]/40 p-8 text-center text-[#FCF0CA]">
-              Cargando eventos...
+            <div className="flex flex-col items-center justify-center py-24 space-y-4">
+              <div className="w-12 h-12 border-4 border-[#7F532C] border-t-[#FCF0CA] rounded-full animate-spin"></div>
+              <p className="text-[#946841] font-mono text-sm animate-pulse">CARGANDO BASE DE DATOS...</p>
             </div>
           ) : filteredEvents.length === 0 ? (
-            <div className="col-span-full rounded-3xl bg-[#2E160C]/90 border border-[#7F532C]/40 p-8 text-center text-[#FCF0CA]">
-              No se encontraron eventos.
+            <div className="flex flex-col items-center justify-center py-20 bg-[#5B300E]/10 rounded-[3rem] border-2 border-dashed border-[#7F532C]/30 text-center">
+              <div className="text-5xl mb-6 grayscale opacity-50">🎫</div>
+              <h3 className="text-[#FCF0CA] text-lg font-bold mb-2">No hay eventos registrados</h3>
+              <p className="text-[#946841] text-sm">Crea el primer evento haciendo clic en el botón "Nuevo evento"</p>
             </div>
           ) : (
-            filteredEvents.map((event) => (
-              <article
-                key={event._id || event.id}
-                className="rounded-[2rem] border border-[#7F532C]/20 bg-[#2E160C]/90 p-6 shadow-2xl shadow-black/20"
-              >
-                <div className="mb-5 flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.28em] text-[#946841]">
-                      {event.status || event.event_status || 'Activo'}
-                    </p>
-                    <h2 className="mt-3 text-2xl font-bold text-[#FCF0CA]">
-                      {event.title || event.event_title || 'Evento sin título'}
-                    </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredEvents.map((event) => (
+                <article
+                  key={event._id || event.id}
+                  className="rounded-[2rem] border border-[#7F532C]/20 bg-[#2E160C]/90 p-6 shadow-2xl shadow-black/20"
+                >
+                  <div className="mb-5 flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.28em] text-[#946841]">
+                        {event.status || event.event_status || 'Activo'}
+                      </p>
+                      <h2 className="mt-3 text-2xl font-bold text-[#FCF0CA]">
+                        {event.title || event.event_title || 'Evento sin título'}
+                      </h2>
+                    </div>
+                    <div className="rounded-3xl bg-[#FCF0CA]/5 px-4 py-2 text-sm text-[#FCF0CA]">
+                      {event.date || event.event_date ? new Date(event.date || event.event_date).toLocaleDateString() : 'Fecha pendiente'}
+                    </div>
                   </div>
-                  <div className="rounded-3xl bg-[#FCF0CA]/5 px-4 py-2 text-sm text-[#FCF0CA]">
-                    {event.date || event.event_date ? new Date(event.date || event.event_date).toLocaleDateString() : 'Fecha pendiente'}
+
+                  <p className="mb-5 text-[#D8C5A3] min-h-[4.25rem]">
+                    {event.description || event.event_description || 'No hay descripción disponible.'}
+                  </p>
+
+                  <div className="mb-6 flex flex-wrap gap-3 text-sm text-[#FCF0CA]/80">
+                    <span className="rounded-full border border-[#7F532C]/40 bg-[#FCF0CA]/5 px-3 py-2">
+                      {event.location || event.event_location || 'Ubicación no especificada'}
+                    </span>
                   </div>
-                </div>
 
-                <p className="mb-5 text-[#D8C5A3] min-h-[4.25rem]">
-                  {event.description || event.event_description || 'No hay descripción disponible.'}
-                </p>
-
-                <div className="mb-6 flex flex-wrap gap-3 text-sm text-[#FCF0CA]/80">
-                  <span className="rounded-full border border-[#7F532C]/40 bg-[#FCF0CA]/5 px-3 py-2">
-                    {event.location || event.event_location || 'Ubicación no especificada'}
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    onClick={() => handleOpenModal(event)}
-                    className="rounded-2xl border border-[#FCF0CA]/20 bg-[#946841]/10 px-4 py-2 text-sm text-[#FCF0CA] transition hover:border-[#FCF0CA]/40 hover:bg-[#946841]/20"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(event._id || event.id)}
-                    className="rounded-2xl border border-[#FCF0CA]/20 bg-[#7F532C]/10 px-4 py-2 text-sm text-[#FCF0CA] transition hover:border-[#FCF0CA]/40 hover:bg-[#7F532C]/20"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </article>
-            ))
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      onClick={() => handleOpenModal(event)}
+                      className="rounded-2xl border border-[#FCF0CA]/20 bg-[#946841]/10 px-4 py-2 text-sm text-[#FCF0CA] transition hover:border-[#FCF0CA]/40 hover:bg-[#946841]/20"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDelete(event._id || event.id)}
+                      className="rounded-2xl border border-[#FCF0CA]/20 bg-[#7F532C]/10 px-4 py-2 text-sm text-[#FCF0CA] transition hover:border-[#FCF0CA]/40 hover:bg-[#7F532C]/20"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
           )}
-        </div>
+        </section>
+
+        {/* Decoración de fondo sutil para dar profundidad */}
+        <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#5B300E]/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+        <div className="fixed bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-[#7F532C]/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
       </main>
 
       <EventModal
