@@ -106,19 +106,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'reservations',
-        element: (
-          <ProtectedRoute>
-            <ReservationsPage />
-          </ProtectedRoute>
-        ),
+        element: <ReservationsPage />,
       },
       {
         path: 'notifications',
-        element: (
-          <ProtectedRoute>
-            <NotificationsPage />
-          </ProtectedRoute>
-        ),
+        element: <NotificationsPage />,
       },
       {
         path: 'profile',

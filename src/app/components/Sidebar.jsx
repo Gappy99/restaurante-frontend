@@ -89,7 +89,7 @@ const Sidebar = ({ isOpen = true }) => {
         </Link>
 
         <Link
-          to="/reservations"
+          to="/loby/reservations"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
         >
           <span>📅</span>
@@ -97,7 +97,7 @@ const Sidebar = ({ isOpen = true }) => {
         </Link>
 
         <Link
-          to="/notifications"
+          to="/loby/notifications"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
         >
           <span>🔔</span>

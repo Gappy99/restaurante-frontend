@@ -45,7 +45,8 @@ const NotificationsPage = () => {
     await loadNotifications()
   }
 
-  const rows = notifications.map((notification) => ({
+  const safeNotifications = Array.isArray(notifications) ? notifications : []
+  const rows = safeNotifications.map((notification) => ({
     ...notification,
     estado: notification.read ? 'Leída' : 'Pendiente',
   }))

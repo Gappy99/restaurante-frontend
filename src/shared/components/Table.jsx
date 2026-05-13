@@ -24,7 +24,9 @@ const Table = ({ columns, data, onEdit, onDelete, actionLabels = {} }) => {
           <tr key={row._id} className="border-b border-[var(--accent-soft)] hover:bg-[var(--surface)]">
             {columns.map((col) => (
               <td key={col.key} className="px-6 py-4 text-[var(--text)]">
-                {row[col.key]}
+                {col.key === 'notas'
+                  ? row.notas || row.notes || row.reservation_history || row.description || row.details || '-'
+                  : row[col.key] || '-'}
               </td>
             ))}
             <td className="px-6 py-4 flex gap-2">

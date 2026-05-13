@@ -3,11 +3,18 @@ import toast from 'react-hot-toast'
 
 const resource = '/notifications'
 
+const normalizeNotificationResponse = (payload) => {
+  if (Array.isArray(payload)) return payload
+  if (payload?.notifications && Array.isArray(payload.notifications)) return payload.notifications
+  if (payload?.data && Array.isArray(payload.data)) return payload.data
+  return []
+}
+
 const notificationService = {
   getNotifications: async (params = {}) => {
     try {
       const response = await adminClient.get(resource, { params })
-      return response.data?.data ?? response.data ?? []
+      return normalizeNotificationResponse(response.data?.data ?? response.data)
     } catch (error) {
       toast.error(error.response?.data?.message || 'Error cargando notificaciones')
       return []

@@ -6,19 +6,35 @@ export const authService = {
     try {
       const response = await authClient.post('/login', { email, password })
       const data = response.data || {}
-      const token = data.token
-      const userDetails = data.data || data.userDetails || data.user || {}
+      const token = data.token || data.accessToken || data.access_token
+      const userDetails =
+        data.data ||
+        data.userDetails ||
+        data.user ||
+        data.usuario ||
+        data.data?.user ||
+        data.data?.usuario ||
+        {}
 
       if (!token) {
         throw new Error('El backend no devolvió un token de autenticación')
       }
 
+      const userId =
+        userDetails.id ||
+        userDetails._id ||
+        userDetails.usuario_id ||
+        userDetails.user_id ||
+        null
+
       const user = {
-        id: userDetails.id || userDetails._id || null,
+        id: userId,
+        _id: userId,
         nombre: userDetails.nombre || userDetails.name || userDetails.username || '',
         username: userDetails.username || userDetails.nombre || '',
         email: userDetails.email || '',
-        telefono: userDetails.telefono || userDetails.phone || userDetails.contact_phone_number || '',
+        telefono:
+          userDetails.telefono || userDetails.phone || userDetails.contact_phone_number || '',
         profilePicture: userDetails.profilePicture || null,
         rol: userDetails.role || userDetails.rol || 'USER_ROLE',
       }
