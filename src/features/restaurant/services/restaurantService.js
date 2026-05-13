@@ -66,14 +66,16 @@ const normalizeRestaurantItem = (payload) => {
 export const restaurantService = {
   /**
    * Obtener lista de todos los restaurantes
-   * ENDPOINT NO DISPONIBLE EN EL BACKEND ACTUAL
    */
   getRestaurants: async (params = {}) => {
     try {
-      // Endpoint no disponible en el backend actualmente
+      const response = await adminClient.get(RESTAURANT_API_ENDPOINTS.LIST, {
+        params,
+      })
+
       return {
         success: true,
-        data: [],
+        data: normalizeRestaurantList(response.data),
       }
     } catch (error) {
       return {
@@ -85,14 +87,19 @@ export const restaurantService = {
 
   /**
    * Obtener un restaurante por ID
-   * ENDPOINT NO DISPONIBLE EN EL BACKEND ACTUAL
    */
   getRestaurantById: async (id) => {
     try {
-      // Endpoint no disponible en el backend actualmente
+      const response = await adminClient.get(RESTAURANT_API_ENDPOINTS.DETAIL(id))
+      const restaurant = normalizeRestaurantItem(response.data)
+
+      if (!restaurant) {
+        throw new Error('Respuesta invalida al obtener restaurante')
+      }
+
       return {
         success: true,
-        data: null,
+        data: restaurant,
       }
     } catch (error) {
       return {
@@ -104,42 +111,64 @@ export const restaurantService = {
 
   /**
    * Crear un nuevo restaurante
-   * ENDPOINT NO DISPONIBLE EN EL BACKEND ACTUAL
    */
   createRestaurant: async (restaurantData) => {
     try {
-      // Endpoint no disponible en el backend actualmente
+      let payload = restaurantData
+      if (!(restaurantData instanceof FormData)) {
+        const fd = new FormData()
+        Object.keys(restaurantData).forEach((key) => {
+          const val = restaurantData[key]
+          if (val === undefined || val === null) return
+          if (Array.isArray(val)) {
+            val.forEach((v) => fd.append(key, v))
+          } else {
+            fd.append(key, val)
+          }
+        })
+        payload = fd
+      }
+
+      const response = await adminClient.post(
+        RESTAURANT_API_ENDPOINTS.CREATE,
+        payload
+      )
+      const restaurant = normalizeRestaurantItem(response.data)
+
+      if (!restaurant) {
+        throw new Error('Respuesta invalida al crear restaurante')
+      }
+
       return {
         success: true,
-        data: null,
+        data: restaurant,
       }
     } catch (error) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        raw: error.response?.data,
-      }
-        }
-      }
-
-      return {
-        success: false,
-        error: raw?.message || error.message,
-        raw,
       }
     }
   },
 
   /**
    * Actualizar un restaurante
-   * ENDPOINT NO DISPONIBLE EN EL BACKEND ACTUAL
    */
   updateRestaurant: async (id, restaurantData) => {
     try {
-      // Endpoint no disponible en el backend actualmente
+      const response = await adminClient.put(
+        RESTAURANT_API_ENDPOINTS.UPDATE(id),
+        restaurantData
+      )
+      const restaurant = normalizeRestaurantItem(response.data)
+
+      if (!restaurant) {
+        throw new Error('Respuesta invalida al actualizar restaurante')
+      }
+
       return {
         success: true,
-        data: null,
+        data: restaurant,
       }
     } catch (error) {
       return {
@@ -151,11 +180,10 @@ export const restaurantService = {
 
   /**
    * Eliminar un restaurante
-   * ENDPOINT NO DISPONIBLE EN EL BACKEND ACTUAL
    */
   deleteRestaurant: async (id) => {
     try {
-      // Endpoint no disponible en el backend actualmente
+      await adminClient.delete(RESTAURANT_API_ENDPOINTS.DELETE(id))
       return {
         success: true,
       }
@@ -169,14 +197,16 @@ export const restaurantService = {
 
   /**
    * Buscar restaurantes
-   * ENDPOINT NO DISPONIBLE EN EL BACKEND ACTUAL
    */
   searchRestaurants: async (searchTerm) => {
     try {
-      // Endpoint no disponible en el backend actualmente
+      const response = await adminClient.get(RESTAURANT_API_ENDPOINTS.SEARCH, {
+        params: { q: searchTerm },
+      })
+
       return {
         success: true,
-        data: [],
+        data: normalizeRestaurantList(response.data),
       }
     } catch (error) {
       return {
