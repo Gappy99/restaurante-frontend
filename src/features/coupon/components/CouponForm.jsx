@@ -16,6 +16,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
     handleSubmit,
     reset,
     control,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -68,6 +69,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
   }, [coupon, reset])
 
   const discount_type = useWatch({ control, name: 'discount_type' })
+  const active = useWatch({ control, name: 'active' })
 
   const onFormSubmit = (data) => {
     const submitData = {
@@ -85,12 +87,11 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
   }
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onFormSubmit)} autoComplete="off" className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Código del cupón */}
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Código del Cupón *
+            Código del cupón * (identificador único)
           </label>
           <input
             type="text"
@@ -98,7 +99,8 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               required: 'El código es requerido',
               minLength: { value: 3, message: 'Mínimo 3 caracteres' },
             })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
             placeholder="Ej: DESC10"
           />
           {errors.code && (
@@ -106,32 +108,32 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
           )}
         </div>
 
-        {/* Descripción */}
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Descripción *
+            Descripción * (mensaje corto para el cupón)
           </label>
           <input
             type="text"
             {...register('description', {
               required: 'La descripción es requerida',
             })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Descripción del cupón"
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            placeholder="Ej: 10% de descuento en menú"
           />
           {errors.description && (
             <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
           )}
         </div>
 
-        {/* Tipo de descuento */}
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Tipo de Descuento *
+            Tipo de descuento *
           </label>
           <select
             {...register('discount_type', { required: 'Selecciona un tipo' })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
           >
             <option value="percentage">Porcentaje</option>
             <option value="amount">Monto fijo</option>
@@ -141,10 +143,9 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
           )}
         </div>
 
-        {/* Valor del descuento */}
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Valor del Descuento *
+            Valor del descuento * (porcentaje o monto fijo)
           </label>
           <input
             type="number"
@@ -154,39 +155,59 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               min: { value: 0, message: 'Debe ser mayor a 0' },
               max: discount_type === 'percentage' ? { value: 100, message: 'Máximo 100%' } : undefined,
             })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder={discount_type === 'percentage' ? '10' : '50'}
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            placeholder={discount_type === 'percentage' ? 'Ej: 10 (porcentaje)' : 'Ej: 50 (monto fijo)'}
           />
           {errors.discount_value && (
             <p className="mt-1 text-sm text-red-600">{errors.discount_value.message}</p>
           )}
         </div>
 
-        {/* Fecha de expiración */}
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Fecha de Expiración *
+            Uso máximo total * (cantidad total de veces que puede aplicarse)
+          </label>
+          <input
+            type="number"
+            {...register('max_uses', {
+              required: 'El uso máximo total es requerido',
+              min: { value: 1, message: 'Debe ser mayor a 0' },
+            })}
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            placeholder="Ej: 100"
+          />
+          <p className="mt-1 text-xs text-[#5B300E]">Cuántas veces puede usarse este cupón en total.</p>
+          {errors.max_uses && (
+            <p className="mt-1 text-sm text-red-600">{errors.max_uses.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+            Fecha de expiración * (fecha y hora límite)
           </label>
           <input
             type="datetime-local"
             {...register('expiration_date', { required: 'La fecha de expiración es requerida' })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
           />
           {errors.expiration_date && (
             <p className="mt-1 text-sm text-red-600">{errors.expiration_date.message}</p>
           )}
         </div>
 
-        {/* Restaurante */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Restaurante *
+            Restaurante * (restaurante asociado al cupón)
           </label>
           <select
             {...register('restaurant_ids', {
               required: 'Selecciona un restaurante',
             })}
-            className="w-full rounded-md border border-[#B08851]/50 bg-[#FFF8F0] px-3 py-2 text-[#2E160C] focus:outline-none focus:ring-2 focus:ring-[#946841]/30"
+            autoComplete="off"
+            className="w-full rounded-md border border-[#B08851]/40 bg-[#FFF8F8] px-3 py-2 text-[#5B300E] placeholder:text-[#5B300E] focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
           >
             <option value="">Selecciona un restaurante</option>
             {restaurants.map((restaurant) => {
@@ -203,10 +224,9 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
           )}
         </div>
 
-        {/* Máximo por usuario */}
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Usos máximos por usuario *
+            Usos máximos por usuario * (límite por cliente)
           </label>
           <input
             type="number"
@@ -214,18 +234,19 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               required: 'Este valor es requerido',
               min: { value: 1, message: 'Debe ser mayor a 0' },
             })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
             placeholder="Ej: 1"
           />
+          <p className="mt-1 text-xs text-[#5B300E]">Cantidad máxima de usos del cupón por cada cliente.</p>
           {errors.max_uses_per_user && (
             <p className="mt-1 text-sm text-red-600">{errors.max_uses_per_user.message}</p>
           )}
         </div>
 
-        {/* Monto mínimo */}
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Monto mínimo de compra
+            Monto mínimo de compra (opcional)
           </label>
           <input
             type="number"
@@ -233,29 +254,45 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
             {...register('min_order_amount', {
               min: { value: 0, message: 'Debe ser mayor o igual a 0' },
             })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
             placeholder="Ej: 100"
           />
+          <p className="mt-1 text-xs text-[#5B300E]">Monto mínimo de compra para que el cupón sea aplicable.</p>
           {errors.min_order_amount && (
             <p className="mt-1 text-sm text-red-600">{errors.min_order_amount.message}</p>
           )}
         </div>
 
-        {/* Activo */}
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            {...register('active')}
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label className="ml-2 block text-sm text-[#5B300E]">
-            Activo
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+            Disponibilidad del cupón
           </label>
+          <input type="hidden" {...register('active')} />
+          <div className="inline-flex rounded-full border border-[#B08851]/40 bg-[#FFFDF8] p-1">
+            <button
+              type="button"
+              onClick={() => setValue('active', true, { shouldDirty: true, shouldValidate: true })}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${active ? 'bg-[#5B300E] text-white' : 'text-[#5B300E]'}`}
+            >
+              Vigente
+            </button>
+            <button
+              type="button"
+              onClick={() => setValue('active', false, { shouldDirty: true, shouldValidate: true })}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!active ? 'bg-[#5B300E] text-white' : 'text-[#5B300E]'}`}
+            >
+              No vigente
+            </button>
+          </div>
+          <p className="mt-2 text-xs text-[#5B300E]">Elige si el cupón estará disponible para uso inmediato.</p>
+          {errors.active && (
+            <p className="mt-1 text-sm text-red-600">{errors.active.message}</p>
+          )}
         </div>
       </div>
 
-      {/* Botones */}
-      <div className="flex justify-end gap-4 pt-6 border-t">
+      <div className="flex justify-end gap-4 pt-6 border-t border-[#B08851]/20">
         <button
           type="button"
           onClick={onCancel}

@@ -92,24 +92,28 @@ const CouponPage = () => {
 
       if (!normalizedSearch) return true
 
-      const restaurantsText = Array.isArray(coupon.restaurant_ids)
+      // Buscar en código, descripción y nombres de restaurantes
+      const restaurantNames = Array.isArray(coupon.restaurant_ids)
         ? coupon.restaurant_ids
-            .map((restaurant) => {
-              if (!restaurant) return ''
-              return restaurant.restaurant_name || restaurant.name || restaurant
+            .map((restaurantId) => {
+              if (!restaurantId) return ''
+              const idStr = typeof restaurantId === 'string' ? restaurantId : (restaurantId?._id || restaurantId?.id)
+              const restaurant = restaurants.find(r => (r._id || r.id) === idStr)
+              return restaurant?.restaurant_name || restaurant?.name || ''
             })
+            .filter(Boolean)
             .join(' ')
         : ''
 
       return [
         coupon.code,
         coupon.description,
-        restaurantsText,
+        restaurantNames,
       ]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(normalizedSearch))
     })
-  }, [couponsList, searchText, statusFilter])
+  }, [couponsList, searchText, statusFilter, restaurants])
 
   const stats = useMemo(() => {
     const total = couponsList.length
@@ -165,21 +169,21 @@ const CouponPage = () => {
 
       <section className="grid gap-4 xl:grid-cols-3">
         <div className="rounded-[28px] border border-[#E8D8B5] bg-white p-6 shadow-[0_18px_44px_rgba(46,22,12,0.08)]">
-          <p className="text-sm font-medium text-[#7F532C]">Total de cupones</p>
+          <p className="text-sm font-medium text-[#5B300E]">Total de cupones</p>
           <p className="mt-4 text-4xl font-black text-[#2E160C]">{stats.total}</p>
-          <p className="mt-2 text-sm text-[#7F532C]">Cupones cargados desde el backend</p>
+          <p className="mt-2 text-sm text-[#5B300E]">Cupones cargados desde el backend</p>
           <div className="mt-4 h-1 rounded-full bg-[#5B300E]" />
         </div>
         <div className="rounded-[28px] border border-[#E8D8B5] bg-white p-6 shadow-[0_18px_44px_rgba(46,22,12,0.08)]">
-          <p className="text-sm font-medium text-[#7F532C]">Activos</p>
+          <p className="text-sm font-medium text-[#5B300E]">Activos</p>
           <p className="mt-4 text-4xl font-black text-[#2E160C]">{stats.active}</p>
-          <p className="mt-2 text-sm text-[#7F532C]">Cupones vigentes</p>
+          <p className="mt-2 text-sm text-[#5B300E]">Cupones vigentes</p>
           <div className="mt-4 h-1 rounded-full bg-emerald-500" />
         </div>
         <div className="rounded-[28px] border border-[#E8D8B5] bg-white p-6 shadow-[0_18px_44px_rgba(46,22,12,0.08)]">
-          <p className="text-sm font-medium text-[#7F532C]">Inactivos</p>
+          <p className="text-sm font-medium text-[#5B300E]">Inactivos</p>
           <p className="mt-4 text-4xl font-black text-[#2E160C]">{stats.inactive}</p>
-          <p className="mt-2 text-sm text-[#7F532C]">Cupones desactivados</p>
+          <p className="mt-2 text-sm text-[#5B300E]">Cupones desactivados</p>
           <div className="mt-4 h-1 rounded-full bg-amber-500" />
         </div>
       </section>
@@ -187,20 +191,20 @@ const CouponPage = () => {
       <section className="rounded-[28px] border border-[#FCF0CA] bg-white p-6 shadow-[0_18px_44px_rgba(46,22,12,0.08)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <h2 className="text-2xl font-bold text-[#2E160C]">Filtrar cupones</h2>
-            <p className="mt-1 text-sm text-[#7F532C]">Busca por código, descripción o restaurante asociado.</p>
+            <h2 className="text-2xl font-bold text-[#5B300E]">Filtrar cupones</h2>
+            <p className="mt-1 text-sm text-[#5B300E]">Busca por código, descripción o restaurante asociado.</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:w-auto">
             <input
               value={searchText}
               onChange={(event) => setSearchText(event.target.value)}
               placeholder="Buscar cupones"
-              className="min-w-[260px] rounded-xl border border-[#E8D8B5] bg-[#FFFDF8] px-4 py-3 text-[#2E160C] placeholder:text-[#2E160C] caret-[#2E160C] outline-none transition focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/20"
+              className="min-w-[260px] rounded-xl border border-[#E8D8B5] bg-[#FFFDF8] px-4 py-3 text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] outline-none transition focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/20"
             />
             <select
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
-              className="min-w-[240px] rounded-xl border border-[#E8D8B5] bg-[#FFFDF8] px-4 py-3 text-[#2E160C] outline-none transition focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/20"
+              className="min-w-[240px] rounded-xl border border-[#E8D8B5] bg-[#FFFDF8] px-4 py-3 text-[#5B300E] outline-none transition focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/20"
             >
               <option value="all">Todos</option>
               <option value="active">Activos</option>
@@ -220,8 +224,8 @@ const CouponPage = () => {
 
         {!loading && filteredCoupons.length === 0 && (
           <div className="rounded-[28px] border border-dashed border-[#E8D8B5] bg-white p-14 text-center shadow-[0_18px_44px_rgba(46,22,12,0.06)]">
-            <p className="text-xl font-semibold text-[#2E160C]">No hay cupones para mostrar</p>
-            <p className="mt-2 text-sm text-[#7F532C]">Crea un cupón nuevo o ajusta los filtros para ver resultados.</p>
+            <p className="text-xl font-semibold text-[#5B300E]">No hay cupones para mostrar</p>
+            <p className="mt-2 text-sm text-[#5B300E]">Crea un cupón nuevo o ajusta los filtros para ver resultados.</p>
           </div>
         )}
       </section>

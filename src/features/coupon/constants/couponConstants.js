@@ -11,12 +11,12 @@ export const COUPON_MESSAGES = {
 }
 
 export const COUPON_API_ENDPOINTS = {
-  BASE: '/coupon',
-  LIST: '/coupon',
-  CREATE: '/coupon',
-  DETAIL: (id) => `/coupon/${id}`,
-  UPDATE: (id) => `/coupon/${id}`,
-  DELETE: (id) => `/coupon/${id}`,
+  BASE: '/coupons',
+  LIST: '/coupons',
+  CREATE: '/coupons',
+  DETAIL: (id) => `/coupons/${id}`,
+  UPDATE: (id) => `/coupons/${id}`,
+  DELETE: (id) => `/coupons/${id}`,
 }
 
 export const COUPON_DEFAULTS = {

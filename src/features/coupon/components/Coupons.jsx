@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import CouponCard from './CouponCard'
 
-const Coupons = ({ coupons, onEdit, onDelete, loading }) => {
+const Coupons = ({ coupons, onEdit, onDelete, loading, restaurants = [] }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5B300E]"></div>
       </div>
     )
   }
@@ -37,13 +37,14 @@ const Coupons = ({ coupons, onEdit, onDelete, loading }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {coupons.map((coupon) => (
         <CouponCard
           key={coupon._id || coupon.id}
           coupon={coupon}
           onEdit={onEdit}
           onDelete={onDelete}
+          restaurants={restaurants}
         />
       ))}
     </div>
@@ -55,6 +56,7 @@ Coupons.propTypes = {
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  restaurants: PropTypes.array,
 }
 
 export default Coupons
