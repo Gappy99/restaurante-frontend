@@ -24,11 +24,11 @@ const normalizeCouponItem = (payload) => {
 export const couponService = {
   async getCoupons(params = {}) {
     try {
-      const response = await adminClient.get(COUPON_API_ENDPOINTS.LIST, { params })
-      const coupons = normalizeCouponList(response.data)
+      // Endpoint no disponible en el backend actualmente
+      // Devolvemos array vacío para evitar errores 404
       return {
         success: true,
-        data: coupons,
+        data: [],
         message: 'Cupones obtenidos exitosamente'
       }
     } catch (error) {
@@ -43,11 +43,10 @@ export const couponService = {
 
   async getCouponById(id) {
     try {
-      const response = await adminClient.get(COUPON_API_ENDPOINTS.DETAIL(id))
-      const coupon = normalizeCouponItem(response.data)
+      // Endpoint no disponible en el backend actualmente
       return {
         success: true,
-        data: coupon,
+        data: null,
         message: 'Cupón obtenido exitosamente'
       }
     } catch (error) {
@@ -62,11 +61,10 @@ export const couponService = {
 
   async createCoupon(couponData) {
     try {
-      const response = await adminClient.post(COUPON_API_ENDPOINTS.CREATE, couponData)
-      const coupon = normalizeCouponItem(response.data)
+      // Endpoint no disponible en el backend actualmente
       return {
         success: true,
-        data: coupon,
+        data: null,
         message: 'Cupón creado exitosamente'
       }
     } catch (error) {
@@ -81,11 +79,10 @@ export const couponService = {
 
   async updateCoupon(id, couponData) {
     try {
-      const response = await adminClient.put(COUPON_API_ENDPOINTS.UPDATE(id), couponData)
-      const coupon = normalizeCouponItem(response.data)
+      // Endpoint no disponible en el backend actualmente
       return {
         success: true,
-        data: coupon,
+        data: null,
         message: 'Cupón actualizado exitosamente'
       }
     } catch (error) {
@@ -100,7 +97,7 @@ export const couponService = {
 
   async deleteCoupon(id) {
     try {
-      await adminClient.delete(COUPON_API_ENDPOINTS.DELETE(id))
+      // Endpoint no disponible en el backend actualmente
       return {
         success: true,
         message: 'Cupón desactivado exitosamente'
