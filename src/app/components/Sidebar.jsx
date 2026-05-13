@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import useAuthStore from '../../shared/stores/useAuthStore'
-import logoRestaurant from '../../shared/assets/img/logo-restaurant.jpeg'
+import logoRestaurant from '../../shared/assets/img/logo.png'
 
 /**
  * Componente Sidebar - Navegación lateral
@@ -19,9 +19,9 @@ const Sidebar = ({ isOpen = true }) => {
   return (
     <aside
       className={`
-        shrink-0 h-full overflow-hidden bg-black text-white flex flex-col
-        transition-all duration-300
-        ${isOpen ? 'w-72 border-r border-white/10 opacity-100' : 'w-0 border-r-0 opacity-0'}
+        fixed left-0 top-0 h-full overflow-hidden bg-black text-white flex flex-col z-40
+        transition-all duration-300 ease-in-out
+        ${isOpen ? 'w-72 border-r border-white/10 opacity-100 translate-x-0' : 'w-72 opacity-0 -translate-x-full'}
       `}
     >
       <div className="p-6">
@@ -42,33 +42,29 @@ const Sidebar = ({ isOpen = true }) => {
       <nav className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 space-y-3">
         <Link
           to="/loby"
-          className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white text-black hover:bg-white/90 transition"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
-          <span className="text-xl">🏠</span>
           <span className="font-medium">Menú Principal</span>
         </Link>
 
         <Link
           to="/loby/restaurants"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
-          <span className="text-xl">🍽️</span>
           <span>Restaurantes</span>
         </Link>
 
         <Link
           to="/loby/tables"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
-          <span>🪑</span>
           <span>Mesas</span>
         </Link>
 
         <Link
           to="/loby/menu"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
-          <span>📋</span>
           <span>Menú</span>
         </Link>
 
@@ -82,17 +78,15 @@ const Sidebar = ({ isOpen = true }) => {
 
         <Link
           to="/loby/information"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
-          <span>ℹ️</span>
           <span>Información</span>
         </Link>
 
         <Link
           to="/loby/profile"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
-          <span>🙍‍♂️</span>
           <span>Mi Perfil</span>
         </Link>
 
@@ -100,9 +94,8 @@ const Sidebar = ({ isOpen = true }) => {
           <>
             <Link
               to="/loby/users"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
             >
-              <span>👥</span>
               <span>Contactos</span>
             </Link>
           </>

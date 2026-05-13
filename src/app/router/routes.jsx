@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 // Layouts
 import MainLayout from '../layouts/MainLayout'
 import AuthLayout from '../layouts/AuthLayout'
+import FullLayout from '../layouts/FullLayout'
 
 // Páginas públicas
 import LoginPage from '../../features/auth/pages/LoginPage'
@@ -84,36 +85,110 @@ const router = createBrowserRouter([
         element: <UsersPage />,
       },
       {
-        path: 'restaurants',
-        element: <RestaurantPage />,
-      },
-      {
-        path: 'restaurants/:id',
-        element: <RestaurantMiniMenuPage />,
-      },
-      {
-        path: 'restaurants/:id/tables',
-        element: <RestaurantTablesPage />,
-      },
-      {
         path: 'fields',
         element: <FieldsPage />,
       },
+    ],
+  },
+  // Rutas de Restaurantes a pantalla completa
+  {
+    path: '/loby/restaurants',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: 'tables',
+        index: true,
+        element: <RestaurantPage />,
+      },
+      {
+        path: ':id',
+        element: <RestaurantMiniMenuPage />,
+      },
+      {
+        path: ':id/tables',
+        element: <RestaurantTablesPage />,
+      },
+    ],
+  },
+  // Rutas de Mesas a pantalla completa
+  {
+    path: '/loby/tables',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
         element: <TablesPage />,
       },
       {
-        path: 'tables/all',
+        path: 'all',
         element: <AllTablesPage />,
       },
+    ],
+  },
+  // Rutas de Menú a pantalla completa
+  {
+    path: '/loby/menu',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: 'profile',
-        element: (
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
-        ),
+        index: true,
+        element: <MenuPage />,
+      },
+    ],
+  },
+  // Rutas de Información a pantalla completa
+  {
+    path: '/loby/information',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <InformationPage />,
+      },
+    ],
+  },
+  // Rutas de Perfil a pantalla completa
+  {
+    path: '/loby/profile',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <ProfilePage />,
+      },
+    ],
+  },
+  // Rutas de Contactos a pantalla completa
+  {
+    path: '/loby/users',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <UsersPage />,
       },
     ],
   },
