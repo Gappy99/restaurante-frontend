@@ -73,6 +73,14 @@ const Sidebar = ({ isOpen = true }) => {
         </Link>
 
         <Link
+          to="/loby/events"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+        >
+          <span>🎫</span>
+          <span>Eventos</span>
+        </Link>
+
+        <Link
           to="/loby/information"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
         >
