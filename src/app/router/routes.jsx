@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 // Layouts
 import MainLayout from '../layouts/MainLayout'
 import AuthLayout from '../layouts/AuthLayout'
+import FullLayout from '../layouts/FullLayout'
 
 // Páginas públicas
 import LoginPage from '../../features/auth/pages/LoginPage'
@@ -26,6 +27,9 @@ import ProtectedRoute from './ProtectedRoute'
 
 // Página de perfil de usuario
 import ProfilePage from '../../features/users/pages/ProfilePage'
+
+// Mapa de sedes
+import MapaDeSedePage from '../../features/mapa/pages/MapaDeSedePage'
 
 /**
  * Configuración de rutas
@@ -109,6 +113,21 @@ const router = createBrowserRouter([
             <ProfilePage />
           </ProtectedRoute>
         ),
+      },
+    ],
+  },
+  // Mapa de sedes a pantalla completa
+  {
+    path: '/loby/mapa-de-sedes',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <MapaDeSedePage />,
       },
     ],
   },
