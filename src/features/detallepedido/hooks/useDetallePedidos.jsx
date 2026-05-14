@@ -52,10 +52,35 @@ export const useSaveDetallePedido = (detallePedidoId = null) => {
 
     const handleSave = useCallback(
         async (formData) => {
-            if (!formData?.orders_id || !formData?.producto || !formData?.restaurant_id) {
+            if (!formData?.orders_id) {
                 return {
                     success: false,
-                    error: "La orden, producto y restaurante son obligatorios",
+                    error: "La orden es obligatoria",
+                };
+            }
+
+            // Soporte para creación múltiple: { orders_id, items: [] }
+            if (Array.isArray(formData?.items) && formData.items.length > 0) {
+                const hasInvalidItem = formData.items.some((item) => {
+                    if (!item?.producto) return true;
+                    if (!["dish", "beverage"].includes(item?.productType)) return true;
+                    return !item?.candidadproducto || Number(item.candidadproducto) < 1;
+                });
+
+                if (hasInvalidItem) {
+                    return {
+                        success: false,
+                        error: "Cada item debe tener producto, tipo válido y cantidad mayor a 0",
+                    };
+                }
+
+                return await saveDetallePedido(formData, detallePedidoId);
+            }
+
+            if (!formData?.producto) {
+                return {
+                    success: false,
+                    error: "El producto es obligatorio",
                 };
             }
 
@@ -70,13 +95,6 @@ export const useSaveDetallePedido = (detallePedidoId = null) => {
                 return {
                     success: false,
                     error: "La cantidad del producto debe ser mayor a 0",
-                };
-            }
-
-            if (formData?.preciounitario === undefined || formData?.preciounitario < 0) {
-                return {
-                    success: false,
-                    error: "El precio unitario es obligatorio y no puede ser negativo",
                 };
             }
 

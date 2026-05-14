@@ -42,27 +42,6 @@ export const useSaveOrder = (orderId = null) => {
                 };
             }
 
-            if (!formData?.Orders_number) {
-                return {
-                    success: false,
-                    error: "El numero de la orden es obligatorio",
-                };
-            }
-
-            if (!formData?.Orders_facture) {
-                return {
-                    success: false,
-                    error: "La factura es obligatoria",
-                };
-            }
-
-            if (!formData?.Orders_facture_descripcion) {
-                return {
-                    success: false,
-                    error: "La descripcion de factura es obligatoria",
-                };
-            }
-
             if (!formData?.Restaurant_id || !formData?.Menu_id || !formData?.User_id) {
                 return {
                     success: false,

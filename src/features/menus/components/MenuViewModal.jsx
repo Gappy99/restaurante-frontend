@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { getDishByIdService } from '../../dishes/services/DishService'
 import { getBeverageByIdService } from '../../beverages/services/BeverageService'
+import { getDishesByRestaurantService } from '../../dishes/services/DishService'
+import { getBeveragesByRestaurantService } from '../../beverages/services/BeverageService'
 
 export const MenuViewModal = ({ isOpen, onClose, menu }) => {
     const [loadingDetails, setLoadingDetails] = useState(false)
@@ -15,15 +17,62 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
 
     const normalizeItems = (items) => (Array.isArray(items) ? items : [])
 
+    const resolveMenuKey = () => menu?.Menu_id || menu?.menu_id || menu?._id || menu?.id || null
+
+    const extractItems = (payload) => {
+        if (Array.isArray(payload)) return payload
+        if (Array.isArray(payload?.data)) return payload.data
+        if (Array.isArray(payload?.items)) return payload.items
+        if (Array.isArray(payload?.dishes)) return payload.dishes
+        if (Array.isArray(payload?.beverages)) return payload.beverages
+        return []
+    }
+
+    const filterByMenuKey = (items, menuKey) => {
+        if (!menuKey) return items
+        return items.filter((item) => {
+            const itemMenuKey = item?.Menu_id || item?.menu_id || item?.MenuId || item?.menuId || null
+            return itemMenuKey == menuKey
+        })
+    }
+
     useEffect(() => {
         const loadDetails = async () => {
             if (!isOpen || !menu) return
 
+            const menuKey = resolveMenuKey()
+            const restaurantId = menu?.Restaurant_id || menu?.restaurant_id || null
+
             const dishes = normalizeItems(menu.dishes)
             const beverages = normalizeItems(menu.beverages)
 
+            let resolvedDishSources = dishes
+            let resolvedBeverageSources = beverages
+
+            if ((resolvedDishSources.length === 0 || resolvedBeverageSources.length === 0) && restaurantId) {
+                try {
+                    const [restaurantDishResponse, restaurantBeverageResponse] = await Promise.all([
+                        getDishesByRestaurantService(restaurantId),
+                        getBeveragesByRestaurantService(restaurantId),
+                    ])
+
+                    const restaurantDishes = filterByMenuKey(extractItems(restaurantDishResponse), menuKey)
+                    const restaurantBeverages = filterByMenuKey(extractItems(restaurantBeverageResponse), menuKey)
+
+                    if (resolvedDishSources.length === 0 && restaurantDishes.length > 0) {
+                        resolvedDishSources = restaurantDishes
+                    }
+
+                    if (resolvedBeverageSources.length === 0 && restaurantBeverages.length > 0) {
+                        resolvedBeverageSources = restaurantBeverages
+                    }
+                } catch {
+                    // If fallback loading fails, keep the original menu data.
+                }
+            }
+
             const dishDetails = await Promise.all(
-                dishes.map(async (dish) => {
+                resolvedDishSources.map(async (dish) => {
                     if (dish && typeof dish === 'object') return dish
                     try {
                         const response = await getDishByIdService(dish)
@@ -35,7 +84,7 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
             )
 
             const beverageDetails = await Promise.all(
-                beverages.map(async (beverage) => {
+                resolvedBeverageSources.map(async (beverage) => {
                     if (beverage && typeof beverage === 'object') return beverage
                     try {
                         const response = await getBeverageByIdService(beverage)

@@ -1,11 +1,7 @@
 import { create } from 'zustand'
 
-const useUserStore = create((set) => ({
-  users: [
-    { _id: '1', nombre: 'Juan Pérez', email: 'juan@example.com', rol: 'ADMIN', telefono: '123-456-7890' },
-    { _id: '2', nombre: 'Ana López', email: 'ana@example.com', rol: 'CLIENTE', telefono: '987-654-3210' },
-    { _id: '3', nombre: 'Carlos García', email: 'carlos@example.com', rol: 'ADMIN', telefono: '555-666-7777' },
-  ],
+const useUserStore = create((set, get) => ({
+  users: [],
   loading: false,
   error: null,
 

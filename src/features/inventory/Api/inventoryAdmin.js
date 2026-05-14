@@ -6,18 +6,21 @@ export const createInventory = async (data) => {
 };
 
 export const getInventory = async (restaurantId = null) => {
-    const query = restaurantId ? `?restaurantId=${encodeURIComponent(restaurantId)}` : "";
+    const cacheBuster = `&_=${Date.now()}`;
+    const query = restaurantId
+        ? `?restaurantId=${encodeURIComponent(restaurantId)}${cacheBuster}`
+        : `?_${Date.now()}`;
     const response = await axiosAdmin.get(`/inventory${query}`);
     return response.data;
 };
 
 export const getInventoryByRestaurant = async (restaurantId) => {
-    const response = await axiosAdmin.get(`/inventory/restaurant/${restaurantId}`);
+    const response = await axiosAdmin.get(`/inventory/restaurant/${restaurantId}?_=${Date.now()}`);
     return response.data;
 };
 
 export const getInventoryById = async (id) => {
-    const response = await axiosAdmin.get(`/inventory/${id}`);
+    const response = await axiosAdmin.get(`/inventory/${id}?_=${Date.now()}`);
     return response.data;
 };
 
@@ -44,7 +47,7 @@ export const increaseInventory = async (id, quantity) => {
 
 export const searchInventoryByName = async (restaurantId, name) => {
     const response = await axiosAdmin.get(
-        `/inventory/restaurant/${restaurantId}/search?name=${encodeURIComponent(name)}`
+        `/inventory/restaurant/${restaurantId}/search?name=${encodeURIComponent(name)}&_=${Date.now()}`
     );
     return response.data;
 };

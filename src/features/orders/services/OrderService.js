@@ -13,7 +13,7 @@ export const createOrderService = async (data) => {
         const response = await createOrderRequest(data);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al crear orden";
+        throw error;
     }
 };
 
@@ -22,7 +22,7 @@ export const getOrdersService = async () => {
         const response = await getOrdersRequest();
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al obtener ordenes";
+        throw error;
     }
 };
 
@@ -31,7 +31,7 @@ export const getOrderByIdService = async (id) => {
         const response = await getOrderByIdRequest(id);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al obtener orden";
+        throw error;
     }
 };
 
@@ -40,7 +40,7 @@ export const getOrderByIdWithDetailsService = async (id) => {
         const response = await getOrderByIdWithDetailsRequest(id);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al obtener detalle de orden";
+        throw error;
     }
 };
 
@@ -49,7 +49,7 @@ export const searchOrdersService = async (searchTerm) => {
         const response = await searchOrdersRequest(searchTerm);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al buscar ordenes";
+        throw error;
     }
 };
 
@@ -58,7 +58,7 @@ export const updateOrderService = async (id, data) => {
         const response = await updateOrderRequest(id, data);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al actualizar orden";
+        throw error;
     }
 };
 
@@ -67,7 +67,7 @@ export const deleteOrderService = async (id) => {
         const response = await deleteOrderRequest(id);
         return response;
     } catch (error) {
-        throw error.response?.data?.message || "Error al eliminar orden";
+        throw error;
     }
 };
 

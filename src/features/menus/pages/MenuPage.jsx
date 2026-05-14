@@ -70,6 +70,14 @@ export default function MenuPage() {
           menu={selectedMenu}
         />
       )}
+
+      {isViewModalOpen && (
+        <MenuViewModal
+          isOpen={isViewModalOpen}
+          onClose={() => setIsViewModalOpen(false)}
+          menu={selectedMenu}
+        />
+      )}
     </div>
   )
 }

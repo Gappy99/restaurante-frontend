@@ -1,6 +1,16 @@
 import { useCallback } from 'react'
 import useBeverageStore from '../store/useBeverageStore.js'
 
+const beverageTypes = [
+  'Cerveza',
+  'Vinos',
+  'Licores',
+  'Cocteles',
+  'Shots',
+  'Bebidas_sin_alcohol',
+  'Bebidas_calientes',
+]
+
 /**
  * Hook para obtener y manejar la lista de bebidas
  */
@@ -53,6 +63,13 @@ export const useSaveBeverage = (beverageId = null) => {
         }
       }
 
+      if (!formData?.description) {
+        return {
+          success: false,
+          error: 'La descripción de la bebida es obligatoria',
+        }
+      }
+
       if (!formData?.price || formData.price < 0) {
         return {
           success: false,
@@ -60,14 +77,26 @@ export const useSaveBeverage = (beverageId = null) => {
         }
       }
 
-      if (!formData?.type) {
+      if (!formData?.type || !beverageTypes.includes(formData.type)) {
         return {
           success: false,
-          error: 'El tipo de bebida es obligatorio',
+          error: 'El tipo de bebida es obligatorio y debe ser válido',
         }
       }
 
-      return await saveBeverage(formData, beverageId)
+      if (!formData?.restaurant_id) {
+        return {
+          success: false,
+          error: 'El restaurante de la bebida es obligatorio',
+        }
+      }
+
+      const normalizedFormData = {
+        ...formData,
+        image: formData.image ?? null,
+      }
+
+      return await saveBeverage(normalizedFormData, beverageId)
     },
     [saveBeverage, beverageId]
   )

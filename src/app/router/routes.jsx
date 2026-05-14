@@ -16,11 +16,15 @@ import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
 import RestaurantPage from '../../features/restaurant/pages/RestaurantPage'
+import InventoryPage from '../../features/inventory/pages/InventoryPage'
 import TablesPage from '../../features/tables/pages/TablesPage'
 import RestaurantMiniMenuPage from '../../features/restaurant/pages/RestaurantMiniMenuPage'
 import RestaurantTablesPage from '../../features/tables/pages/RestaurantTablesPage'
 import AllTablesPage from '../../features/tables/pages/AllTablesPage'
 import InformationPage from '../../features/Information/pages/InformationPage'
+import RecipesPage from '../../features/recipes/pages/RecipesPage'
+import OrdersPage from '../../features/orders/pages/OrdersPage'
+import DetallePedidosPage from '../../features/detallepedido/pages/DetallePedidosPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
@@ -75,12 +79,28 @@ const router = createBrowserRouter([
         element: <MenuPage />,
       },
       {
+        path: 'recipes',
+        element: <RecipesPage />,
+      },
+      {
+        path: 'orders',
+        element: <OrdersPage />,
+      },
+      {
+        path: 'detallePedidos',
+        element: <DetallePedidosPage />,
+      },
+      {
         path: 'users',
         element: <UsersPage />,
       },
       {
         path: 'restaurants',
         element: <RestaurantPage />,
+      },
+      {
+        path: 'inventory',
+        element: <InventoryPage />,
       },
       {
         path: 'restaurants/:id',

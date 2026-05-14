@@ -9,57 +9,57 @@ import {
 
 export const createDetallePedidoService = async (data) => {
     try {
-        const response = await createDetallePedidoRequest(data);
-        return response;
+        const response = await createDetallePedidoRequest(data)
+        return response
     } catch (error) {
-        throw error.response?.data?.message || "Error al crear detalle de pedido";
+        throw error
     }
-};
+}
 
 export const getDetallePedidosService = async () => {
     try {
-        const response = await getDetallePedidosRequest();
-        return response;
+        const response = await getDetallePedidosRequest()
+        return response
     } catch (error) {
-        throw error.response?.data?.message || "Error al obtener detalles de pedido";
+        throw error
     }
-};
+}
 
 export const getDetallePedidoByIdService = async (id) => {
     try {
-        const response = await getDetallePedidoByIdRequest(id);
-        return response;
+        const response = await getDetallePedidoByIdRequest(id)
+        return response
     } catch (error) {
-        throw error.response?.data?.message || "Error al obtener detalle de pedido";
+        throw error
     }
-};
+}
 
 export const getDetallePedidosByOrderService = async (orderId) => {
     try {
-        const response = await getDetallePedidosByOrderRequest(orderId);
-        return response;
+        const response = await getDetallePedidosByOrderRequest(orderId)
+        return response
     } catch (error) {
-        throw error.response?.data?.message || "Error al obtener detalles por orden";
+        throw error
     }
-};
+}
 
 export const updateDetallePedidoService = async (id, data) => {
     try {
-        const response = await updateDetallePedidoRequest(id, data);
-        return response;
+        const response = await updateDetallePedidoRequest(id, data)
+        return response
     } catch (error) {
-        throw error.response?.data?.message || "Error al actualizar detalle de pedido";
+        throw error
     }
-};
+}
 
 export const deleteDetallePedidoService = async (id) => {
     try {
-        const response = await deleteDetallePedidoRequest(id);
-        return response;
+        const response = await deleteDetallePedidoRequest(id)
+        return response
     } catch (error) {
-        throw error.response?.data?.message || "Error al eliminar detalle de pedido";
+        throw error
     }
-};
+}
 
 export default {
     createDetallePedidoService,

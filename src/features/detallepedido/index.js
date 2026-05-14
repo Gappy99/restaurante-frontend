@@ -1,3 +1,6 @@
+// DetallePedido Pages
+export { default as DetallePedidosPage } from "./pages/DetallePedidosPage.jsx";
+
 // DetallePedido Hooks
 export {
   useDetallePedidos,

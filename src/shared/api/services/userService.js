@@ -1,69 +1,71 @@
 import adminClient from '../adminClient'
 import authClient from '../authClient'
 
-const normalizeContact = (contact) => ({
-  ...contact,
-  _id: contact._id || contact.contact_id,
-  nombre: contact.contact_name || contact.nombre || '',
-  email: contact.contact_email || contact.email || '',
-  rol: contact.contact_position || contact.rol || 'CLIENTE',
-  telefono: contact.contact_phone_number || contact.telefono || '',
+const normalizeUser = (user) => ({
+  ...user,
+  _id: user._id || user.idusuario || user.id,
+  name: user.name || '',
+  surname: user.surname || '',
+  username: user.username || '',
+  email: user.email || '',
+  user_age: user.user_age || 0,
 })
 
-// Servicio para obtener contactos (usuarios en el backend)
+// Servicio para obtener usuarios desde el backend
 export const getUsers = async () => {
   try {
-    const response = await adminClient.get('/contact')
-    const contacts = response.data.contacts || response.data || []
-    return Array.isArray(contacts) ? contacts.map(normalizeContact) : []
+    const response = await adminClient.get('/users')
+    const users =
+      response.data?.users ||
+      response.data?.data ||
+      response.data?.usuarios ||
+      response.data
+
+    return Array.isArray(users) ? users.map(normalizeUser) : []
   } catch (error) {
     console.error('Error al obtener usuarios:', error)
     return []
   }
 }
 
-// Servicio para crear un contacto/usuario
+// Servicio para crear un usuario
 export const createUser = async (userData) => {
   try {
-    // Mapear campos del frontend al backend
-    const contactData = {
-      contact_type: userData.contact_type || 'CLIENTE',
-      contact_name: userData.contact_name || userData.nombre || '',
-      contact_position: userData.contact_position || userData.rol || 'CLIENTE',
-      contact_phone_number: userData.contact_phone_number || userData.telefono || '',
-      contact_email: userData.contact_email || userData.email || ''
+    const payload = {
+      nombre: userData.nombre || userData.name || userData.contact_name || '',
+      email: userData.email || userData.contact_email || '',
+      telefono: userData.telefono || userData.phone || userData.contact_phone_number || '',
+      rol: userData.rol || userData.role || userData.contact_position || 'CLIENTE',
     }
-    const response = await adminClient.post('/contact', contactData)
-    return normalizeContact(response.data.contact || response.data)
+    const response = await adminClient.post('/users', payload)
+    return normalizeUser(response.data?.user || response.data?.data || response.data)
   } catch (error) {
     console.error('Error al crear usuario:', error)
     throw error
   }
 }
 
-// Servicio para actualizar un contacto/usuario
+// Servicio para actualizar un usuario
 export const updateUser = async (id, userData) => {
   try {
-    // Mapear campos del frontend al backend
-    const contactData = {
-      contact_type: userData.contact_type || 'CLIENTE',
-      contact_name: userData.contact_name || userData.nombre || '',
-      contact_position: userData.contact_position || userData.rol || 'CLIENTE',
-      contact_phone_number: userData.contact_phone_number || userData.telefono || '',
-      contact_email: userData.contact_email || userData.email || ''
+    const payload = {
+      nombre: userData.nombre || userData.name || userData.contact_name || '',
+      email: userData.email || userData.contact_email || '',
+      telefono: userData.telefono || userData.phone || userData.contact_phone_number || '',
+      rol: userData.rol || userData.role || userData.contact_position || 'CLIENTE',
     }
-    const response = await adminClient.put(`/contact/${id}`, contactData)
-    return normalizeContact(response.data.contact || response.data)
+    const response = await adminClient.put(`/users/${id}`, payload)
+    return normalizeUser(response.data?.user || response.data?.data || response.data)
   } catch (error) {
     console.error('Error al actualizar usuario:', error)
     throw error
   }
 }
 
-// Servicio para eliminar un contacto/usuario
+// Servicio para eliminar un usuario
 export const deleteUser = async (id) => {
   try {
-    const response = await adminClient.delete(`/contact/${id}`)
+    const response = await adminClient.delete(`/users/${id}`)
     return response.data
   } catch (error) {
     console.error('Error al eliminar usuario:', error)

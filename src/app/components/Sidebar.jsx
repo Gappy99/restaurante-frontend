@@ -73,6 +73,38 @@ const Sidebar = ({ isOpen = true }) => {
         </Link>
 
         <Link
+          to="/loby/recipes"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+        >
+          <span>🧾</span>
+          <span>Recetas</span>
+        </Link>
+
+        <Link
+          to="/loby/orders"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+        >
+          <span>🛒</span>
+          <span>Órdenes</span>
+        </Link>
+
+        <Link
+          to="/loby/inventory"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+        >
+          <span>📦</span>
+          <span>Inventario</span>
+        </Link>
+
+        <Link
+          to="/loby/detallePedidos"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+        >
+          <span>📝</span>
+          <span>Detalles Pedidos</span>
+        </Link>
+
+        <Link
           to="/loby/information"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
         >

@@ -8,6 +8,8 @@ export {
   useInventoryStockActions,
 } from "./hooks/index.js";
 
+export { default as InventoryPage } from "./pages/InventoryPage.jsx";
+
 // Inventory Services
 export {
   createInventoryService,

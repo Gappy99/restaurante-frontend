@@ -14,7 +14,15 @@ const normalizeOrderList = (payload) => {
     if (Array.isArray(payload)) return payload;
     if (Array.isArray(payload?.data)) return payload.data;
     if (Array.isArray(payload?.orders)) return payload.orders;
+    if (Array.isArray(payload?.data?.orders)) return payload.data.orders;
+    if (Array.isArray(payload?.result)) return payload.result;
     return [];
+};
+
+const extractId = (value) => {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    return value?._id || value?.idusuario || value?.id || value?.user_id || '';
 };
 
 const orderId = (order) => order?._id || order?.id;
@@ -182,7 +190,6 @@ export const useOrderStore = create((set, get) => ({
             filtered = filtered.filter((o) =>
                 String(o.Orders_number || "").toLowerCase().includes(term) ||
                 String(o.Orders_domicile || "").toLowerCase().includes(term) ||
-                String(o.Orders_facture || "").toLowerCase().includes(term) ||
                 String(o.Orders_cupon || "").toLowerCase().includes(term)
             );
         }
@@ -200,8 +207,8 @@ export const useOrderStore = create((set, get) => ({
 
         if (state.filters.user) {
             filtered = filtered.filter((o) => {
-                const uid = o.User_id?._id || o.User_id;
-                return uid === state.filters.user;
+                const uid = extractId(o.User_id);
+                return String(uid) === String(state.filters.user);
             });
         }
 
