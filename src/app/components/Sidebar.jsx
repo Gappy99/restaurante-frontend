@@ -1,21 +1,20 @@
 import { Link, useNavigate } from 'react-router-dom'
 import useAuthStore from '../../shared/stores/useAuthStore'
 import logoRestaurant from '../../shared/assets/img/logo.png'
-
 /**
  * Componente Sidebar - Navegación lateral
  */
 const Sidebar = ({ isOpen = true }) => {
   const { logout, user } = useAuthStore()
   const navigate = useNavigate()
-
+ 
   const handleLogout = () => {
     logout()
     navigate('/login')
   }
-
+ 
   const isAdmin = user?.rol === 'ADMIN'
-
+ 
   return (
     <aside
       className={`
@@ -33,13 +32,13 @@ const Sidebar = ({ isOpen = true }) => {
             className="w-full h-48 object-cover"
           />
         </div>
-
+ 
         <div className="mt-5">
           <h1 className="text-2xl font-bold text-white">Restaurantes</h1>
           <p className="mt-2 text-sm text-white/65">Gestión de restaurantes</p>
         </div>
       </div>
-
+ 
       <nav className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 space-y-3">
         <Link
           to="/loby"
@@ -47,28 +46,28 @@ const Sidebar = ({ isOpen = true }) => {
         >
           <span className="font-medium">Menú Principal</span>
         </Link>
-
+ 
         <Link
           to="/loby/restaurants"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
           <span>Restaurantes</span>
         </Link>
-
+ 
         <Link
           to="/loby/tables"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
           <span>Mesas</span>
         </Link>
-
+ 
         <Link
           to="/loby/menu"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
           <span>Menú</span>
         </Link>
-
+ 
         <Link
           to="/loby/recipes"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
@@ -109,6 +108,22 @@ const Sidebar = ({ isOpen = true }) => {
         </Link>
 
         <Link
+          to="/loby/reviews"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+        >
+          <span>⭐</span>
+          <span>Reseñas</span>
+        </Link>
+
+        <Link
+          to="/loby/coupons"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
+        >
+          <span>🎫</span>
+          <span>Cupones</span>
+        </Link>
+ 
+        <Link
           to="/loby/mapa-de-sedes"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white/10 transition"
         >
@@ -122,7 +137,6 @@ const Sidebar = ({ isOpen = true }) => {
         >
           <span>Mi Perfil</span>
         </Link>
-
         <Link
           to="/loby/reservations"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
@@ -130,7 +144,6 @@ const Sidebar = ({ isOpen = true }) => {
           <span>📅</span>
           <span>Reservaciones</span>
         </Link>
-
         <Link
           to="/loby/notifications"
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
@@ -138,7 +151,6 @@ const Sidebar = ({ isOpen = true }) => {
           <span>🔔</span>
           <span>Notificaciones</span>
         </Link>
-
         {isAdmin && (
           <>
             <Link
@@ -150,7 +162,7 @@ const Sidebar = ({ isOpen = true }) => {
           </>
         )}
       </nav>
-
+ 
       <div className="px-6 pb-6">
         <div className="rounded-2xl bg-[var(--bg)] p-4 border border-[var(--accent-soft)]">
           <p className="text-xs text-[var(--muted)]">Usuario conectado</p>
@@ -166,5 +178,7 @@ const Sidebar = ({ isOpen = true }) => {
     </aside>
   )
 }
-
+ 
 export default Sidebar
+ 
+ 

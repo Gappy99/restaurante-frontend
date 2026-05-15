@@ -9,7 +9,6 @@ import FullLayout from '../layouts/FullLayout'
 import LoginPage from '../../features/auth/pages/LoginPage'
 import RegisterPage from '../../features/auth/pages/RegisterPage'
 import NotFoundPage from '../../features/common/pages/NotFoundPage'
-import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
 import MenuPage from '../../features/menus/pages/MenuPage'
 
 // Páginas principales
@@ -28,6 +27,8 @@ import InformationPage from '../../features/Information/pages/InformationPage'
 import RecipesPage from '../../features/recipes/pages/RecipesPage'
 import OrdersPage from '../../features/orders/pages/OrdersPage'
 import DetallePedidosPage from '../../features/detallepedido/pages/DetallePedidosPage'
+import ReviewPage from '../../features/Review/pages/ReviewPage'
+import CouponPage from '../../features/coupon/pages/CouponPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
@@ -81,6 +82,14 @@ const router = createBrowserRouter([
         element: <InformationPage />,
       },
       {
+        path: 'reviews',
+        element: <ReviewPage />,
+      },
+      {
+        path: 'coupons',
+        element: <CouponPage />,
+      },
+      {
         path: 'menu',
         element: <MenuPage />,
       },
@@ -126,6 +135,10 @@ const router = createBrowserRouter([
       {
         path: 'restaurants/:id',
         element: <RestaurantMiniMenuPage />,
+      },
+      {
+        path: 'restaurants/:id/reviews',
+        element: <ReviewPage />,
       },
       {
         path: ':id/tables',

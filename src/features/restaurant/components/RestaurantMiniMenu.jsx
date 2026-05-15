@@ -10,7 +10,7 @@ const RestaurantMiniMenu = ({ restaurant }) => {
         <p className="text-sm text-[#946841]">Opciones rápidas</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <button
           type="button"
           className="text-center py-3 px-2 rounded-lg bg-[#5B300E]/20 opacity-60 cursor-not-allowed"
@@ -20,6 +20,9 @@ const RestaurantMiniMenu = ({ restaurant }) => {
         </button>
         <Link to={`/restaurants/${id}/tables`} className="text-center py-3 px-2 rounded-lg bg-[#7F532C] text-[#FCF0CA] font-semibold hover:bg-[#946841]">
           Mesas
+        </Link>
+        <Link to={`/loby/restaurants/${id}/reviews`} className="text-center py-3 px-2 rounded-lg bg-[#946841] text-[#FCF0CA] font-semibold hover:bg-[#7F532C]">
+          Reseñas
         </Link>
         <button
           type="button"
