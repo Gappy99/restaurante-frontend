@@ -76,8 +76,10 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
   const inputStyles = "w-full bg-[#5B300E]/20 border border-[#7F532C]/50 rounded-xl px-4 py-2.5 text-[#FCF0CA] focus:border-[#FCF0CA] focus:outline-none transition-all placeholder:text-[#946841]/50"
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-[#2E160C] border border-[#7F532C] w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-[#2E160C] border border-[#7F532C] w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col" onClick={e => e.stopPropagation()}>
+        
+        {/* Header */}
         <div className="p-6 border-b border-[#7F532C]/30 flex justify-between items-center">
           <h2 className="text-xl font-bold text-[#FCF0CA] uppercase tracking-wider">
             {initialData ? 'Editar Restaurante' : 'Nuevo Restaurante'}
@@ -85,20 +87,28 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
           <button onClick={onClose} className="text-[#946841] hover:text-[#FCF0CA] text-xl">✕</button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 max-h-[80vh] overflow-y-auto space-y-6">
+        <form onSubmit={handleSubmit} className="p-8 max-h-[80vh] overflow-y-auto space-y-6 flex flex-col">
           {error && <div className="p-3 bg-red-900/30 border border-red-500/50 rounded-xl text-red-200 text-sm">{error}</div>}
 
           {/* Nombre */}
-          <div>
-            <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1">Nombre del Restaurante *</label>
-            <input name="name" value={formData.name} onChange={handleInputChange} className={`${inputStyles} ${errors.name ? 'border-red-500' : ''}`} />
+          <div className="w-full flex flex-col items-start"> 
+            <label className="text-[#946841] text-[10px] font-bold uppercase mb-1 ml-1">
+            </label>
+            <input 
+              name="name" 
+              value={formData.name} 
+              onChange={handleInputChange} 
+              placeholder="Escribe el nombre aquí"
+              className={`${inputStyles} ${errors.name ? 'border-red-500' : ''}`} 
+            />
             {errors.name && <p className="text-red-400 text-xs mt-1 ml-1">{errors.name}</p>}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             {/* Tipo */}
-            <div>
-              <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1">Tipo *</label>
+            <div className="flex flex-col">
+              <label className="text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1 text-left">
+              </label>
               <select name="type" value={formData.type} onChange={handleInputChange} className={inputStyles}>
                 <option value="">Selecciona</option>
                 {RESTAURANT_TYPES.map(t => <option key={t} value={t} className="bg-[#2E160C] text-[#FCF0CA]">{t}</option>)}
@@ -106,8 +116,9 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
             </div>
 
             {/* Tipo Gastronómico */}
-            <div>
-              <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1">Tipo Gastronómico *</label>
+            <div className="flex flex-col">
+              <label className="text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1 text-left">
+              </label>
               <select name="gastronomicType" value={formData.gastronomicType} onChange={handleInputChange} className={inputStyles}>
                 <option value="">Selecciona</option>
                 {GASTRONOMIC_TYPES.map(t => <option key={t} value={t} className="bg-[#2E160C] text-[#FCF0CA]">{t}</option>)}
@@ -116,37 +127,61 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
           </div>
 
           {/* Dirección */}
-          <div>
-            <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1">Dirección *</label>
-            <input name="address" value={formData.address} onChange={handleInputChange} className={inputStyles} />
+          <div className="w-full flex flex-col items-start">
+            <label className="text-[#946841] text-[10px] font-bold uppercase mb-1 ml-1">
+            </label>
+            <input 
+              name="address" 
+              value={formData.address} 
+              onChange={handleInputChange} 
+              placeholder="Ej. Zona 15, Ciudad de Guatemala"
+              className={inputStyles} 
+            />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 w-full">
             {/* Apertura */}
-            <div>
-              <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1 text-center">Apertura</label>
+            <div className="flex flex-col">
+              <label className="text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1 text-center">
+              </label>
               <input type="time" name="timeStart" value={formData.timeStart} onChange={handleInputChange} className={inputStyles} />
             </div>
 
             {/* Cierre */}
-            <div>
-              <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1 text-center">Cierre</label>
+            <div className="flex flex-col">
+              <label className="text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1 text-center">
+              </label>
               <input type="time" name="timeClose" value={formData.timeClose} onChange={handleInputChange} className={inputStyles} />
             </div>
           </div>
 
           {/* Precio y Imagen */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-            <div>
-              <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1">Precio Promedio</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end w-full">
+            <div className="flex flex-col">
+              <label className="text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1 text-left">
+              </label>
               <input type="number" name="meanPrice" value={formData.meanPrice} onChange={handleInputChange} className={inputStyles} />
             </div>
             
-            <div className="relative">
-              <label className="block text-[#946841] text-[10px] font-bold uppercase mb-2 ml-1">Imagen</label>
-              <div className="flex items-center gap-3 bg-[#5B300E]/30 p-2 rounded-xl border border-[#7F532C]/50">
-                {preview && <img src={preview} className="w-10 h-10 rounded object-cover" />}
-                <input type="file" name="image" accept="image/*" onChange={handleImageChange} className="text-[10px] text-[#946841] file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:bg-[#7F532C] file:text-[#FCF0CA]" />
+            <div className="flex flex-col gap-2">
+              <label className="text-[#946841] text-[10px] font-bold uppercase ml-1 text-left">
+
+              </label>
+              <div className="relative flex items-center gap-4 bg-[#5B300E]/20 p-3 rounded-2xl border border-[#7F532C]/50 overflow-hidden">
+                {preview && (
+                  <img src={preview} className="w-12 h-12 rounded-lg object-cover border border-[#7F532C] flex-shrink-0" alt="Vista previa" />
+                )}
+                <input 
+                  type="file" 
+                  name="image" 
+                  accept="image/*" 
+                  onChange={handleImageChange} 
+                  className="flex-1 text-[10px] text-[#946841] cursor-pointer
+                    file:mr-3 file:py-1 file:px-3 
+                    file:rounded-full file:border-0 
+                    file:bg-[#7F532C] file:text-[#FCF0CA] 
+                    file:font-bold file:text-[10px]"
+                />
               </div>
             </div>
           </div>
