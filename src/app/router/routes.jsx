@@ -15,6 +15,8 @@ import MenuPage from '../../features/menus/pages/MenuPage'
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
 import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
+import ReservationsPage from '../../features/reservations/pages/ReservationsPage'
+import NotificationsPage from '../../features/notifications/pages/NotificationsPage'
 import RestaurantPage from '../../features/restaurant/pages/RestaurantPage'
 import InventoryPage from '../../features/inventory/pages/InventoryPage'
 import TablesPage from '../../features/tables/pages/TablesPage'
@@ -121,6 +123,14 @@ const router = createBrowserRouter([
       {
         path: 'tables/all',
         element: <AllTablesPage />,
+      },
+      {
+        path: 'reservations',
+        element: <ReservationsPage />,
+      },
+      {
+        path: 'notifications',
+        element: <NotificationsPage />,
       },
       {
         path: 'profile',

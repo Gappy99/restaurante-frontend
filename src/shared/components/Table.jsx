@@ -1,4 +1,7 @@
-const Table = ({ columns, data, onEdit, onDelete }) => {
+const Table = ({ columns, data, onEdit, onDelete, actionLabels = {} }) => {
+  const editLabel = actionLabels.edit || 'Editar'
+  const deleteLabel = actionLabels.delete || 'Eliminar'
+  const rows = Array.isArray(data) ? data : []
   return (
     <table className="w-full">
       <thead>
@@ -17,11 +20,13 @@ const Table = ({ columns, data, onEdit, onDelete }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
+        {rows.map((row) => (
           <tr key={row._id} className="border-b border-[var(--accent-soft)] hover:bg-[var(--surface)]">
             {columns.map((col) => (
               <td key={col.key} className="px-6 py-4 text-[var(--text)]">
-                {row[col.key]}
+                {col.key === 'notas'
+                  ? row.notas || row.notes || row.reservation_history || row.description || row.details || '-'
+                  : row[col.key] || '-'}
               </td>
             ))}
             <td className="px-6 py-4 flex gap-2">
@@ -29,13 +34,13 @@ const Table = ({ columns, data, onEdit, onDelete }) => {
                 onClick={() => onEdit(row)}
                 className="px-3 py-1 bg-[var(--primary-soft)] text-[var(--primary)] rounded hover:bg-[var(--primary)] hover:text-[var(--surface)] text-sm font-semibold transition"
               >
-                Editar
+                {editLabel}
               </button>
               <button
                 onClick={() => onDelete(row._id)}
                 className="px-3 py-1 bg-[#ffe5e5] text-[#b02020] rounded hover:bg-[#f1c2c2] text-sm font-semibold transition"
               >
-                Eliminar
+                {deleteLabel}
               </button>
             </td>
           </tr>

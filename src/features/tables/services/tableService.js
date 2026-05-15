@@ -64,15 +64,33 @@ const normalizeLayoutMap = (payload) => {
 export const tableService = {
 	getTables: async (params = {}) => {
 		try {
-			const response = await adminClient.get(TABLE_API_ENDPOINTS.LIST, {
-				params,
+			let { restaurantId } = params
+
+			if (restaurantId && typeof restaurantId === 'object') {
+				restaurantId = restaurantId._id || restaurantId.restaurant_id || restaurantId.id || ''
+			}
+
+			// Use general table endpoint with restaurant_id filter (backend expects restaurant_id)
+			const endpoint = TABLE_API_ENDPOINTS.LIST
+			const requestParams = restaurantId ? { restaurant_id: restaurantId } : params
+
+			console.log('🔍 Fetching tables for restaurant:', restaurantId)
+			console.log('🔍 Request params:', requestParams)
+
+			const response = await adminClient.get(endpoint, {
+				params: requestParams,
 			})
+
+			console.log('📋 Tables response:', response.data)
+			const normalizedData = normalizeTableList(response.data)
+			console.log('🔄 Normalized tables:', normalizedData)
 
 			return {
 				success: true,
-				data: normalizeTableList(response.data),
+				data: normalizedData,
 			}
 		} catch (error) {
+			console.error('❌ Error fetching tables:', error)
 			return {
 				success: false,
 				error: error.response?.data?.message || error.message,

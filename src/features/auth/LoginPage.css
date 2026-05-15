@@ -1,0 +1,138 @@
+/* From Uiverse.io by shadyeljokers */
+.container {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.container span {
+  position: absolute;
+  left: 0;
+  width: 32px;
+  height: 6px;
+  background: #946841;
+  border-radius: 80px;
+  transform-origin: 200px;
+  transform: rotate(calc(var(--i) * (360deg / 50)));
+  animation: blink 3s linear infinite;
+  animation-delay: calc(var(--i) * (3s / 50));
+}
+
+@keyframes blink {
+  0% {
+    background: #FCF0CA;
+  }
+  25% {
+    background: #946841;
+  }
+}
+
+.login-box {
+  position: absolute;
+  width: 80%;
+  max-width: 300px;
+  z-index: 1;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+form {
+  width: 100%;
+  padding: 0 10px;
+}
+
+h2 {
+  font-size: 1.8em;
+  color: #FCF0CA;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.input-box {
+  position: relative;
+  margin: 15px 0;
+}
+
+input {
+  width: 100%;
+  height: 45px;
+  background: transparent;
+  border: 2px solid #946841;
+  outline: none;
+  border-radius: 40px;
+  font-size: 1em;
+  color: #FCF0CA;
+  padding: 0 15px;
+  transition: 0.5s ease;
+}
+
+input:focus {
+  border-color: #FCF0CA;
+}
+
+input[value]:not([value=""]) ~ label,
+input:focus ~ label {
+  top: -10px;
+  font-size: 0.8em;
+  background: #5B300E;
+  padding: 0 6px;
+  color: #FCF0CA;
+}
+
+label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 1em;
+  pointer-events: none;
+  transition: 0.5s ease;
+  color: #FCF0CA;
+}
+
+.forgot-pass {
+  margin: -10px 0 10px;
+  text-align: center;
+}
+
+.forgot-pass a {
+  font-size: 0.85em;
+  color: #FCF0CA;
+  text-decoration: none;
+}
+
+.btn {
+  width: 100%;
+  height: 45px;
+  background: #946841;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 1em;
+  color: #FCF0CA;
+  font-weight: 600;
+}
+
+.signup-link {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.signup-link a {
+  font-size: 1em;
+  color: #FCF0CA;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.error-text {
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: #FCF0CA;
+}
