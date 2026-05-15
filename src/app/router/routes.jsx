@@ -29,6 +29,7 @@ import OrdersPage from '../../features/orders/pages/OrdersPage'
 import DetallePedidosPage from '../../features/detallepedido/pages/DetallePedidosPage'
 import ReviewPage from '../../features/Review/pages/ReviewPage'
 import CouponPage from '../../features/coupon/pages/CouponPage'
+import EventsPage from '../../features/events/pages/EventsPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
@@ -104,6 +105,18 @@ const router = createBrowserRouter([
       {
         path: 'detallePedidos',
         element: <DetallePedidosPage />,
+      },
+      {
+        path: 'information',
+        element: <InformationPage />,
+      },
+      {
+        path: 'events',
+        element: <EventsPage />,
+      },
+      {
+        path: 'menu',
+        element: <MenuPage />,
       },
       {
         path: 'users',
