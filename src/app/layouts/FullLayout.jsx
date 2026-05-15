@@ -15,30 +15,27 @@ const FullLayout = () => {
 
   return (
     <div className="w-full h-screen bg-[var(--bg)] overflow-hidden relative">
-      {/* Sidebar — se superpone sobre el contenido (z-[2000]) */}
+
+      {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} />
 
-      {/* Backdrop semitransparente al abrir el sidebar — cierra al hacer clic */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-[1999]"
-          onClick={handleToggleSidebar}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Botón flotante fijo — no se mueve cuando abre el sidebar */}
+      {/* Botón flotante en esquina superior izquierda */}
       <button
         type="button"
         onClick={handleToggleSidebar}
-        className="fixed top-6 left-6 z-[2001] inline-flex items-center justify-center w-12 h-12 rounded-lg border-2 border-gray-400 bg-gray-800 text-gray-300 hover:bg-gray-700 hover:border-gray-300 hover:text-white transition-all duration-300 font-bold text-lg"
+        className="absolute top-6 z-50 inline-flex items-center justify-center w-12 h-12 rounded-lg border-2 border-gray-400 bg-gray-800 text-gray-300 hover:bg-gray-700 hover:border-gray-300 hover:text-white transition-all duration-300 font-bold text-lg"
+        style={{
+          left: '24px',
+          marginLeft: isSidebarOpen ? '288px' : '0px'
+        }}
+        
         aria-label={isSidebarOpen ? 'Ocultar menú' : 'Mostrar menú'}
         title={isSidebarOpen ? 'Ocultar menú' : 'Mostrar menú'}
       >
         {isSidebarOpen ? '⟩' : '⟨'}
       </button>
 
-      {/* Página a pantalla completa — nunca se desplaza con el sidebar */}
+      {/* Página a pantalla completa */}
       <main className="w-full h-full overflow-auto">
         <Outlet />
       </main>

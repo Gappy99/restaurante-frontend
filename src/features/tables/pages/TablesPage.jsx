@@ -40,7 +40,6 @@ const TablesPage = () => {
 					</div>
 
 					<div className="relative w-full md:w-96">
-						<span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#946841]">🔎</span>
 						<input
 							type="search"
 							value={searchTerm}
@@ -55,7 +54,7 @@ const TablesPage = () => {
 			<main className="max-w-7xl mx-auto relative">
 				{error && (
 					<div className="mb-10 p-5 bg-red-900/20 border border-red-500/40 rounded-2xl text-red-300 text-sm flex items-center gap-3 animate-pulse">
-						<span className="text-lg">⚠️</span>
+
 						<span><strong>Estado del Sistema:</strong> {error}</span>
 					</div>
 				)}
@@ -78,29 +77,28 @@ const TablesPage = () => {
 								to={`/loby/restaurants/${restaurant._id || restaurant.id}/tables`}
 									className="group rounded-[2rem] border border-[#7F532C]/30 bg-[#5B300E]/20 p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#FCF0CA]/40 hover:shadow-2xl hover:shadow-black/40"
 								>
-									<div className="flex items-start gap-4">
-										<div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#946841]/20 text-2xl">
-											🏪
-										</div>
-										<div className="min-w-0 flex-1">
-											<h2 className="truncate text-xl font-bold text-[#FCF0CA] group-hover:text-white">
-												{restaurant.restaurant_name}
-											</h2>
-											<p className="mt-1 text-sm text-[#946841]">
-												{restaurant.restaurant_direction || 'Sin dirección registrada'}
-											</p>
-											<p className="mt-3 text-sm text-[#FCF0CA]/80">
-												Haz clic para abrir el plano de mesas de este restaurante.
-											</p>
-										</div>
+								<div className="flex items-start gap-4">
+									<div className="flex h-32 w-32 shrink-0 items-center justify-center rounded-2xl bg-[#946841]/20 text-2xl">
+										<img src={restaurant.restaurant_photo} alt={restaurant.restaurant_name} className="w-full h-full object-cover rounded-2xl" />
 									</div>
+									<div className="min-w-0 flex-1">
+										<h2 className="truncate text-xl font-bold text-[#FCF0CA] group-hover:text-white">
+											{restaurant.restaurant_name}
+										</h2>
+										<p className="mt-1 text-sm text-[#946841]">
+											{restaurant.restaurant_direction || 'Sin dirección registrada'}
+										</p>
+										<p className="mt-3 text-sm text-[#FCF0CA]/80">
+											Haz clic para abrir el plano de mesas de este restaurante.
+										</p>
+									</div>
+								</div>
 								</Link>
 							))}
 						</div>
 					) : (
 						<div className="flex items-center justify-center py-24">
 							<div className="text-center">
-								<div className="text-6xl mb-4">🏪</div>
 								<h3 className="text-[#FCF0CA] text-xl font-bold mb-2">No hay restaurantes registrados</h3>
 								<p className="text-[#946841]">Crea un restaurante primero para poder administrar sus mesas</p>
 							</div>

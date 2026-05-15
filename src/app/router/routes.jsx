@@ -101,7 +101,22 @@ const router = createBrowserRouter([
         element: <UsersPage />,
       },
       {
-        path: 'restaurants',
+        path: 'fields',
+        element: <FieldsPage />,
+      },
+    ],
+  },
+  // Rutas de Restaurantes a pantalla completa
+  {
+    path: '/loby/restaurants',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
         element: <RestaurantPage />,
       },
       {
@@ -113,19 +128,26 @@ const router = createBrowserRouter([
         element: <RestaurantMiniMenuPage />,
       },
       {
-        path: 'restaurants/:id/tables',
+        path: ':id/tables',
         element: <RestaurantTablesPage />,
       },
+    ],
+  },
+  // Rutas de Mesas a pantalla completa
+  {
+    path: '/loby/tables',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: 'fields',
-        element: <FieldsPage />,
-      },
-      {
-        path: 'tables',
+        index: true,
         element: <TablesPage />,
       },
       {
-        path: 'tables/all',
+        path: 'all',
         element: <AllTablesPage />,
       },
       {

@@ -27,7 +27,6 @@ export const MenuCard = ({ menu, onEdit, onDelete, onView, isAdmin }) => {
                 ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FCF0CA] via-[#F5D9A5] to-[#946841] text-center px-6">
                         <div>
-                            <div className="text-5xl mb-3">🍽️</div>
                             <p className="text-[#5B300E] font-black uppercase tracking-[0.25em] text-xs">Menú</p>
                         </div>
                     </div>
