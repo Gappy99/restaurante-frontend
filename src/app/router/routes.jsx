@@ -22,6 +22,7 @@ import RestaurantMiniMenuPage from '../../features/restaurant/pages/RestaurantMi
 import RestaurantTablesPage from '../../features/tables/pages/RestaurantTablesPage'
 import AllTablesPage from '../../features/tables/pages/AllTablesPage'
 import InformationPage from '../../features/Information/pages/InformationPage'
+import EventsPage from '../../features/events/pages/EventsPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
         element: <InformationPage />,
       },
       {
+        path: 'events',
+        element: <EventsPage />,
+      },
+      {
         path: 'menu',
         element: <MenuPage />,
       },
@@ -83,36 +88,110 @@ const router = createBrowserRouter([
         element: <UsersPage />,
       },
       {
-        path: 'restaurants',
-        element: <RestaurantPage />,
-      },
-      {
-        path: 'restaurants/:id',
-        element: <RestaurantMiniMenuPage />,
-      },
-      {
-        path: 'restaurants/:id/tables',
-        element: <RestaurantTablesPage />,
-      },
-      {
         path: 'fields',
         element: <FieldsPage />,
       },
+    ],
+  },
+  // Rutas de Restaurantes a pantalla completa
+  {
+    path: '/loby/restaurants',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: 'tables',
+        index: true,
+        element: <RestaurantPage />,
+      },
+      {
+        path: ':id',
+        element: <RestaurantMiniMenuPage />,
+      },
+      {
+        path: ':id/tables',
+        element: <RestaurantTablesPage />,
+      },
+    ],
+  },
+  // Rutas de Mesas a pantalla completa
+  {
+    path: '/loby/tables',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
         element: <TablesPage />,
       },
       {
-        path: 'tables/all',
+        path: 'all',
         element: <AllTablesPage />,
       },
+    ],
+  },
+  // Rutas de Menú a pantalla completa
+  {
+    path: '/loby/menu',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: 'profile',
-        element: (
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
-        ),
+        index: true,
+        element: <MenuPage />,
+      },
+    ],
+  },
+  // Rutas de Información a pantalla completa
+  {
+    path: '/loby/information',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <InformationPage />,
+      },
+    ],
+  },
+  // Rutas de Perfil a pantalla completa
+  {
+    path: '/loby/profile',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <ProfilePage />,
+      },
+    ],
+  },
+  // Rutas de Contactos a pantalla completa
+  {
+    path: '/loby/users',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <UsersPage />,
       },
     ],
   },
