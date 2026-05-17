@@ -4,7 +4,48 @@ import toast from 'react-hot-toast'
 import useReportStore from '../../../shared/stores/useReportStore'
 import { reportService } from '../../../shared/api/services/reportService'
 import Modal from '../../../shared/components/Modal'
-import Table from '../../../shared/components/Table'
+
+const IconFile = ({ className = 'h-5 w-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M14 2V8H20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
+const IconChart = ({ className = 'h-5 w-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 19H20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M7 14V10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M12 14V6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M17 14V8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+)
+
+const IconPdf = ({ className = 'h-4 w-4' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 2H14L20 8V22C20 22.5523 19.5523 23 19 23H5C4.44772 23 4 22.5523 4 22V3C4 2.44772 4.44772 2 5 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+    <path d="M14 2V8H20" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+    <path d="M8.5 18H11.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M8.5 14H15.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+)
+
+const IconExcel = ({ className = 'h-4 w-4' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 2H14L20 8V22C20 22.5523 19.5523 23 19 23H5C4.44772 23 4 22.5523 4 22V3C4 2.44772 4.44772 2 5 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+    <path d="M14 2V8H20" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+    <path d="M8 15H16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M8 19H16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M10 11L12 15L14 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
+const IconView = ({ className = 'h-4 w-4' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8"/>
+  </svg>
+)
 
 /**
  * Página de Gestión de Reportes (CRUD + Análisis)
@@ -57,15 +98,18 @@ const ReportsPage = () => {
   }
 
   const handleDownload = async (id, format = 'pdf') => {
-    const result = format === 'pdf' 
+    const result = format === 'pdf'
       ? await reportService.downloadReportPDF(id)
+      : format === 'excel'
+      ? await reportService.downloadReportExcel(id)
       : await reportService.downloadReportCSV(id)
-    
+
     if (result.success) {
       const url = window.URL.createObjectURL(new Blob([result.data]))
+      const extension = format === 'excel' ? 'xlsx' : format
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', `reporte-${id}.${format}`)
+      link.setAttribute('download', `reporte-${id}.${extension}`)
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
@@ -129,23 +173,25 @@ const ReportsPage = () => {
       <div className="flex gap-4 mb-6 border-b border-gray-200">
         <button
           onClick={() => setActiveTab('guardados')}
-          className={`px-4 py-2 font-semibold transition ${
+          className={`px-4 py-2 font-semibold inline-flex items-center gap-2 transition ${
             activeTab === 'guardados'
               ? 'border-b-2 border-blue-600 text-blue-600'
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          📄 Reportes Guardados
+          <IconFile className="h-5 w-5" />
+          Reportes Guardados
         </button>
         <button
           onClick={() => setActiveTab('generar')}
-          className={`px-4 py-2 font-semibold transition ${
+          className={`px-4 py-2 font-semibold inline-flex items-center gap-2 transition ${
             activeTab === 'generar'
               ? 'border-b-2 border-blue-600 text-blue-600'
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          📊 Generar Análisis
+          <IconChart className="h-5 w-5" />
+          Generar Análisis
         </button>
       </div>
 
@@ -154,7 +200,7 @@ const ReportsPage = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {loading ? (
             <div className="p-6 text-center text-gray-500">Cargando reportes...</div>
-          ) : reports.length === 0 ? (
+          ) : !Array.isArray(reports) || reports.length === 0 ? (
             <div className="p-6 text-center text-gray-500">
               No hay reportes registrados
             </div>
@@ -179,35 +225,35 @@ const ReportsPage = () => {
             <AnalysisCard
               title="Demanda de Restaurantes"
               description="Analiza la demanda por restaurante"
-              icon="📈"
+              icon={<IconChart className="h-8 w-8 text-blue-600" />}
               onClick={() => handleLoadAnalysis('demanda')}
               loading={analysisLoading && selectedAnalysis === 'demanda'}
             />
             <AnalysisCard
               title="Top de Platos"
               description="Platos más vendidos"
-              icon="🍽️"
+              icon={<IconFile className="h-8 w-8 text-emerald-600" />}
               onClick={() => handleLoadAnalysis('top-platos')}
               loading={analysisLoading && selectedAnalysis === 'top-platos'}
             />
             <AnalysisCard
               title="Ingresos"
               description="Análisis de ingresos"
-              icon="💰"
+              icon={<IconExcel className="h-8 w-8 text-amber-600" />}
               onClick={() => handleLoadAnalysis('ingresos')}
               loading={analysisLoading && selectedAnalysis === 'ingresos'}
             />
             <AnalysisCard
               title="Horas Pico"
               description="Horarios con mayor demanda"
-              icon="⏰"
+              icon={<IconChart className="h-8 w-8 text-indigo-600" />}
               onClick={() => handleLoadAnalysis('horas-pico')}
               loading={analysisLoading && selectedAnalysis === 'horas-pico'}
             />
             <AnalysisCard
               title="Reservaciones"
               description="Datos de reservaciones"
-              icon="🗓️"
+              icon={<IconFile className="h-8 w-8 text-fuchsia-600" />}
               onClick={() => handleLoadAnalysis('reservaciones')}
               loading={analysisLoading && selectedAnalysis === 'reservaciones'}
             />
@@ -253,6 +299,8 @@ const ReportsPage = () => {
  * Tabla de Reportes con acciones mejoradas
  */
 const ReportTable = ({ columns, data, onEdit, onDelete, onView, onDownload }) => {
+  const safeData = Array.isArray(data) ? data : []
+  
   return (
     <table className="w-full">
       <thead>
@@ -271,7 +319,7 @@ const ReportTable = ({ columns, data, onEdit, onDelete, onView, onDownload }) =>
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
+        {safeData.map((row) => (
           <tr key={row._id} className="border-b border-gray-200 hover:bg-gray-50">
             {columns.map((col) => (
               <td key={col.key} className="px-6 py-4 text-gray-700">
@@ -281,31 +329,31 @@ const ReportTable = ({ columns, data, onEdit, onDelete, onView, onDownload }) =>
             <td className="px-6 py-4 flex gap-2 flex-wrap">
               <button
                 onClick={() => onView(row)}
-                className="px-3 py-1 bg-green-100 text-green-600 rounded hover:bg-green-200 text-sm font-semibold transition"
+                className="px-3 py-1 bg-green-100 text-green-600 rounded hover:bg-green-200 text-sm font-semibold transition inline-flex items-center gap-1"
                 title="Ver detalles"
               >
-                Ver
+                <IconView className="h-4 w-4" /> Ver
               </button>
               <button
                 onClick={() => onEdit(row)}
-                className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm font-semibold transition"
+                className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm font-semibold transition inline-flex items-center gap-1"
                 title="Editar reporte"
               >
                 Editar
               </button>
               <button
                 onClick={() => onDownload(row._id, 'pdf')}
-                className="px-3 py-1 bg-purple-100 text-purple-600 rounded hover:bg-purple-200 text-sm font-semibold transition"
+                className="px-3 py-1 bg-purple-100 text-purple-600 rounded hover:bg-purple-200 text-sm font-semibold transition inline-flex items-center gap-1"
                 title="Descargar PDF"
               >
-                PDF
+                <IconPdf className="h-4 w-4" /> PDF
               </button>
               <button
-                onClick={() => onDownload(row._id, 'csv')}
-                className="px-3 py-1 bg-orange-100 text-orange-600 rounded hover:bg-orange-200 text-sm font-semibold transition"
-                title="Descargar CSV"
+                onClick={() => onDownload(row._id, 'excel')}
+                className="px-3 py-1 bg-emerald-100 text-emerald-600 rounded hover:bg-emerald-200 text-sm font-semibold transition inline-flex items-center gap-1"
+                title="Descargar Excel"
               >
-                CSV
+                <IconExcel className="h-4 w-4" /> Excel
               </button>
               <button
                 onClick={() => onDelete(row._id)}
@@ -531,18 +579,18 @@ const ReportDetailModal = ({ isOpen, onClose, report, onDownload }) => {
           </p>
         </div>
 
-        <div className="flex gap-2 pt-4 justify-end">
+        <div className="flex gap-2 pt-4 justify-end flex-wrap">
           <button
             onClick={() => onDownload(report._id, 'pdf')}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition"
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition inline-flex items-center gap-2"
           >
-            📥 Descargar PDF
+            <IconPdf className="h-4 w-4" /> Descargar PDF
           </button>
           <button
-            onClick={() => onDownload(report._id, 'csv')}
-            className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition"
+            onClick={() => onDownload(report._id, 'excel')}
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold transition inline-flex items-center gap-2"
           >
-            📥 Descargar CSV
+            <IconExcel className="h-4 w-4" /> Descargar Excel
           </button>
           <button
             onClick={onClose}

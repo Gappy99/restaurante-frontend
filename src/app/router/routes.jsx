@@ -138,6 +138,10 @@ const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        element: <RestaurantPage />,
+      },
+      {
         path: 'restaurants',
         element: <RestaurantPage />,
       },

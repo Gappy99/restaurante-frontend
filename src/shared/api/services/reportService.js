@@ -1,6 +1,8 @@
 import adminClient from '../adminClient'
 import useReportStore from '../../stores/useReportStore'
 import toast from 'react-hot-toast'
+import { jsPDF } from 'jspdf'
+import * as XLSX from 'xlsx'
 
 /**
  * Servicio de Reportes
@@ -16,26 +18,9 @@ import toast from 'react-hot-toast'
  * - Pedidos recurrentes
  */
 
-const REPORTS_STORAGE_KEY = 'restaurante_reports'
-
-const getStoredReports = () => {
-  try {
-    const stored = localStorage.getItem(REPORTS_STORAGE_KEY)
-    return stored ? JSON.parse(stored) : []
-  } catch (error) {
-    console.error('Error al leer reportes del storage:', error)
-    return []
-  }
-}
-
-const saveStoredReports = (reports) => {
-  try {
-    localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(reports))
-    return true
-  } catch (error) {
-    console.error('Error al guardar reportes en storage:', error)
-    return false
-  }
+const fetchReportById = async (id) => {
+  const response = await adminClient.get(`/reports/${id}`)
+  return response.data?.data || response.data
 }
 
 export const reportService = {
@@ -45,9 +30,10 @@ export const reportService = {
   getReports: async () => {
     try {
       useReportStore.getState().setLoading(true)
-      const storedReports = getStoredReports()
-      useReportStore.getState().setReports(storedReports)
-      return { success: true, data: storedReports }
+      const response = await adminClient.get('/reports')
+      const reportsData = Array.isArray(response.data) ? response.data : response.data.data || []
+      useReportStore.getState().setReports(reportsData)
+      return { success: true, data: reportsData }
     } catch (error) {
       toast.error('Error al obtener reportes')
       return { success: false, error: error.message }
@@ -59,18 +45,11 @@ export const reportService = {
   // Crear reporte
   createReport: async (reportData) => {
     try {
-      const newReport = {
-        ...reportData,
-        _id: Date.now().toString(),
-        fechaCreacion: reportData.fechaCreacion || new Date().toISOString(),
-      }
-
-      const allReports = getStoredReports()
-      allReports.push(newReport)
-      saveStoredReports(allReports)
-      useReportStore.getState().addReport(newReport)
+      const response = await adminClient.post('/reports', reportData)
+      const reportResult = response.data?.data || response.data
+      useReportStore.getState().addReport(reportResult)
       toast.success('Reporte creado exitosamente')
-      return { success: true, data: newReport }
+      return { success: true, data: reportResult }
     } catch (error) {
       toast.error('Error al crear reporte')
       return { success: false, error: error.message }
@@ -80,22 +59,11 @@ export const reportService = {
   // Actualizar reporte
   updateReport: async (id, reportData) => {
     try {
-      const updatedReport = {
-        ...reportData,
-        _id: id,
-        fechaActualizacion: new Date().toISOString(),
-      }
-
-      const allReports = getStoredReports()
-      const index = allReports.findIndex(r => r._id === id)
-      if (index !== -1) {
-        allReports[index] = updatedReport
-        saveStoredReports(allReports)
-        useReportStore.getState().updateReport(id, updatedReport)
-        toast.success('Reporte actualizado exitosamente')
-        return { success: true, data: updatedReport }
-      }
-      throw new Error('Reporte no encontrado')
+      const response = await adminClient.put(`/reports/${id}`, reportData)
+      const reportResult = response.data?.data || response.data
+      useReportStore.getState().updateReport(id, reportResult)
+      toast.success('Reporte actualizado exitosamente')
+      return { success: true, data: reportResult }
     } catch (error) {
       toast.error('Error al actualizar reporte')
       return { success: false, error: error.message }
@@ -105,9 +73,7 @@ export const reportService = {
   // Eliminar reporte
   deleteReport: async (id) => {
     try {
-      const allReports = getStoredReports()
-      const filtered = allReports.filter(r => r._id !== id)
-      saveStoredReports(filtered)
+      await adminClient.delete(`/reports/${id}`)
       useReportStore.getState().deleteReport(id)
       toast.success('Reporte eliminado exitosamente')
       return { success: true }
@@ -120,12 +86,8 @@ export const reportService = {
   // Obtener reporte por ID
   getReportById: async (id) => {
     try {
-      const allReports = getStoredReports()
-      const report = allReports.find(r => r._id === id)
-      if (report) {
-        return { success: true, data: report }
-      }
-      throw new Error('Reporte no encontrado')
+      const report = await fetchReportById(id)
+      return { success: true, data: report }
     } catch (error) {
       toast.error('Error al obtener el reporte')
       return { success: false, error: error.message }
@@ -265,7 +227,7 @@ export const reportService = {
   // Descargar reporte en CSV
   downloadReportCSV: async (id, format = 'csv') => {
     try {
-      const report = getStoredReports().find(r => r._id === id)
+      const report = await fetchReportById(id)
       
       if (!report) {
         throw new Error('Reporte no encontrado')
@@ -290,54 +252,98 @@ export const reportService = {
     }
   },
 
-  // Descargar reporte en PDF (HTML)
-  downloadReportPDF: async (id) => {
+  // Descargar reporte en Excel
+  downloadReportExcel: async (id) => {
     try {
-      const report = getStoredReports().find(r => r._id === id)
+      const report = await fetchReportById(id)
       
       if (!report) {
         throw new Error('Reporte no encontrado')
       }
 
-      const content = `
-        <html>
-          <head>
-            <meta charset="UTF-8">
-            <title>${report.titulo}</title>
-            <style>
-              body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-              .container { background: white; padding: 20px; border-radius: 8px; }
-              h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-              .section { margin: 15px 0; }
-              .label { font-weight: bold; color: #555; }
-              p { margin: 8px 0; color: #666; }
-              hr { border: none; border-top: 1px solid #ddd; margin: 20px 0; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>${report.titulo}</h1>
-              <div class="section">
-                <p><span class="label">Tipo:</span> ${report.tipo || 'N/A'}</p>
-                <p><span class="label">Estado:</span> ${report.estado || 'N/A'}</p>
-                <p><span class="label">Autor:</span> ${report.autor || 'N/A'}</p>
-                <p><span class="label">Período:</span> ${report.periodo || 'N/A'}</p>
-                <p><span class="label">Fecha Creación:</span> ${report.fechaCreacion ? new Date(report.fechaCreacion).toLocaleDateString('es-ES') : 'N/A'}</p>
-              </div>
-              <hr>
-              <div class="section">
-                <h3>Descripción</h3>
-                <p>${report.descripcion || 'Sin descripción'}</p>
-              </div>
-              <footer style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #999; font-size: 12px;">
-                <p>Generado el: ${new Date().toLocaleString('es-ES')}</p>
-              </footer>
-            </div>
-          </body>
-        </html>
-      `
+      const data = [
+        {
+          'Título': report.titulo || '',
+          'Tipo': report.tipo || '',
+          'Estado': report.estado || '',
+          'Autor': report.autor || '',
+          'Período': report.periodo || '',
+          'Fecha Creación': report.fechaCreacion ? new Date(report.fechaCreacion).toLocaleDateString('es-ES') : '',
+          'Descripción': report.descripcion || '',
+        }
+      ]
+
+      const workbook = XLSX.utils.book_new()
+      const worksheet = XLSX.utils.json_to_sheet(data)
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Reporte')
+      const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+
+      return { success: true, data: blob }
+    } catch (error) {
+      toast.error('Error al descargar reporte')
+      return { success: false, error: error.message }
+    }
+  },
+
+  // Descargar reporte en PDF
+  downloadReportPDF: async (id) => {
+    try {
+      const report = await fetchReportById(id)
       
-      const blob = new Blob([content], { type: 'application/pdf' })
+      if (!report) {
+        throw new Error('Reporte no encontrado')
+      }
+
+      const doc = new jsPDF({ unit: 'pt', format: 'a4' })
+      const margin = 40
+      let y = 50
+
+      doc.setFontSize(20)
+      doc.setTextColor('#111827')
+      doc.text(report.titulo || 'Reporte', margin, y)
+      y += 30
+
+      doc.setFontSize(11)
+      doc.setTextColor('#374151')
+      const rows = [
+        ['Tipo', report.tipo || 'N/A'],
+        ['Estado', report.estado || 'N/A'],
+        ['Autor', report.autor || 'N/A'],
+        ['Período', report.periodo || 'N/A'],
+        ['Fecha Creación', report.fechaCreacion ? new Date(report.fechaCreacion).toLocaleDateString('es-ES') : 'N/A'],
+      ]
+
+      rows.forEach(([label, value]) => {
+        doc.setFont(undefined, 'bold')
+        doc.text(`${label}:`, margin, y)
+        doc.setFont(undefined, 'normal')
+        doc.text(String(value), margin + 90, y)
+        y += 18
+      })
+
+      y += 10
+      doc.setDrawColor('#d1d5db')
+      doc.setLineWidth(0.5)
+      doc.line(margin, y, 555, y)
+      y += 24
+
+      doc.setFontSize(13)
+      doc.setFont(undefined, 'bold')
+      doc.text('Descripción', margin, y)
+      y += 18
+      doc.setFontSize(11)
+      doc.setFont(undefined, 'normal')
+      const description = report.descripcion || 'Sin descripción'
+      const paragraph = doc.splitTextToSize(description, 515)
+      doc.text(paragraph, margin, y)
+      y += paragraph.length * 14 + 20
+
+      doc.setFontSize(9)
+      doc.setTextColor('#6b7280')
+      doc.text(`Generado el: ${new Date().toLocaleString('es-ES')}`, margin, y)
+
+      const blob = doc.output('blob')
       return { success: true, data: blob }
     } catch (error) {
       toast.error('Error al descargar reporte')
