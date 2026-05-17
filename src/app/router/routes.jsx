@@ -16,6 +16,7 @@ import UsersPage from '../../features/users/pages/UsersPage'
 import FieldsPage from '../../features/fields/pages/FieldsPage'
 import ReservationsPage from '../../features/reservations/pages/ReservationsPage'
 import NotificationsPage from '../../features/notifications/pages/NotificationsPage'
+import ReportsPage from '../../features/reports/pages/ReportsPage'
 import RestaurantPage from '../../features/restaurant/pages/RestaurantPage'
 import InventoryPage from '../../features/inventory/pages/InventoryPage'
 import TablesPage from '../../features/tables/pages/TablesPage'
@@ -121,6 +122,20 @@ const router = createBrowserRouter([
         path: 'fields',
         element: <FieldsPage />,
       },
+      {
+        path: 'reports',
+        element: <ReportsPage />,
+      },
+    ],
+  },
+  {
+    path: '/loby/restaurants',
+    element: (
+      <ProtectedRoute>
+        <FullLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
         path: 'restaurants',
         element: <RestaurantPage />,

@@ -167,6 +167,13 @@ const Sidebar = ({ isOpen = true }) => {
             >
               <span>Contactos</span>
             </Link>
+            <Link
+              to="/loby/reports"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
+            >
+              <span>📊</span>
+              <span>Reportes</span>
+            </Link>
           </>
         )}
       </nav>
