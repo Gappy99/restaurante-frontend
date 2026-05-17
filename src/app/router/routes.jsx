@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 // Layouts
 import MainLayout from '../layouts/MainLayout'
 import AuthLayout from '../layouts/AuthLayout'
+import FullLayout from '../layouts/FullLayout'
 
 // Páginas públicas
 import LoginPage from '../../features/auth/pages/LoginPage'
@@ -132,7 +133,7 @@ const router = createBrowserRouter([
     path: '/loby/restaurants',
     element: (
       <ProtectedRoute>
-        <FullLayout />
+        <MainLayout />
       </ProtectedRoute>
     ),
     children: [

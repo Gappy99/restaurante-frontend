@@ -337,18 +337,29 @@ const ReportModal = ({ isOpen, onClose, report, onSuccess }) => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true)
+    try {
+      let result
+      if (report?._id) {
+        result = await reportService.updateReport(report._id, data)
+      } else {
+        result = await reportService.createReport({
+          ...data,
+          fechaCreacion: new Date().toISOString(),
+        })
+      }
 
-    if (report?._id) {
-      await reportService.updateReport(report._id, data)
-    } else {
-      await reportService.createReport({
-        ...data,
-        fechaCreacion: new Date().toISOString(),
-      })
+      setIsSubmitting(false)
+      if (result?.success) {
+        onSuccess()
+      } else {
+        console.error('Report save failed:', result)
+        toast.error(result?.error || 'Error al guardar reporte')
+      }
+    } catch (err) {
+      console.error('Unexpected error saving report:', err)
+      toast.error('Error inesperado al guardar reporte')
+      setIsSubmitting(false)
     }
-
-    setIsSubmitting(false)
-    onSuccess()
   }
 
   return (
