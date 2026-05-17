@@ -8,6 +8,10 @@
  * Si hay imagen nueva, devuelve FormData; sino, devuelve JSON plano
  */
 export const formatRestaurantData = (formData) => {
+  const normalizedLat = Number(formData.lat)
+  const normalizedLng = Number(formData.lng)
+  const hasLocation = Number.isFinite(normalizedLat) && Number.isFinite(normalizedLng)
+
   const jsonData = {
     restaurant_name: formData.name?.trim() || '',
     restaurant_type: formData.type || '',
@@ -16,6 +20,9 @@ export const formatRestaurantData = (formData) => {
     restaurant_time_start: formData.timeStart || '10:00',
     restaurant_time_close: formData.timeClose || '23:00',
     restaurant_mean_price: formData.meanPrice || 0,
+    lat: hasLocation ? normalizedLat : null,
+    lng: hasLocation ? normalizedLng : null,
+    hasLocation,
   }
 
   // Si hay archivo de imagen, usar FormData
@@ -37,6 +44,8 @@ export const formatRestaurantData = (formData) => {
  */
 export const validateRestaurantForm = (data) => {
   const errors = {}
+  const lat = Number(data.lat)
+  const lng = Number(data.lng)
 
   if (!data.name?.trim()) {
     errors.name = 'El nombre del restaurante es requerido'
@@ -64,6 +73,10 @@ export const validateRestaurantForm = (data) => {
 
   if (!data.meanPrice || parseFloat(data.meanPrice) < 0) {
     errors.meanPrice = 'El precio promedio debe ser mayor a 0'
+  }
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    errors.location = 'Debes seleccionar la ubicación en el mapa'
   }
 
   return { isValid: Object.keys(errors).length === 0, errors }
