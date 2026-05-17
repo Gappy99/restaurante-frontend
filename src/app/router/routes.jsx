@@ -3,7 +3,6 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 // Layouts
 import MainLayout from '../layouts/MainLayout'
 import AuthLayout from '../layouts/AuthLayout'
-import FullLayout from '../layouts/FullLayout'
 
 // Páginas públicas
 import LoginPage from '../../features/auth/pages/LoginPage'
@@ -32,6 +31,10 @@ import CouponPage from '../../features/coupon/pages/CouponPage'
 import EventsPage from '../../features/events/pages/EventsPage'
 
 import ProtectedRoute from './ProtectedRoute'
+
+// Customer feature (vista cliente)
+import CustomerMainLayout from '../../features/customer-menu/pages/MainLayout'
+import CustomerMenuPage from '../../features/customer-menu/pages/CustomerMenuPage'
 
 // Página de perfil de usuario
 import ProfilePage from '../../features/users/pages/ProfilePage'
@@ -107,16 +110,8 @@ const router = createBrowserRouter([
         element: <DetallePedidosPage />,
       },
       {
-        path: 'information',
-        element: <InformationPage />,
-      },
-      {
         path: 'events',
         element: <EventsPage />,
-      },
-      {
-        path: 'menu',
-        element: <MenuPage />,
       },
       {
         path: 'users',
@@ -126,24 +121,9 @@ const router = createBrowserRouter([
         path: 'fields',
         element: <FieldsPage />,
       },
-    ],
-  },
-  // Rutas de Restaurantes a pantalla completa
-  {
-    path: '/loby/restaurants',
-    element: (
-      <ProtectedRoute>
-        <FullLayout />
-      </ProtectedRoute>
-    ),
-    children: [
       {
-        index: true,
+        path: 'restaurants',
         element: <RestaurantPage />,
-      },
-      {
-        path: 'inventory',
-        element: <InventoryPage />,
       },
       {
         path: 'restaurants/:id',
@@ -154,26 +134,19 @@ const router = createBrowserRouter([
         element: <ReviewPage />,
       },
       {
-        path: ':id/tables',
+        path: 'restaurants/:id/tables',
         element: <RestaurantTablesPage />,
       },
-    ],
-  },
-  // Rutas de Mesas a pantalla completa
-  {
-    path: '/loby/tables',
-    element: (
-      <ProtectedRoute>
-        <FullLayout />
-      </ProtectedRoute>
-    ),
-    children: [
       {
-        index: true,
+        path: 'inventory',
+        element: <InventoryPage />,
+      },
+      {
+        path: 'tables',
         element: <TablesPage />,
       },
       {
-        path: 'all',
+        path: 'tables/all',
         element: <AllTablesPage />,
       },
       {
@@ -192,20 +165,24 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: 'mapa-de-sedes',
+        element: <MapaDeSedePage />,
+      },
     ],
   },
-  // Mapa de sedes a pantalla completa
+  // Rutas cliente protegidas por rol CLIENTE
   {
-    path: '/loby/mapa-de-sedes',
+    path: '/customer',
     element: (
-      <ProtectedRoute>
-        <FullLayout />
+      <ProtectedRoute requiredRole={'CLIENTE'}>
+        <CustomerMainLayout />
       </ProtectedRoute>
     ),
     children: [
       {
         index: true,
-        element: <MapaDeSedePage />,
+        element: <CustomerMenuPage />,
       },
     ],
   },

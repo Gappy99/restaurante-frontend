@@ -5,7 +5,7 @@ import useAuthStore from '../stores/useAuthStore'
 const adminClient = axios.create({
   baseURL:
     import.meta.env.VITE_ADMIN_URL ||
-    'http://localhost:3006/GestorRestaurante/v1',
+    'http://localhost:3000/GestorRestaurante/v1',
   headers: {
     'Content-Type': 'application/json',
   },

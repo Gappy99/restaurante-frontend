@@ -20,7 +20,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
   const [currentIngredient, setCurrentIngredient] = useState({
     inventory_id: '',
     quantity: '',
-    unit: 'kg'
+    unit: ''
   });
   const [fetchingInventory, setFetchingInventory] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -82,7 +82,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
       setCurrentIngredient({
         inventory_id: '',
         quantity: '',
-        unit: 'kg'
+        unit: ''
       });
       
       setTimeout(() => {
@@ -113,13 +113,17 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
 
     setSelectedIngredients([
       ...selectedIngredients,
-      { ...currentIngredient, quantity: parseFloat(currentIngredient.quantity) }
+      {
+        ...currentIngredient,
+        unit: getInventoryItemUnit(currentIngredient.inventory_id),
+        quantity: parseFloat(currentIngredient.quantity)
+      }
     ]);
 
     setCurrentIngredient({
       inventory_id: '',
       quantity: '',
-      unit: 'kg'
+      unit: ''
     });
 
     toast.success('Ingrediente agregado');
@@ -135,6 +139,11 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
   const getInventoryItemName = (id) => {
     const item = inventoryItems.find(i => i._id === id || i.id === id);
     return item?.item_name || item?.name || 'Desconocido';
+  };
+
+  const getInventoryItemUnit = (id) => {
+    const item = inventoryItems.find(i => i._id === id || i.id === id);
+    return item?.unit || '';
   };
 
   if (!isOpen) return null;
@@ -159,10 +168,8 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
         <form onSubmit={handleSubmit(onSubmitRecipe)} className="p-6 space-y-6">
           {/* Descripción */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Descripción (opcional)
-            </label>
             <textarea
+              aria-label="Descripción (opcional)"
               {...register('description')}
               rows="3"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -173,10 +180,8 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
           {/* Tiempo de preparación y Dificultad */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tiempo de preparación (minutos)
-              </label>
               <input
+                aria-label="Tiempo de preparación (minutos)"
                 type="number"
                 {...register('preparation_time')}
                 min="0"
@@ -186,10 +191,8 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Dificultad
-              </label>
               <select
+                aria-label="Dificultad"
                 {...register('difficulty')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
@@ -213,15 +216,14 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
               <div className="space-y-3 mb-4">
                 {/* Selector de inventario */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Selecciona un ingrediente
-                  </label>
                   <select
+                    aria-label="Selecciona un ingrediente"
                     value={currentIngredient.inventory_id}
                     onChange={(e) =>
                       setCurrentIngredient({
                         ...currentIngredient,
                         inventory_id: e.target.value,
+                        unit: getInventoryItemUnit(e.target.value),
                       })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -238,10 +240,8 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
                 {/* Cantidad y Unidad */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Cantidad
-                    </label>
                     <input
+                      aria-label="Cantidad"
                       type="number"
                       step="0.01"
                       value={currentIngredient.quantity}
@@ -257,29 +257,14 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Unidad
-                    </label>
-                    <select
+                    <input
+                      aria-label="Unidad"
+                      type="text"
                       value={currentIngredient.unit}
-                      onChange={(e) =>
-                        setCurrentIngredient({
-                          ...currentIngredient,
-                          unit: e.target.value,
-                        })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    >
-                      <option value="kg">kg</option>
-                      <option value="g">g</option>
-                      <option value="L">L</option>
-                      <option value="ml">ml</option>
-                      <option value="unidades">unidades</option>
-                      <option value="docena">docena</option>
-                      <option value="paquete">paquete</option>
-                      <option value="lata">lata</option>
-                      <option value="caja">caja</option>
-                    </select>
+                      readOnly
+                      placeholder="Selecciona un ingrediente"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none"
+                    />
                   </div>
                 </div>
 

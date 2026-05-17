@@ -102,8 +102,8 @@ const TableModal = ({
 
 				<form onSubmit={handleSubmit} className="restaurant-form">
 					<div className="form-group">
-						<label htmlFor="name">Nombre de la Mesa *</label>
 						<input
+							aria-label="Nombre de la Mesa"
 							id="name"
 							type="text"
 							name="name"
@@ -117,8 +117,8 @@ const TableModal = ({
 
 					<div className="form-row">
 						<div className="form-group">
-							<label htmlFor="number">Número de Mesa *</label>
 							<input
+								aria-label="Número de Mesa"
 								id="number"
 								type="number"
 								name="number"
@@ -134,8 +134,8 @@ const TableModal = ({
 						</div>
 
 						<div className="form-group">
-							<label htmlFor="capacity">Capacidad *</label>
 							<input
+								aria-label="Capacidad"
 								id="capacity"
 								type="number"
 								name="capacity"
@@ -152,8 +152,8 @@ const TableModal = ({
 					</div>
 
 					<div className="form-group">
-						<label htmlFor="ubication">Ubicación *</label>
 						<input
+							aria-label="Ubicación"
 							id="ubication"
 							type="text"
 							name="ubication"
@@ -168,8 +168,8 @@ const TableModal = ({
 					</div>
 
 					<div className="form-group">
-						<label htmlFor="timeAvailable">Horario Disponible</label>
 						<input
+							aria-label="Horario Disponible"
 							id="timeAvailable"
 							type="text"
 							name="timeAvailable"
@@ -180,8 +180,8 @@ const TableModal = ({
 					</div>
 
 					<div className="form-group">
-						<label htmlFor="tableState">Estado de la Mesa</label>
 						<select
+							aria-label="Estado de la Mesa"
 							id="tableState"
 							name="tableState"
 							value={formData.tableState}
@@ -197,8 +197,8 @@ const TableModal = ({
 
 					<div className="form-row">
 						<div className="form-group">
-							<label htmlFor="restaurantId">ID del Restaurante *</label>
 							<input
+								aria-label="ID del Restaurante"
 								id="restaurantId"
 								type="text"
 								name="restaurantId"
@@ -220,8 +220,8 @@ const TableModal = ({
 						</div>
 
 						<div className="form-group">
-							<label htmlFor="reservationId">ID de Reserva</label>
 							<input
+								aria-label="ID de Reserva"
 								id="reservationId"
 								type="text"
 								name="reservationId"

@@ -133,8 +133,8 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
     <Modal isOpen={isOpen} onClose={onClose} title={user ? 'Editar Usuario' : 'Nuevo Usuario'}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[var(--text)] mb-1">Nombre</label>
           <input
+            aria-label="Nombre"
             {...register('nombre', { required: 'Nombre requerido' })}
             placeholder="Nombre"
             className="w-full px-4 py-2 border rounded-lg"
@@ -143,8 +143,8 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--text)] mb-1">Email</label>
           <input
+            aria-label="Email"
             {...register('email', { required: 'Email requerido' })}
             placeholder="Email"
             className="w-full px-4 py-2 border rounded-lg"
@@ -153,8 +153,8 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--muted)] mb-1">Teléfono</label>
           <input
+            aria-label="Teléfono"
             {...register('telefono')}
             placeholder="Teléfono"
             className="w-full px-4 py-2 border rounded-lg"

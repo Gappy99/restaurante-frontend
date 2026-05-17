@@ -3,18 +3,7 @@ import useOrderStore from '../store/useOrderStore'
 import { Spinner } from '../../../shared/components/Spinner'
 import useRestaurantStore from '../../restaurant/store/useRestaurantStore'
 import useMenuStore from '../../menus/store/useMenuStore'
-
-const couponOptions = [
-  '',
-  'Cupon_30_Quetzales',
-  'Cupon_20%_Descuento',
-  'Dos_Por_Uno',
-  'Envio_Gratis',
-  'Primera_Compra',
-  'Descuento_10%',
-  'Cupon_50_Quetzales',
-  'Cupon_15%_Descuento',
-]
+import useCouponStore from '../../coupon/store/useCouponStore'
 
 const statusOptions = ['en_preparacion', 'listo', 'entregado', 'cancelado']
 
@@ -39,6 +28,36 @@ const getRestaurantLabel = (restaurant) =>
 const getMenuLabel = (menu) =>
   menu?.name || menu?.Menu_Plate || menu?.title || menu?.menu_name || 'Menú sin nombre'
 
+const getCouponLabel = (coupon) => {
+  if (!coupon) return 'Sin cupón'
+
+  const code = coupon?.code || coupon?.name || coupon?.coupon_code || coupon?.title || 'Cupón sin nombre'
+  const description = coupon?.description ? ` - ${coupon.description}` : ''
+
+  return `${code}${description}`
+}
+
+const isCouponValidForOrder = (coupon) => {
+  if (!coupon) return false
+
+  if (coupon.active === false) return false
+
+  if (coupon.expiration_date) {
+    const expirationDate = new Date(coupon.expiration_date)
+    if (!Number.isNaN(expirationDate.getTime()) && expirationDate < new Date()) {
+      return false
+    }
+  }
+
+  if (typeof coupon.current_uses === 'number' && typeof coupon.max_uses === 'number') {
+    if (coupon.current_uses >= coupon.max_uses) {
+      return false
+    }
+  }
+
+  return true
+}
+
 const OrdersPage = () => {
   const {
     orders,
@@ -52,6 +71,7 @@ const OrdersPage = () => {
 
   const { restaurants, fetchRestaurants } = useRestaurantStore()
   const { menus, fetchMenus } = useMenuStore()
+  const { coupons, fetchCoupons } = useCouponStore()
 
   const [searchTerm, setSearchTerm] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -65,12 +85,18 @@ const OrdersPage = () => {
   useEffect(() => {
     fetchRestaurants()
     fetchMenus()
-  }, [fetchRestaurants, fetchMenus])
+    fetchCoupons()
+  }, [fetchRestaurants, fetchMenus, fetchCoupons])
 
   const rows = useMemo(() => (Array.isArray(orders) ? orders : []), [orders])
 
   const restaurantOptions = useMemo(() => (Array.isArray(restaurants) ? restaurants : []), [restaurants])
   const menuOptions = useMemo(() => (Array.isArray(menus) ? menus : []), [menus])
+  const couponOptions = useMemo(() => (Array.isArray(coupons) ? coupons : []), [coupons])
+  const validCouponOptions = useMemo(
+    () => couponOptions.filter(isCouponValidForOrder),
+    [couponOptions]
+  )
 
   const filteredMenuOptions = useMemo(() => {
     if (!formData.Restaurant_id) return []
@@ -91,6 +117,16 @@ const OrdersPage = () => {
     return menu ? getMenuLabel(menu) : 'Selecciona un menú'
   }
 
+  const selectedCouponLabel = (id) => {
+    const coupon = couponOptions.find((item) => asId(item) === id)
+    return coupon ? getCouponLabel(coupon) : 'Sin cupón'
+  }
+
+  const selectedCoupon = useMemo(
+    () => couponOptions.find((item) => asId(item) === formData.Orders_cupon),
+    [couponOptions, formData.Orders_cupon]
+  )
+
   const selectedUserLabel = (id) => id || 'Sin usuario'
 
   const openCreate = () => {
@@ -103,7 +139,7 @@ const OrdersPage = () => {
     setEditingOrderId(asId(order))
     setFormData({
       Orders_domicile: order?.Orders_domicile || '',
-      Orders_cupon: order?.Orders_cupon || '',
+      Orders_cupon: asId(order?.Orders_cupon),
       Orders_status: order?.Orders_status || 'en_preparacion',
       Restaurant_id: asId(order?.Restaurant_id),
       Menu_id: asId(order?.Menu_id),
@@ -142,6 +178,14 @@ const OrdersPage = () => {
       Restaurant_id: sanitize(formData.Restaurant_id),
       Menu_id: sanitize(formData.Menu_id),
       User_id: sanitize(formData.User_id),
+    }
+
+    if (payload.Orders_cupon) {
+      const coupon = couponOptions.find((item) => asId(item) === payload.Orders_cupon)
+      if (!isCouponValidForOrder(coupon)) {
+        alert('El cupón seleccionado está expirado, inactivo o ya no tiene usos disponibles')
+        return
+      }
     }
 
     // Validación de campos obligatorios
@@ -244,6 +288,7 @@ const OrdersPage = () => {
                           <div>R: {selectedRestaurantLabel(asId(order?.Restaurant_id))}</div>
                           <div>M: {selectedMenuLabel(asId(order?.Menu_id))}</div>
                           <div>U: {selectedUserLabel(asId(order?.User_id))}</div>
+                          <div>C: {selectedCouponLabel(asId(order?.Orders_cupon))}</div>
                         </td>
                         <td className="px-4 py-4 text-right">
                           <div className="flex justify-end gap-2">
@@ -301,48 +346,59 @@ const OrdersPage = () => {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
-              <label className="space-y-1 text-sm md:col-span-2">
-                <span>Domicilio *</span>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 p-6 md:grid-cols-2">
+              {/* Domicilio */}
+              <div className="flex w-full flex-col gap-1 text-sm md:col-span-2">
                 <input
+                  id="domicile"
                   required
                   value={formData.Orders_domicile}
                   onChange={(e) => setFormData((prev) => ({ ...prev, Orders_domicile: e.target.value }))}
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                  placeholder="Domicilio de la orden *"
+                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2 text-[#2E160C] focus:outline-none focus:ring-2 focus:ring-[#7F532C]/50"
                 />
-              </label>
+              </div>
 
-              <label className="space-y-1 text-sm">
-                <span>Cupon</span>
+              {/* Cupon */}
+              <div className="flex w-full flex-col gap-1 text-sm">
                 <select
+                  id="coupon"
                   value={formData.Orders_cupon}
                   onChange={(e) => setFormData((prev) => ({ ...prev, Orders_cupon: e.target.value }))}
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2 text-[#2E160C] focus:outline-none"
                 >
-                  {couponOptions.map((coupon) => (
-                    <option key={coupon || 'none'} value={coupon}>
-                      {coupon || 'Sin cupon'}
+                  <option value="">Sin cupón</option>
+                  {validCouponOptions.map((coupon) => {
+                    const id = asId(coupon)
+                    return (
+                      <option key={id} value={id}>
+                        {getCouponLabel(coupon)}
+                      </option>
+                    )
+                  })}
+                </select>
+              </div>
+
+              {/* Estado */}
+              <div className="flex w-full flex-col gap-1 text-sm">
+                <select
+                  id="status"
+                  value={formData.Orders_status}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, Orders_status: e.target.value }))}
+                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2 text-[#2E160C] focus:outline-none"
+                >
+                  {statusOptions.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
                     </option>
                   ))}
                 </select>
-              </label>
+              </div>
 
-              <label className="space-y-1 text-sm">
-                <span>Estado</span>
+              {/* Restaurant */}
+              <div className="flex w-full flex-col gap-1 text-sm">
                 <select
-                  value={formData.Orders_status}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, Orders_status: e.target.value }))}
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
-                >
-                  {statusOptions.map((status) => (
-                    <option key={status} value={status}>{status}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="space-y-1 text-sm">
-                <span>Restaurant *</span>
-                <select
+                  id="restaurant"
                   required
                   value={formData.Restaurant_id}
                   onChange={(e) =>
@@ -352,9 +408,9 @@ const OrdersPage = () => {
                       Menu_id: '',
                     }))
                   }
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2 text-[#2E160C] focus:outline-none"
                 >
-                  <option value="">Selecciona un restaurante</option>
+                  <option value="">Selecciona un restaurante *</option>
                   {restaurantOptions.map((restaurant) => {
                     const id = asId(restaurant)
                     return (
@@ -364,19 +420,20 @@ const OrdersPage = () => {
                     )
                   })}
                 </select>
-              </label>
+              </div>
 
-              <label className="space-y-1 text-sm">
-                <span>Menú *</span>
+              {/* Menú */}
+              <div className="flex w-full flex-col gap-1 text-sm">
                 <select
+                  id="menu"
                   required
                   value={formData.Menu_id}
                   onChange={(e) => setFormData((prev) => ({ ...prev, Menu_id: e.target.value }))}
                   disabled={!formData.Restaurant_id}
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2 disabled:cursor-not-allowed disabled:bg-gray-100"
+                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2 text-[#2E160C] focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100"
                 >
                   <option value="">
-                    {formData.Restaurant_id ? 'Selecciona un menú' : 'Selecciona primero un restaurante'}
+                    {formData.Restaurant_id ? 'Selecciona un menú *' : 'Selecciona primero un restaurante'}
                   </option>
                   {filteredMenuOptions.map((menu) => {
                     const id = asId(menu)
@@ -387,28 +444,31 @@ const OrdersPage = () => {
                     )
                   })}
                 </select>
-              </label>
+              </div>
 
-              <label className="space-y-1 text-sm md:col-span-2">
-                <span>User ID *</span>
+              {/* User ID */}
+              <div className="flex w-full flex-col gap-1 text-sm md:col-span-2">
                 <input
+                  id="userId"
                   required
                   value={formData.User_id}
                   onChange={(e) => setFormData((prev) => ({ ...prev, User_id: e.target.value }))}
-                  placeholder="Ingresa manualmente el User_id"
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                  placeholder="User ID (Ingresa manualmente) *"
+                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2 text-[#2E160C] focus:outline-none"
                 />
-              </label>
+              </div>
 
-              <div className="md:col-span-2 rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3 text-sm text-[#5B300E]">
+              {/* Nota de Backend */}
+              <div className="block w-full clear-both rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3 text-sm text-[#5B300E] md:col-span-2">
                 El número de orden y el ID se generan automáticamente en el backend.
               </div>
 
-              <div className="md:col-span-2 flex justify-end gap-3 pt-2">
+              {/* Botones */}
+              <div className="flex w-full justify-end gap-3 pt-2 md:col-span-2">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-[#7F532C]/30 px-4 py-2 font-semibold hover:bg-[#FCF0CA]"
+                  className="rounded-xl border border-[#7F532C]/30 px-4 py-2 font-semibold text-[#2E160C] hover:bg-[#FCF0CA]"
                 >
                   Cancelar
                 </button>

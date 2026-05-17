@@ -332,42 +332,46 @@ const InventoryPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="grid gap-4 p-6 md:grid-cols-2">
-              <label className="grid gap-2 md:col-span-2">
-                <span className="text-sm font-bold uppercase tracking-wider text-[#7F532C]">Nombre del artículo</span>
+              <div className="grid gap-2 md:col-span-2">
+                <span className="sr-only">Nombre del artículo</span>
                 <input
+                  aria-label="Nombre del artículo"
                   value={formData.item_name}
                   onChange={(event) => setFormData((prev) => ({ ...prev, item_name: event.target.value }))}
                   className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
                   placeholder="Ej. Tomate"
                   required
                 />
-              </label>
+              </div>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-bold uppercase tracking-wider text-[#7F532C]">Categoría</span>
+              <div className="grid gap-2">
+                <span className="sr-only">Categoría</span>
                 <input
+                  aria-label="Categoría"
                   value={formData.category}
                   onChange={(event) => setFormData((prev) => ({ ...prev, category: event.target.value }))}
                   className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
                   placeholder="Ej. Verduras"
                   required
                 />
-              </label>
+              </div>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-bold uppercase tracking-wider text-[#7F532C]">Proveedor</span>
+              <div className="grid gap-2">
+                <span className="sr-only">Proveedor</span>
                 <input
+                  aria-label="Proveedor"
                   value={formData.provider}
                   onChange={(event) => setFormData((prev) => ({ ...prev, provider: event.target.value }))}
                   className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
                   placeholder="Ej. Proveedor Central"
                   required
                 />
-              </label>
+              </div>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-bold uppercase tracking-wider text-[#7F532C]">Cantidad</span>
+              <div className="grid gap-2">
+                <span className="sr-only">Cantidad</span>
                 <input
+                  aria-label="Cantidad"
                   type="number"
                   min="0"
                   step="0.01"
@@ -376,11 +380,12 @@ const InventoryPage = () => {
                   className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
                   required
                 />
-              </label>
+              </div>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-bold uppercase tracking-wider text-[#7F532C]">Unidad</span>
+              <div className="grid gap-2">
+                <span className="sr-only">Unidad</span>
                 <select
+                  aria-label="Unidad"
                   value={formData.unit}
                   onChange={(event) => setFormData((prev) => ({ ...prev, unit: event.target.value }))}
                   className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
@@ -390,11 +395,12 @@ const InventoryPage = () => {
                     <option key={unit} value={unit}>{unit}</option>
                   ))}
                 </select>
-              </label>
+              </div>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-bold uppercase tracking-wider text-[#7F532C]">Precio</span>
+              <div className="grid gap-2">
+                <span className="sr-only">Precio</span>
                 <input
+                  aria-label="Precio"
                   type="number"
                   min="0"
                   step="0.01"
@@ -403,28 +409,30 @@ const InventoryPage = () => {
                   className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
                   required
                 />
-              </label>
+              </div>
 
-              <label className="grid gap-2 md:col-span-2">
-                <span className="text-sm font-bold uppercase tracking-wider text-[#7F532C]">Restaurant ID</span>
+              <div className="grid gap-2 md:col-span-2">
+                <span className="sr-only">Restaurant ID</span>
                 <input
+                  aria-label="Restaurant ID"
                   value={formData.restaurant_id}
                   onChange={(event) => setFormData((prev) => ({ ...prev, restaurant_id: event.target.value }))}
                   className="rounded-2xl border border-[#7F532C]/20 bg-[#f5ead2] px-4 py-3 outline-none"
                   placeholder="Ingresa el ID del restaurante"
                 />
                 <span className="text-xs text-[#7F532C]">Este campo se captura manualmente por ahora.</span>
-              </label>
+              </div>
 
-              <label className="flex items-center gap-3 rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 md:col-span-2">
+              <div className="flex items-center gap-3 rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 md:col-span-2">
                 <input
+                  aria-label="Activo"
                   type="checkbox"
                   checked={formData.estado}
                   onChange={(event) => setFormData((prev) => ({ ...prev, estado: event.target.checked }))}
                   className="h-4 w-4 accent-[#5B300E]"
                 />
-                <span className="font-semibold text-[#2E160C]">Activo</span>
-              </label>
+                <span className="sr-only">Activo</span>
+              </div>
 
               <div className="flex gap-3 pt-2 md:col-span-2">
                 <button

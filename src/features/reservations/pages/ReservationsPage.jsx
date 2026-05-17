@@ -353,8 +353,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
     >
       <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4" onSubmitCapture={(e) => console.log('📝 Form onSubmit triggered', e)}>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Restaurante</label>
           <select
+            aria-label="Restaurante"
             {...register('restaurant_id', { required: 'Restaurante requerido' })}
             className="w-full px-4 py-2 border rounded-lg"
           >
@@ -370,8 +370,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
             <input
+              aria-label="Cliente"
               {...register('cliente', { required: 'Nombre requerido' })}
               className="w-full px-4 py-2 border rounded-lg"
               placeholder="Nombre del cliente"
@@ -381,8 +381,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
+              aria-label="Email"
               {...register('email', { required: 'Email requerido' })}
               type="email"
               className="w-full px-4 py-2 border rounded-lg"
@@ -393,8 +393,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
             <select
+              aria-label="Tipo"
               {...register('tipo')}
               className="w-full px-4 py-2 border rounded-lg"
             >
@@ -406,8 +406,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
             <input
+              aria-label="Fecha"
               type="date"
               {...register('fecha', { required: 'Fecha requerida' })}
               className="w-full px-4 py-2 border rounded-lg"
@@ -416,8 +416,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Hora</label>
             <input
+              aria-label="Hora"
               type="time"
               {...register('hora', { required: 'Hora requerida' })}
               className="w-full px-4 py-2 border rounded-lg"
@@ -426,8 +426,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Personas</label>
             <input
+              aria-label="Personas"
               type="number"
               {...register('personas', {
                 required: 'Cantidad requerida',
@@ -442,8 +442,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {selectedType !== 'domicilio' ? (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Mesa</label>
               <select
+                aria-label="Mesa"
                 {...register('table_id', {
                   validate: (value) =>
                     selectedType === 'domicilio' || value ? true : 'Mesa requerida',
@@ -477,9 +477,9 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
           )}
 
           {isAdmin && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+              <div>
               <select
+                aria-label="Estado"
                 {...register('estado')}
                 className="w-full px-4 py-2 border rounded-lg"
               >
@@ -494,8 +494,8 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notas adicionales</label>
           <textarea
+            aria-label="Notas adicionales"
             {...register('notas')}
             className="w-full px-4 py-2 border rounded-lg min-h-[120px]"
             placeholder="Indica solicitudes, alergias o detalles especiales"

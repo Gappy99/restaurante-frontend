@@ -16,7 +16,7 @@ export default defineConfig({
     proxy: {
       // Mantenemos tu estructura y aseguramos la redirección
       '/GestorRestaurante': {
-        target: 'http://localhost:3006',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
         // Esta línea es opcional pero ayuda si el backend espera la ruta limpia

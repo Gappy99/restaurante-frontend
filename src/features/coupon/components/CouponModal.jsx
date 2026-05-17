@@ -14,16 +14,12 @@ const CouponModal = ({ isOpen, onClose, coupon, restaurants = [], onSuccess, loa
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto px-4 py-6">
+      <div className="absolute inset-0 bg-[#2E160C]/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-4xl">
         {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          onClick={onClose}
-        />
-
         {/* Modal */}
-        <div className="inline-block align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div className="relative overflow-hidden rounded-[32px] border border-[#FCF0CA] bg-white shadow-2xl shadow-black/30">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-[#5B300E]">

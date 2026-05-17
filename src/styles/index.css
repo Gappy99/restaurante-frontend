@@ -103,3 +103,39 @@ html {
   @apply rounded-lg shadow p-6;
   background: var(--surface);
 }
+
+/* Form fields: asegurar texto y placeholders en negro SOLO dentro de formularios */
+form input,
+form textarea,
+form select {
+  color: #000000 !important;
+}
+
+/* Placeholders en inputs/textarea dentro de formularios */
+form input::placeholder,
+form textarea::placeholder {
+  color: #000000 !important;
+  opacity: 1;
+}
+
+/* Opciones de select dentro de formularios */
+form select option {
+  color: #000000 !important;
+}
+
+/* Inputs inside Menu modal should also be black (step 3 uses inputs outside a <form>) */
+.menu-modal input,
+.menu-modal textarea,
+.menu-modal select {
+  color: #000000 !important;
+}
+
+.menu-modal input::placeholder,
+.menu-modal textarea::placeholder {
+  color: #000000 !important;
+  opacity: 1;
+}
+
+.menu-modal select option {
+  color: #000000 !important;
+}

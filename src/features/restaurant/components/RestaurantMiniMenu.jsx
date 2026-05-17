@@ -18,7 +18,7 @@ const RestaurantMiniMenu = ({ restaurant }) => {
         >
           Menú
         </button>
-        <Link to={`/restaurants/${id}/tables`} className="text-center py-3 px-2 rounded-lg bg-[#7F532C] text-[#FCF0CA] font-semibold hover:bg-[#946841]">
+        <Link to={`/loby/restaurants/${id}/tables`} className="text-center py-3 px-2 rounded-lg bg-[#7F532C] text-[#FCF0CA] font-semibold hover:bg-[#946841]">
           Mesas
         </Link>
         <Link to={`/loby/restaurants/${id}/reviews`} className="text-center py-3 px-2 rounded-lg bg-[#946841] text-[#FCF0CA] font-semibold hover:bg-[#7F532C]">

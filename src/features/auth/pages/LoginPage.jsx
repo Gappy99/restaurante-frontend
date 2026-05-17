@@ -23,7 +23,13 @@ const LoginPage = () => {
       if (result.success) {
         login(result.token, result.user, result.refreshToken)
         toast.success('Sesión iniciada correctamente')
-        navigate('/loby')
+        // Redirección basada en rol: CLIENTE -> customer, ADMIN u otros -> loby
+        const role = result.user?.rol || result.user?.role
+        if (role && role.toUpperCase() === 'CLIENTE') {
+          navigate('/customer')
+        } else {
+          navigate('/loby')
+        }
       }
     } catch (err) {
       console.error(err)

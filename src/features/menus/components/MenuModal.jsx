@@ -13,6 +13,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
         handleSubmit,
         reset,
         getValues,
+        watch,
         formState: { errors },
     } = useForm();
 
@@ -83,6 +84,9 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
     };
 
     const restaurantId = menu?.Restaurant_id || menu?.restaurant_id || null;
+    const draftRestaurantId = menuDraft?.Restaurant_id || menuDraft?.restaurant_id || null;
+    const formRestaurantId = watch('Restaurant_id') || null;
+    const resolvedRecipeRestaurantId = draftRestaurantId || formRestaurantId || restaurantId;
 
     // Limpiar el estado al cerrar/abrir
     useEffect(() => {
@@ -490,7 +494,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
 
     return (
         <div className="fixed inset-0 bg-[#2E160C]/60 backdrop-blur-sm flex justify-center items-center z-50 px-3">
-            <div className="bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden border border-[#FCF0CA] flex flex-col">
+            <div className="menu-modal bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden border border-[#FCF0CA] flex flex-col">
                 
                 {/* Cabecera dinámica según el paso */}
                 <div className="p-6 text-white bg-[#5B300E] shrink-0">
@@ -507,7 +511,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
             onClose={() => setShowRecipeModal(false)}
             productId={recipeProductId}
             productType={recipeProductType}
-            restaurantId={restaurantId}
+            restaurantId={resolvedRecipeRestaurantId}
         />
 
                 <div className="flex-1 overflow-y-auto p-6">
@@ -515,14 +519,12 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                     {step === 1 && (
                         <form onSubmit={handleSubmit(onSubmitMenu)} className="space-y-4">
                             <div>
-                                <label className="text-xs font-bold text-[#2E160C] uppercase block mb-1">Nombre del Menú</label>
-                                <input {...register("Menu_Plate", { required: "El nombre es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="Ej. Menu del Día" />
+                                <input aria-label="Nombre del Menú" {...register("Menu_Plate", { required: "El nombre es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="Ej. Menu del Día" />
                                 {errors.Menu_Plate && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_Plate.message}</p>}
                             </div>
 
                             <div>
-                                <label className="text-xs font-bold text-[#2E160C] uppercase block mb-1">Promoción</label>
-                                <select className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" {...register("Menu_Promotion")}>
+                                <select aria-label="Promoción" className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" {...register("Menu_Promotion")}>
                                     <option value="">Sin promoción</option>
                                     <option value="Promoción_Familiar">Promoción familiar</option>
                                     <option value="Promoción_de_Quincena">Promoción de quincena</option>
@@ -532,20 +534,18 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                 </select>
                             </div>
                             <div>
-                                <label className="text-xs font-bold text-[#2E160C] uppercase block mb-1">Restaurant ID</label>
-                                <input {...register("Restaurant_id", { required: "El restaurante es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="ID del restaurante" />
+                                <input aria-label="Restaurant ID" {...register("Restaurant_id", { required: "El restaurante es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="ID del restaurante" />
                                 {errors.Restaurant_id && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Restaurant_id.message}</p>}
                             </div>
 
                             <div>
-                                <label className="text-xs font-bold text-[#2E160C] uppercase block mb-1">Descripción</label>
-                                <textarea rows="3" {...register("Menu_description_plate")} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50 resize-none" placeholder="Describe el menú..." />
+                                <textarea aria-label="Descripción del Menú" rows="3" {...register("Menu_description_plate")} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50 resize-none" placeholder="Describe el menú..." />
                                 {errors.Menu_description_plate && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_description_plate.message}</p>}
                             </div>
 
                             <div className="flex items-center gap-3 rounded-xl border border-[#FCF0CA] px-4 py-3 bg-[#FCF0CA]/40">
-                                <input type="checkbox" className="h-4 w-4 accent-[#5B300E]" {...register("Menu_available")} />
-                                <label className="text-sm font-semibold text-[#2E160C]">Disponible</label>
+                                <input aria-label="Disponible" type="checkbox" className="h-4 w-4 accent-[#5B300E]" {...register("Menu_available")} />
+                                <span className="sr-only">Disponible</span>
                             </div>
 
                             <div className="flex gap-2 pt-4">
@@ -646,7 +646,10 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                                     <option value="Acompañamiento">Acompañamiento</option>
                                                 </select>
                                                 <textarea placeholder="Descripción" value={form.description} onChange={(e) => setDishForms(prev => prev.map((p, i) => i===idx?{...p,description:e.target.value}:p))} className="p-2 border rounded col-span-2" />
-                                                <label className="flex items-center gap-2 col-span-2"><input type="checkbox" checked={form.available} onChange={(e) => setDishForms(prev => prev.map((p, i) => i===idx?{...p,available:e.target.checked}:p))} /> Disponible</label>
+                                                <div className="flex items-center gap-2 col-span-2">
+                                                    <input aria-label={`Disponible platillo ${idx + 1}`} type="checkbox" checked={form.available} onChange={(e) => setDishForms(prev => prev.map((p, i) => i===idx?{...p,available:e.target.checked}:p))} />
+                                                    <span className="sr-only">Disponible</span>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
@@ -687,7 +690,10 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                                     ))}
                                                 </select>
                                                 <textarea placeholder="Descripción" value={form.description} onChange={(e) => setBeverageForms(prev => prev.map((p, i) => i===idx?{...p,description:e.target.value}:p))} className="p-2 border rounded col-span-2" />
-                                                <label className="flex items-center gap-2 col-span-2"><input type="checkbox" checked={form.available} onChange={(e) => setBeverageForms(prev => prev.map((p, i) => i===idx?{...p,available:e.target.checked}:p))} /> Disponible</label>
+                                                <div className="flex items-center gap-2 col-span-2">
+                                                    <input aria-label={`Disponible bebida ${idx + 1}`} type="checkbox" checked={form.available} onChange={(e) => setBeverageForms(prev => prev.map((p, i) => i===idx?{...p,available:e.target.checked}:p))} />
+                                                    <span className="sr-only">Disponible</span>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}

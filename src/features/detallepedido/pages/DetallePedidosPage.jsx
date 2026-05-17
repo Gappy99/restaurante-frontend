@@ -339,25 +339,25 @@ const DetallePedidosPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
-              <label className="space-y-1 text-sm">
-                <span>Orden ID *</span>
+              <div className="space-y-1 text-sm">
                 <input
                   required
                   value={formData.orders_id}
                   onChange={(e) => setFormData((prev) => ({ ...prev, orders_id: e.target.value }))}
+                  placeholder="Orden ID *"
                   className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
                 />
-              </label>
+              </div>
 
-              <label className="space-y-1 text-sm">
-                <span>Restaurant ID *</span>
+              <div className="space-y-1 text-sm">
                 <input
                   required
                   value={formData.restaurant_id}
                   onChange={(e) => setFormData((prev) => ({ ...prev, restaurant_id: e.target.value }))}
+                  placeholder="Restaurant ID *"
                   className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
                 />
-              </label>
+              </div>
 
               {!editingId && (
                 <>
@@ -385,10 +385,10 @@ const DetallePedidosPage = () => {
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <label className="space-y-1 text-sm">
-                              <span>Tipo *</span>
+                            <div className="space-y-1 text-sm">
                               <select
                                 required
+                                aria-label="Tipo de producto"
                                 value={item.productType}
                                 onChange={(e) => updateItemRow(idx, { productType: e.target.value, producto: '' })}
                                 className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
@@ -396,12 +396,12 @@ const DetallePedidosPage = () => {
                                 <option value="dish">Dish</option>
                                 <option value="beverage">Beverage</option>
                               </select>
-                            </label>
+                            </div>
 
-                            <label className="space-y-1 text-sm md:col-span-2">
-                              <span>Producto *</span>
+                            <div className="space-y-1 text-sm md:col-span-2">
                               <select
                                 required
+                                aria-label="Producto"
                                 value={item.producto}
                                 onChange={(e) => updateItemRow(idx, { producto: e.target.value })}
                                 className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
@@ -416,19 +416,19 @@ const DetallePedidosPage = () => {
                                   )
                                 })}
                               </select>
-                            </label>
+                            </div>
 
-                            <label className="space-y-1 text-sm">
-                              <span>Cantidad *</span>
+                            <div className="space-y-1 text-sm">
                               <input
                                 required
                                 type="number"
                                 min="1"
+                                aria-label="Cantidad"
                                 value={item.candidadproducto}
                                 onChange={(e) => updateItemRow(idx, { candidadproducto: e.target.value })}
                                 className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
                               />
-                            </label>
+                            </div>
 
                             <div className="space-y-1 text-sm">
                               <span>Precio Unitario</span>
@@ -461,10 +461,10 @@ const DetallePedidosPage = () => {
 
               {editingId && (
                 <>
-                  <label className="space-y-1 text-sm">
-                    <span>Tipo de Producto *</span>
+                  <div className="space-y-1 text-sm">
                     <select
                       required
+                      aria-label="Tipo de Producto"
                       value={formData.productType}
                       onChange={(e) => setFormData((prev) => ({ ...prev, productType: e.target.value, producto: '' }))}
                       className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
@@ -472,12 +472,12 @@ const DetallePedidosPage = () => {
                       <option value="dish">Dish</option>
                       <option value="beverage">Beverage</option>
                     </select>
-                  </label>
+                  </div>
 
-                  <label className="space-y-1 text-sm">
-                    <span>Producto *</span>
+                  <div className="space-y-1 text-sm">
                     <select
                       required
+                      aria-label="Producto"
                       value={formData.producto}
                       onChange={(e) => setFormData((prev) => ({ ...prev, producto: e.target.value }))}
                       className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
@@ -492,19 +492,19 @@ const DetallePedidosPage = () => {
                         )
                       })}
                     </select>
-                  </label>
+                  </div>
 
-                  <label className="space-y-1 text-sm">
-                    <span>Cantidad *</span>
+                  <div className="space-y-1 text-sm">
                     <input
                       required
                       type="number"
                       min="1"
+                      aria-label="Cantidad"
                       value={formData.candidadproducto}
                       onChange={(e) => setFormData((prev) => ({ ...prev, candidadproducto: e.target.value }))}
                       className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
                     />
-                  </label>
+                  </div>
 
                   <div className="space-y-1 text-sm">
                     <span>Total estimado</span>

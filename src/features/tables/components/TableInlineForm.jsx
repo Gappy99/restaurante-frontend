@@ -136,10 +136,8 @@ const TableInlineForm = ({
       <form onSubmit={handleSubmit} className="space-y-4 rounded-[1.5rem] bg-[#2E160C]/60 p-5">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <label htmlFor="name" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-              Nombre de la Mesa *
-            </label>
             <input
+              aria-label="Nombre de la Mesa"
               id="name"
               type="text"
               name="name"
@@ -153,10 +151,8 @@ const TableInlineForm = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="number" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-                Número *
-              </label>
               <input
+                aria-label="Número"
                 id="number"
                 type="number"
                 name="number"
@@ -170,10 +166,8 @@ const TableInlineForm = ({
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="capacity" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-                Capacidad *
-              </label>
               <input
+                aria-label="Capacidad"
                 id="capacity"
                 type="number"
                 name="capacity"
@@ -189,10 +183,8 @@ const TableInlineForm = ({
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="ubication" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-            Ubicación *
-          </label>
           <input
+            aria-label="Ubicación"
             id="ubication"
             type="text"
             name="ubication"
@@ -206,10 +198,8 @@ const TableInlineForm = ({
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <label htmlFor="timeAvailable" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-              Horario Disponible
-            </label>
             <input
+              aria-label="Horario Disponible"
               id="timeAvailable"
               type="text"
               name="timeAvailable"
@@ -221,10 +211,8 @@ const TableInlineForm = ({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="tableState" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-              Estado de la Mesa
-            </label>
             <select
+              aria-label="Estado de la Mesa"
               id="tableState"
               name="tableState"
               value={formData.tableState}
@@ -242,10 +230,8 @@ const TableInlineForm = ({
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <label htmlFor="restaurantId" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-              Restaurante *
-            </label>
             <input
+              aria-label="Restaurante"
               id="restaurantId"
               type="text"
               name="restaurantId"
@@ -263,10 +249,8 @@ const TableInlineForm = ({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="reservationId" className="text-xs font-bold uppercase tracking-[0.25em] text-[#946841]">
-              Reserva
-            </label>
             <input
+              aria-label="Reserva"
               id="reservationId"
               type="text"
               name="reservationId"

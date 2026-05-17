@@ -155,7 +155,7 @@ const CouponPage = () => {
               Administración de cupones
             </h1>
             <p className="mt-3 text-base leading-7 text-[#7F532C]">
-              Controla la creación, edición y estado de los cupones vinculados a tus restaurantes.
+              Controla la creación, edición y estado de cupones activos devueltos por el backend.
             </p>
           </div>
           <button

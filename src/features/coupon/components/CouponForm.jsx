@@ -91,7 +91,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Código del cupón * (identificador único)
           </label>
           <input
             type="text"
@@ -110,7 +109,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Descripción * (mensaje corto para el cupón)
           </label>
           <input
             type="text"
@@ -128,7 +126,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Tipo de descuento *
           </label>
           <select
             {...register('discount_type', { required: 'Selecciona un tipo' })}
@@ -145,7 +142,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Valor del descuento * (porcentaje o monto fijo)
           </label>
           <input
             type="number"
@@ -166,7 +162,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Uso máximo total * (cantidad total de veces que puede aplicarse)
           </label>
           <input
             type="number"
@@ -185,7 +180,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Fecha de expiración * (fecha y hora límite)
           </label>
           <input
             type="datetime-local"
@@ -200,7 +194,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Restaurante * (restaurante asociado al cupón)
           </label>
           <select
             {...register('restaurant_ids', {
@@ -226,7 +219,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Usos máximos por usuario * (límite por cliente)
           </label>
           <input
             type="number"
@@ -246,7 +238,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div>
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Monto mínimo de compra (opcional)
           </label>
           <input
             type="number"
@@ -266,7 +257,6 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-[#5B300E] mb-2">
-            Disponibilidad del cupón
           </label>
           <input type="hidden" {...register('active')} />
           <div className="inline-flex rounded-full border border-[#B08851]/40 bg-[#FFFDF8] p-1">
