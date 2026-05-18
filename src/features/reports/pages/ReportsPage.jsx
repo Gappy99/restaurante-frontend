@@ -150,11 +150,11 @@ const ReportsPage = () => {
   }
 
   const columns = [
-    { key: 'titulo', label: 'Título' },
-    { key: 'tipo', label: 'Tipo' },
-    { key: 'estado', label: 'Estado' },
-    { key: 'fechaCreacion', label: 'Fecha Creación' },
-    { key: 'autor', label: 'Autor' },
+    { key: 'title', label: 'Título' },
+    { key: 'type', label: 'Tipo' },
+    { key: 'status', label: 'Estado' },
+    { key: 'createdAt', label: 'Fecha Creación' },
+    { key: 'author', label: 'Autor' },
   ]
 
   return (
@@ -300,6 +300,43 @@ const ReportsPage = () => {
  */
 const ReportTable = ({ columns, data, onEdit, onDelete, onView, onDownload }) => {
   const safeData = Array.isArray(data) ? data : []
+  const fallbackKeys = {
+    title: ['title', 'titulo', 'name'],
+    type: ['type', 'tipo', 'reportType', 'tipoReporte'],
+    status: ['status', 'estado', 'state'],
+    author: ['author', 'autor', 'createdBy', 'creador'],
+    createdAt: ['createdAt', 'created_at', 'fechaCreacion', 'fecha_creacion', 'fecha'],
+  }
+
+  const getCellValue = (row, key) => {
+    const candidates = fallbackKeys[key] || [key]
+    let value = ''
+
+    for (const candidate of candidates) {
+      if (row?.[candidate] !== undefined && row?.[candidate] !== null) {
+        value = row[candidate]
+        break
+      }
+    }
+
+    if (value === '' && row?.report) {
+      for (const candidate of candidates) {
+        if (row.report?.[candidate] !== undefined && row.report?.[candidate] !== null) {
+          value = row.report[candidate]
+          break
+        }
+      }
+    }
+
+    if (key === 'type') {
+      return REPORT_TYPE_LABELS[value] || value || ''
+    }
+    if (key === 'status') {
+      return REPORT_STATUS_LABELS[value] || value || ''
+    }
+
+    return value
+  }
   
   return (
     <table className="w-full">
@@ -321,11 +358,14 @@ const ReportTable = ({ columns, data, onEdit, onDelete, onView, onDownload }) =>
       <tbody>
         {safeData.map((row) => (
           <tr key={row._id} className="border-b border-gray-200 hover:bg-gray-50">
-            {columns.map((col) => (
-              <td key={col.key} className="px-6 py-4 text-gray-700">
-                {row[col.key]}
-              </td>
-            ))}
+            {columns.map((col) => {
+              const cellValue = getCellValue(row, col.key)
+              return (
+                <td key={col.key} className="px-6 py-4 text-gray-700">
+                  {cellValue}
+                </td>
+              )
+            })}
             <td className="px-6 py-4 flex gap-2 flex-wrap">
               <button
                 onClick={() => onView(row)}
@@ -373,27 +413,66 @@ const ReportTable = ({ columns, data, onEdit, onDelete, onView, onDownload }) =>
 /**
  * Modal de Reporte para crear/editar
  */
+const mapReportToFormValues = (report) => ({
+  titulo: report?.title || report?.titulo || '',
+  descripcion: report?.description || report?.descripcion || '',
+  tipo: report?.type || report?.tipo || '',
+  estado: report?.status || report?.estado || report?.state || '',
+  autor:
+    report?.author ||
+    report?.autor ||
+    report?.createdBy ||
+    report?.owner?.name ||
+    report?.owner?.username ||
+    report?.owner?.fullName ||
+    '',
+  periodo: report?.period || report?.periodo || '',
+})
+
+const REPORT_TYPE_LABELS = {
+  'análisis': 'Análisis',
+  'demanda': 'Demanda',
+  'ingresos': 'Ingresos',
+  'ocupación': 'Ocupación',
+  custom: 'Personalizado',
+}
+
+const REPORT_STATUS_LABELS = {
+  draft: 'Borrador',
+  published: 'Publicado',
+  archived: 'Archivado',
+}
+
 const ReportModal = ({ isOpen, onClose, report, onSuccess }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
-    defaultValues: report || {},
+    defaultValues: mapReportToFormValues(report),
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    reset(report || {})
+    reset(mapReportToFormValues(report))
   }, [report, reset])
 
   const onSubmit = async (data) => {
     setIsSubmitting(true)
     try {
+      // Mapear campos españoles al esquema del backend
+      const reportData = {
+        title: data.titulo,
+        description: data.descripcion,
+        type: data.tipo,
+        status: data.estado,
+        ownerName: data.autor,
+        period: data.periodo,
+        shared: report?.shared ?? false,
+        query: report?.query ?? {},
+      }
+
       let result
       if (report?._id) {
-        result = await reportService.updateReport(report._id, data)
+        result = await reportService.updateReport(report._id, reportData)
       } else {
-        result = await reportService.createReport({
-          ...data,
-          fechaCreacion: new Date().toISOString(),
-        })
+        result = await reportService.createReport(reportData)
       }
 
       setIsSubmitting(false)
@@ -453,12 +532,11 @@ const ReportModal = ({ isOpen, onClose, report, onSuccess }) => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="">Seleccionar tipo</option>
-            <option value="VENTAS">Ventas</option>
-            <option value="INVENTARIO">Inventario</option>
-            <option value="CLIENTES">Clientes</option>
-            <option value="FINANZAS">Finanzas</option>
-            <option value="OPERACIONES">Operaciones</option>
-            <option value="GENERAL">General</option>
+            <option value="análisis">Análisis</option>
+            <option value="demanda">Demanda</option>
+            <option value="ingresos">Ingresos</option>
+            <option value="ocupación">Ocupación</option>
+            <option value="custom">Personalizado</option>
           </select>
           {errors.tipo && <p className="text-red-500 text-sm mt-1">{errors.tipo.message}</p>}
         </div>
@@ -473,10 +551,9 @@ const ReportModal = ({ isOpen, onClose, report, onSuccess }) => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="">Seleccionar estado</option>
-            <option value="BORRADOR">Borrador</option>
-            <option value="EN_PROGRESO">En Progreso</option>
-            <option value="COMPLETADO">Completado</option>
-            <option value="ARCHIVADO">Archivado</option>
+            <option value="draft">Borrador</option>
+            <option value="published">Publicado</option>
+            <option value="archived">Archivado</option>
           </select>
           {errors.estado && <p className="text-red-500 text-sm mt-1">{errors.estado.message}</p>}
         </div>
@@ -534,28 +611,28 @@ const ReportDetailModal = ({ isOpen, onClose, report, onDownload }) => {
   if (!report) return null
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`Detalle: ${report.titulo}`}>
+    <Modal isOpen={isOpen} onClose={onClose} title={`Detalle: ${report.title}`}>
       <div className="space-y-4">
         <div>
           <p className="text-sm text-gray-600 font-semibold">Descripción</p>
-          <p className="text-gray-800">{report.descripcion || 'N/A'}</p>
+          <p className="text-gray-800">{report.description || 'N/A'}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-gray-600 font-semibold">Tipo</p>
-            <p className="text-gray-800">{report.tipo || 'N/A'}</p>
+            <p className="text-gray-800">{REPORT_TYPE_LABELS[report.type] || report.type || 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm text-gray-600 font-semibold">Estado</p>
             <p className="text-gray-800">
               <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                report.estado === 'COMPLETADO' ? 'bg-green-100 text-green-800' :
-                report.estado === 'EN_PROGRESO' ? 'bg-yellow-100 text-yellow-800' :
-                report.estado === 'BORRADOR' ? 'bg-gray-100 text-gray-800' :
+                report.status === 'published' ? 'bg-green-100 text-green-800' :
+                report.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
+                report.status === 'archived' ? 'bg-gray-100 text-gray-800' :
                 'bg-blue-100 text-blue-800'
               }`}>
-                {report.estado || 'N/A'}
+                {REPORT_STATUS_LABELS[report.status] || report.status || 'N/A'}
               </span>
             </p>
           </div>
@@ -564,18 +641,18 @@ const ReportDetailModal = ({ isOpen, onClose, report, onDownload }) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-gray-600 font-semibold">Autor</p>
-            <p className="text-gray-800">{report.autor || 'N/A'}</p>
+            <p className="text-gray-800">{report.author || 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm text-gray-600 font-semibold">Período</p>
-            <p className="text-gray-800">{report.periodo || 'N/A'}</p>
+            <p className="text-gray-800">{report.period || 'N/A'}</p>
           </div>
         </div>
 
         <div>
           <p className="text-sm text-gray-600 font-semibold">Fecha de Creación</p>
           <p className="text-gray-800">
-            {report.fechaCreacion ? new Date(report.fechaCreacion).toLocaleDateString('es-ES') : 'N/A'}
+            {report.createdAt ? new Date(report.createdAt).toLocaleDateString('es-ES') : 'N/A'}
           </p>
         </div>
 

@@ -4,6 +4,33 @@ import toast from 'react-hot-toast'
 import { jsPDF } from 'jspdf'
 import * as XLSX from 'xlsx'
 
+const normalizeReport = (report) => {
+  if (!report || typeof report !== 'object') return report
+
+  const source = report.report || report.data || report._source || report
+  const normalized = {
+    ...source,
+    _id: source._id || source.id || source.reportId || source.idReport || source._id,
+    title: source.title || source.titulo || source.name || '',
+    type: source.type || source.tipo || source.reportType || source.tipoReporte || '',
+    status: source.status || source.estado || source.state || source.report_status || source.reportStatus || source.estado_reporte || '',
+    author:
+      source.author ||
+      source.autor ||
+      source.createdBy ||
+      source.creador ||
+      source.owner?.name ||
+      source.owner?.username ||
+      source.owner?.fullName ||
+      '',
+    period: source.period || source.periodo || source.periodo_reporte || '',
+    createdAt: source.createdAt || source.created_at || source.fechaCreacion || source.fecha_creacion || source.fecha || '',
+    description: source.description || source.descripcion || '',
+  }
+
+  return normalized
+}
+
 /**
  * Servicio de Reportes
  * Incluye endpoints de análisis del backend:
@@ -20,7 +47,9 @@ import * as XLSX from 'xlsx'
 
 const fetchReportById = async (id) => {
   const response = await adminClient.get(`/reports/${id}`)
-  return response.data?.data || response.data
+  // Backend puede retornar { success: true, report: {...} } o directamente el objeto
+  const report = response.data?.report || response.data?.data || response.data
+  return normalizeReport(report)
 }
 
 export const reportService = {
@@ -31,10 +60,33 @@ export const reportService = {
     try {
       useReportStore.getState().setLoading(true)
       const response = await adminClient.get('/reports')
-      const reportsData = Array.isArray(response.data) ? response.data : response.data.data || []
-      useReportStore.getState().setReports(reportsData)
-      return { success: true, data: reportsData }
+      console.log('getReports response:', {
+        status: response.status,
+        data: response.data,
+        dataIsArray: Array.isArray(response.data),
+        dataReports: response.data?.reports,
+        dataReportsIsArray: Array.isArray(response.data?.reports),
+        dataData: response.data?.data,
+        dataDataIsArray: Array.isArray(response.data?.data),
+      })
+      
+      // Backend puede retornar { success: true, reports: [...] } o { success: true, data: [...] }
+      const reportsData = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data?.reports)
+        ? response.data.reports
+        : Array.isArray(response.data?.data)
+        ? response.data.data
+        : Array.isArray(response.data?.report)
+        ? response.data.report
+        : []
+      const normalizedReports = reportsData.map(normalizeReport)
+      console.log('reportsData extracted:', normalizedReports)
+      
+      useReportStore.getState().setReports(normalizedReports)
+      return { success: true, data: normalizedReports }
     } catch (error) {
+      console.error('getReports error:', error)
       toast.error('Error al obtener reportes')
       return { success: false, error: error.message }
     } finally {
@@ -45,14 +97,31 @@ export const reportService = {
   // Crear reporte
   createReport: async (reportData) => {
     try {
+      console.log('createReport sending:', reportData)
       const response = await adminClient.post('/reports', reportData)
-      const reportResult = response.data?.data || response.data
-      useReportStore.getState().addReport(reportResult)
+      console.log('createReport response:', {
+        status: response.status,
+        data: response.data,
+        report: response.data?.report,
+      })
+      
+      // Backend retorna { success: true, report: {...} } o similar
+      const reportResult = response.data?.report || response.data?.data || response.data
+      const normalizedReport = normalizeReport(reportResult)
+      console.log('reportResult extracted:', normalizedReport)
+      
+      useReportStore.getState().addReport(normalizedReport)
       toast.success('Reporte creado exitosamente')
-      return { success: true, data: reportResult }
+      return { success: true, data: normalizedReport }
     } catch (error) {
-      toast.error('Error al crear reporte')
-      return { success: false, error: error.message }
+      const serverError = error?.response?.data?.message || error?.response?.data?.error || error?.response?.statusText || error.message
+      console.error('createReport error details:', { 
+        status: error?.response?.status,
+        message: serverError,
+        data: error?.response?.data 
+      })
+      toast.error(serverError || 'Error al crear reporte')
+      return { success: false, error: serverError }
     }
   },
 
@@ -61,12 +130,19 @@ export const reportService = {
     try {
       const response = await adminClient.put(`/reports/${id}`, reportData)
       const reportResult = response.data?.data || response.data
-      useReportStore.getState().updateReport(id, reportResult)
+      const normalizedReport = normalizeReport(reportResult)
+      useReportStore.getState().updateReport(id, normalizedReport)
       toast.success('Reporte actualizado exitosamente')
-      return { success: true, data: reportResult }
+      return { success: true, data: normalizedReport }
     } catch (error) {
-      toast.error('Error al actualizar reporte')
-      return { success: false, error: error.message }
+      const serverError = error?.response?.data?.message || error?.response?.data?.error || error?.response?.statusText || error.message
+      console.error('updateReport error details:', { 
+        status: error?.response?.status,
+        message: serverError,
+        data: error?.response?.data 
+      })
+      toast.error(serverError || 'Error al actualizar reporte')
+      return { success: false, error: serverError }
     }
   },
 
@@ -235,12 +311,12 @@ export const reportService = {
 
       const headers = ['Título', 'Tipo', 'Estado', 'Autor', 'Período', 'Fecha Creación']
       const values = [
-        report.titulo || '',
-        report.tipo || '',
-        report.estado || '',
-        report.autor || '',
-        report.periodo || '',
-        report.fechaCreacion ? new Date(report.fechaCreacion).toLocaleDateString('es-ES') : '',
+        report.title || '',
+        report.type || '',
+        report.status || '',
+        report.author || '',
+        report.period || '',
+        report.createdAt ? new Date(report.createdAt).toLocaleDateString('es-ES') : '',
       ]
       const content = headers.join(',') + '\n' + values.join(',')
       const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
@@ -263,13 +339,13 @@ export const reportService = {
 
       const data = [
         {
-          'Título': report.titulo || '',
-          'Tipo': report.tipo || '',
-          'Estado': report.estado || '',
-          'Autor': report.autor || '',
-          'Período': report.periodo || '',
-          'Fecha Creación': report.fechaCreacion ? new Date(report.fechaCreacion).toLocaleDateString('es-ES') : '',
-          'Descripción': report.descripcion || '',
+          'Título': report.title || '',
+          'Tipo': report.type || '',
+          'Estado': report.status || '',
+          'Autor': report.author || '',
+          'Período': report.period || '',
+          'Fecha Creación': report.createdAt ? new Date(report.createdAt).toLocaleDateString('es-ES') : '',
+          'Descripción': report.description || '',
         }
       ]
 
@@ -301,17 +377,17 @@ export const reportService = {
 
       doc.setFontSize(20)
       doc.setTextColor('#111827')
-      doc.text(report.titulo || 'Reporte', margin, y)
+      doc.text(report.title || 'Reporte', margin, y)
       y += 30
 
       doc.setFontSize(11)
       doc.setTextColor('#374151')
       const rows = [
-        ['Tipo', report.tipo || 'N/A'],
-        ['Estado', report.estado || 'N/A'],
-        ['Autor', report.autor || 'N/A'],
-        ['Período', report.periodo || 'N/A'],
-        ['Fecha Creación', report.fechaCreacion ? new Date(report.fechaCreacion).toLocaleDateString('es-ES') : 'N/A'],
+        ['Tipo', report.type || 'N/A'],
+        ['Estado', report.status || 'N/A'],
+        ['Autor', report.author || 'N/A'],
+        ['Período', report.period || 'N/A'],
+        ['Fecha Creación', report.createdAt ? new Date(report.createdAt).toLocaleDateString('es-ES') : 'N/A'],
       ]
 
       rows.forEach(([label, value]) => {
@@ -334,7 +410,7 @@ export const reportService = {
       y += 18
       doc.setFontSize(11)
       doc.setFont(undefined, 'normal')
-      const description = report.descripcion || 'Sin descripción'
+      const description = report.description || 'Sin descripción'
       const paragraph = doc.splitTextToSize(description, 515)
       doc.text(paragraph, margin, y)
       y += paragraph.length * 14 + 20
