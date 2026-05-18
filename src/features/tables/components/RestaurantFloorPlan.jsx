@@ -89,6 +89,7 @@ const RestaurantFloorPlan = ({
   onCreate,
   layoutFromApi = {},
   onSaveLayout,
+  readOnly = false,
 }) => {
   const boardRef = useRef(null)
   const dragRef = useRef(null)
@@ -121,6 +122,8 @@ const RestaurantFloorPlan = ({
   }, [positions, storageKey])
 
   useEffect(() => {
+    if (readOnly) return undefined
+
     const handlePointerMove = (event) => {
       if (!dragRef.current || !boardRef.current) return
 
@@ -209,9 +212,10 @@ const RestaurantFloorPlan = ({
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', handlePointerUp)
     }
-  }, [invalidDrop, onSaveLayout, tables])
+  }, [invalidDrop, onSaveLayout, tables, readOnly])
 
   const handlePointerDown = (event, table) => {
+    if (readOnly) return
     if (event.button !== 0) return
     if (event.target.closest('button, a, input, select, textarea')) return
 
@@ -238,7 +242,7 @@ const RestaurantFloorPlan = ({
         <div className="text-5xl mb-4">🪑</div>
         <h3 className="text-xl font-bold">No hay mesas para este restaurante</h3>
         <p className="text-[#946841] mt-2">Crea una mesa para comenzar a dibujar el plano.</p>
-        {onCreate && (
+        {!readOnly && onCreate && (
           <button
             onClick={onCreate}
             className="mt-6 px-6 py-3 rounded-xl bg-[#7F532C] hover:bg-[#946841] transition-colors font-semibold"
@@ -256,13 +260,15 @@ const RestaurantFloorPlan = ({
         <div>
           <h2 className="text-2xl font-black uppercase italic text-[#FCF0CA]">Plano interactivo</h2>
           <p className="text-sm text-[#946841]">
-            Arrastra las mesas dentro del espacio del restaurante. El sistema evita solapamientos básicos.
+            {readOnly
+              ? 'Vista solo lectura de la distribucion de mesas.'
+              : 'Arrastra las mesas dentro del espacio del restaurante. El sistema evita solapamientos básicos.'}
           </p>
         </div>
 
         <div className="flex items-center gap-3 text-xs text-[#946841]">
           <span className="rounded-full border border-[#7F532C]/40 px-3 py-1">Restaurante: {restaurantName || restaurantId}</span>
-          {onCreate && (
+          {!readOnly && onCreate && (
             <button
               onClick={onCreate}
               className="rounded-full bg-[#7F532C] px-4 py-2 text-[#FCF0CA] font-semibold hover:bg-[#946841] transition-colors"
@@ -295,15 +301,15 @@ const RestaurantFloorPlan = ({
                 key={tableId}
                 onPointerDown={(event) => handlePointerDown(event, table)}
                 className={`absolute select-none rounded-2xl border-2 px-3 py-2 shadow-xl transition-all duration-150 ${
-                  isActive ? 'scale-[1.02]' : 'hover:scale-[1.01]'
+                  isActive ? 'scale-[1.02]' : !readOnly ? 'hover:scale-[1.01]' : ''
                 } ${isColliding ? 'border-red-500 bg-red-950/80' : 'border-[#7F532C]/70 bg-[#5B300E]/85'} text-[#FCF0CA]`}
                 style={{
                   width: size.width,
                   height: size.height,
                   left: position.x,
                   top: position.y,
-                  cursor: 'grab',
-                  touchAction: 'none',
+                  cursor: readOnly ? 'default' : 'grab',
+                  touchAction: readOnly ? 'auto' : 'none',
                 }}
               >
                 <div className="flex h-full flex-col justify-between gap-2">
@@ -325,8 +331,9 @@ const RestaurantFloorPlan = ({
                   </div>
 
                   <div className="flex items-center justify-between gap-2 text-[10px] text-[#FCF0CA]/60">
-                    <span>Arrastra para mover</span>
-                    <div className="flex gap-1">
+                    <span>{readOnly ? 'Solo visualizacion' : 'Arrastra para mover'}</span>
+                    {!readOnly && (
+                      <div className="flex gap-1">
                       <button
                         type="button"
                         onClick={(event) => {
@@ -347,7 +354,8 @@ const RestaurantFloorPlan = ({
                       >
                         Borrar
                       </button>
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

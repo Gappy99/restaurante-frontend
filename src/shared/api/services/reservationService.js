@@ -214,15 +214,43 @@ const reservationService = {
   cancelReservation: async (id) => {
     try {
       const payload = {
-        status: 'CANCELADA',
-        estado: 'CANCELADA',
-        reservation_status: 'CANCELADA',
+        reservation_state: 'cancelada',
+        status: 'cancelada',
+        estado: 'cancelada',
+        reservation_status: 'cancelada',
       }
       const response = await adminClient.put(`${resource}/${id}`, payload)
       toast.success('Reservación cancelada')
       return response.data?.data ?? response.data
     } catch (error) {
-      console.error('Cancel reservation error:', error.response?.data || error)
+      console.error('Cancel reservation error (initial):', error.response?.data || error)
+
+      // If backend complains about invalid fields, try common alternative payload shapes
+      const msg = error.response?.data?.message || ''
+      if (error.response?.status === 400 && /campos válidos|validos|válidos/i.test(msg)) {
+        const variants = [
+          { reservation_state: 'cancelada' },
+          { reservation_state: 'cancelada', reservation_status: 'cancelada' },
+          { reservation: { reservation_state: 'cancelada' } },
+          { status: 'cancelada' },
+          { estado: 'cancelada' },
+          { reservation_status: 'cancelada' },
+          { state: 'cancelada' },
+        ]
+
+        for (const v of variants) {
+          try {
+            console.debug('Retrying cancel with payload:', v)
+            const r = await adminClient.put(`${resource}/${id}`, v)
+            toast.success('Reservación cancelada')
+            return r.data?.data ?? r.data
+          } catch (err2) {
+            console.debug('Retry failed for payload', v, err2.response?.data || err2)
+            // continue trying other variants
+          }
+        }
+      }
+
       toast.error(error.response?.data?.message || error.response?.data || 'Error al cancelar reservación')
       return null
     }

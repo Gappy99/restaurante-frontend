@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTables, useTableDelete } from '../hooks/index.js'
 import useRestaurantStore from '../../restaurant/store/useRestaurantStore.js'
+import useAuthStore from '../../../shared/stores/useAuthStore.js'
 import { tableService } from '../services/tableService.js'
 import {
   RestaurantFloorPlan,
@@ -15,6 +16,8 @@ const RestaurantTablesPage = () => {
   const { fetchTables, setFilters, getFilteredTables, loading, error } = useTables()
   const { handleDelete, loading: deleteLoading } = useTableDelete()
   const { fetchRestaurantById, currentRestaurant } = useRestaurantStore()
+  const user = useAuthStore((state) => state.user)
+  const isClientUser = user?.rol === 'CLIENTE'
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [selectedTable, setSelectedTable] = useState(null)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
@@ -137,10 +140,11 @@ const RestaurantTablesPage = () => {
           restaurantName={currentRestaurant?.restaurant_name}
           tables={tables}
           layoutFromApi={serverLayout}
-          onSaveLayout={handleSaveLayout}
-          onEdit={handleEdit}
-          onDelete={handleDeleteClick}
-          onCreate={handleCreateNew}
+          readOnly={isClientUser}
+          onSaveLayout={isClientUser ? undefined : handleSaveLayout}
+          onEdit={isClientUser ? undefined : handleEdit}
+          onDelete={isClientUser ? undefined : handleDeleteClick}
+          onCreate={isClientUser ? undefined : handleCreateNew}
         />
       </main>
 

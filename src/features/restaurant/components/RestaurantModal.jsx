@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { useRestaurantForm } from '../hooks/useRestaurants.jsx'
 import { validateRestaurantForm, formatRestaurantData } from '../utils/restaurantUtils.js'
 import {
@@ -10,23 +11,55 @@ import {
 } from '../constants/restaurantConstants.js'
 import toast from 'react-hot-toast'
 
+const LocationPickerMap = lazy(() => import('../../mapa/components/LocationPickerMap.jsx'))
+
+const DEFAULT_GUATEMALA_LOCATION = {
+  lat: 14.6349,
+  lng: -90.5069,
+}
+
+const buildInitialFormData = (initialData) => ({
+  name: initialData?.restaurant_name || '',
+  type: initialData?.restaurant_type || '',
+  gastronomicType: initialData?.restaurant_type_gastronomic || '',
+  address: initialData?.restaurant_direction || '',
+  timeStart: initialData?.restaurant_time_start || DEFAULT_TIME_START,
+  timeClose: initialData?.restaurant_time_close || DEFAULT_TIME_CLOSE,
+  meanPrice: initialData?.restaurant_mean_price || 0,
+  image: null,
+  lat: Number.isFinite(Number(initialData?.lat))
+    ? Number(initialData?.lat)
+    : (initialData ? null : DEFAULT_GUATEMALA_LOCATION.lat),
+  lng: Number.isFinite(Number(initialData?.lng))
+    ? Number(initialData?.lng)
+    : (initialData ? null : DEFAULT_GUATEMALA_LOCATION.lng),
+})
+
+const MapLoader = () => (
+  <div className="flex h-full w-full items-center justify-center bg-[#2E160C]/50 text-[#946841] text-sm">
+    Cargando selector de mapa...
+  </div>
+)
+
 /* eslint-disable react/prop-types */
 const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => {
   const { handleCreate, handleUpdate, loading, error, clearError } = useRestaurantForm()
 
-  const [formData, setFormData] = useState({
-    name: initialData?.restaurant_name || '',
-    type: initialData?.restaurant_type || '',
-    gastronomicType: initialData?.restaurant_type_gastronomic || '',
-    address: initialData?.restaurant_direction || '',
-    timeStart: initialData?.restaurant_time_start || DEFAULT_TIME_START,
-    timeClose: initialData?.restaurant_time_close || DEFAULT_TIME_CLOSE,
-    meanPrice: initialData?.restaurant_mean_price || 0,
-    image: null,
-  })
+  const [formData, setFormData] = useState(buildInitialFormData(initialData))
 
   const [errors, setErrors] = useState({})
   const [preview, setPreview] = useState(initialData?.restaurant_images?.[0] || null)
+  const [geocoding, setGeocoding] = useState(false)
+  const geocodeTimer = useRef(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    setFormData(buildInitialFormData(initialData))
+    setPreview(initialData?.restaurant_images?.[0] || null)
+    setErrors({})
+    clearError()
+  }, [isOpen, initialData, clearError])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -34,13 +67,109 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
+  const geocodeAddress = async (address) => {
+    if (!address || !address.trim()) return null
+
+    try {
+      setGeocoding(true)
+      const q = encodeURIComponent(address.trim())
+      const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&addressdetails=0`
+      const res = await fetch(url)
+      if (!res.ok) throw new Error('Geocoding API error')
+
+      const data = await res.json()
+      if (!Array.isArray(data) || data.length === 0) return null
+
+      const first = data[0]
+      const lat = Number(first.lat)
+      const lng = Number(first.lon)
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
+
+      return { lat, lng }
+    } catch (err) {
+      console.error('Geocoding error', err)
+      return null
+    } finally {
+      setGeocoding(false)
+    }
+  }
+
+  const handleAddressBlur = async () => {
+    const address = formData.address
+    if (!address || !address.trim()) return
+
+    const coords = await geocodeAddress(address)
+    if (coords) {
+      setFormData((prev) => ({ ...prev, lat: coords.lat, lng: coords.lng }))
+      setErrors((prev) => ({ ...prev, location: '' }))
+    }
+  }
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0]
+
     if (file) {
       setFormData((prev) => ({ ...prev, image: file }))
       const reader = new FileReader()
       reader.onloadend = () => setPreview(reader.result)
       reader.readAsDataURL(file)
+    }
+  }
+
+  const reverseGeocode = async (lat, lng) => {
+    if (!Number.isFinite(Number(lat)) || !Number.isFinite(Number(lng))) return null
+    try {
+      setGeocoding(true)
+      const url = `https://nominatim.openstreetmap.org/reverse?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&format=json&addressdetails=0`
+      const res = await fetch(url)
+      if (!res.ok) throw new Error('Reverse geocoding API error')
+      const data = await res.json()
+      return data?.display_name || null
+    } catch (err) {
+      console.error('Reverse geocoding error', err)
+      return null
+    } finally {
+      setGeocoding(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const hasCoordinates = Number.isFinite(Number(initialData?.lat)) && Number.isFinite(Number(initialData?.lng))
+    const hasAddress = Boolean(initialData?.restaurant_direction && initialData.restaurant_direction.trim())
+
+    if (!initialData || !hasAddress || hasCoordinates) return
+
+    if (geocodeTimer.current) clearTimeout(geocodeTimer.current)
+
+    geocodeTimer.current = setTimeout(async () => {
+      const coords = await geocodeAddress(initialData.restaurant_direction)
+      if (coords) {
+        setFormData((prev) => ({ ...prev, lat: coords.lat, lng: coords.lng }))
+      }
+    }, 500)
+
+    return () => {
+      if (geocodeTimer.current) clearTimeout(geocodeTimer.current)
+    }
+  }, [isOpen, initialData])
+
+  const handleLocationSelect = ({ lat, lng }) => {
+    setFormData((prev) => ({ ...prev, lat, lng }))
+
+    // Intentar obtener dirección a partir de las coordenas seleccionadas
+    ;(async () => {
+      try {
+        const addr = await reverseGeocode(lat, lng)
+        if (addr) setFormData((prev) => ({ ...prev, address: addr }))
+      } catch (err) {
+        // noop
+      }
+    })()
+
+    if (errors.location) {
+      setErrors((prev) => ({ ...prev, location: '' }))
     }
   }
 
@@ -134,6 +263,7 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
               name="address" 
               value={formData.address} 
               onChange={handleInputChange} 
+              onBlur={handleAddressBlur}
               placeholder="Ej. Zona 15, Ciudad de Guatemala"
               className={inputStyles} 
             />
@@ -184,6 +314,62 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
                 />
               </div>
             </div>
+          </div>
+
+          {/* Mapa de ubicación */}
+          <div className="hidden lg:flex gap-4 w-full">
+            <div className="w-[360px] bg-[#2E160C] border border-[#7F532C] border-r-0 rounded-l-3xl rounded-r-none shadow-2xl overflow-hidden flex flex-col">
+              <div className="p-6 border-b border-[#7F532C]/30">
+                <h3 className="text-sm font-bold text-[#FCF0CA] uppercase tracking-wider">
+                  Ubicación en mapa *
+                </h3>
+              </div>
+
+              <div className="p-4 flex-1 flex flex-col gap-3">
+                <div className="rounded-2xl overflow-hidden border border-[#7F532C]/50 bg-[#5B300E]/25 flex-1 min-h-[320px]">
+                  <Suspense fallback={<MapLoader />}>
+                    <LocationPickerMap
+                      selectedPosition={{
+                        lat: formData.lat,
+                        lng: formData.lng,
+                      }}
+                      onSelectPosition={handleLocationSelect}
+                    />
+                  </Suspense>
+                </div>
+
+                <span className="rounded-full border border-[#7F532C]/50 bg-[#2E160C]/70 px-3 py-1 text-[#FCF0CA]/80 text-xs self-start">
+                  {formData.lat !== null && formData.lng !== null
+                    ? `Lat ${formData.lat.toFixed(6)} · Lng ${formData.lng.toFixed(6)}`
+                    : 'Haz clic en el mapa para fijar la sede'}
+                </span>
+
+                {errors.location && <p className="text-red-400 text-xs">{errors.location}</p>}
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:hidden space-y-3 w-full">
+            <label className="block text-[#946841] text-[10px] font-bold uppercase ml-1">
+              Ubicación en mapa *
+            </label>
+            <div className="rounded-2xl overflow-hidden border border-[#7F532C]/50 bg-[#5B300E]/25 h-[240px]">
+              <Suspense fallback={<MapLoader />}>
+                <LocationPickerMap
+                  selectedPosition={{
+                    lat: formData.lat,
+                    lng: formData.lng,
+                  }}
+                  onSelectPosition={handleLocationSelect}
+                />
+              </Suspense>
+            </div>
+            <span className="rounded-full border border-[#7F532C]/50 bg-[#2E160C]/70 px-3 py-1 text-[#FCF0CA]/80 text-xs inline-block">
+              {formData.lat !== null && formData.lng !== null
+                ? `Lat ${formData.lat.toFixed(6)} · Lng ${formData.lng.toFixed(6)}`
+                : 'Haz clic en el mapa para fijar la sede'}
+            </span>
+            {errors.location && <p className="text-red-400 text-xs ml-1">{errors.location}</p>}
           </div>
 
           {/* Footer */}
