@@ -105,17 +105,18 @@ export const useOrderStore = create((set, get) => ({
         try {
             set({ loading: true, error: null });
 
+            let result = null;
             if (id) {
                 await updateOrderService(id, formData);
                 toast.success("Orden actualizada exitosamente");
             } else {
-                await createOrderService(formData);
+                result = await createOrderService(formData);
                 toast.success("Orden creada exitosamente");
             }
 
             await get().fetchOrders();
             set({ loading: false });
-            return { success: true };
+            return { success: true, data: result?.data || result };
         } catch (err) {
             const message = err.response?.data?.message || "Error al guardar la orden";
             set({ error: message, loading: false });
@@ -136,6 +137,25 @@ export const useOrderStore = create((set, get) => ({
             const message = err.response?.data?.message || "Error al eliminar la orden";
             set({ error: message, loading: false });
             toast.error(message);
+            return { success: false, error: message };
+        }
+    },
+
+    updateOrderStatus: async (id, status) => {
+        try {
+            set({ loading: true, error: null });
+            await updateOrderService(id, { Orders_status: status });
+            // Actualizar localmente el estado
+            set((state) => ({
+                orders: state.orders.map((order) =>
+                    orderId(order) === id ? { ...order, Orders_status: status } : order
+                ),
+            }));
+            set({ loading: false });
+            return { success: true };
+        } catch (err) {
+            const message = err.response?.data?.message || "Error al actualizar el estado de la orden";
+            set({ error: message, loading: false });
             return { success: false, error: message };
         }
     },

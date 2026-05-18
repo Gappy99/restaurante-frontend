@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 // Layouts
 import MainLayout from '../layouts/MainLayout'
+import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
 import AuthLayout from '../layouts/AuthLayout'
 import FullLayout from '../layouts/FullLayout'
 
@@ -10,6 +11,7 @@ import LoginPage from '../../features/auth/pages/LoginPage'
 import RegisterPage from '../../features/auth/pages/RegisterPage'
 import NotFoundPage from '../../features/common/pages/NotFoundPage'
 import MenuPage from '../../features/menus/pages/MenuPage'
+import CustomerLobbyPage from '../../features/customer-loby/pages/CustomerLobbyPage'
 
 // Páginas principales
 import DashboardPage from '../../features/dashboard/pages/DashboardPage'
@@ -34,15 +36,23 @@ import EventsPage from '../../features/events/pages/EventsPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
-// Customer feature (vista cliente)
-import CustomerMainLayout from '../../features/customer-menu/pages/MainLayout'
-import CustomerMenuPage from '../../features/customer-menu/pages/CustomerMenuPage'
 
 // Página de perfil de usuario
 import ProfilePage from '../../features/users/pages/ProfilePage'
 
 // Mapa de sedes
 import MapaDeSedePage from '../../features/mapa/pages/MapaDeSedePage'
+
+import CustomerMainLayout from '../../features/customer-loby/layouts/CustomerMainLayout'
+import CustomerMenuView from '../../features/customer-menu/page/CustomerMenuView'
+import CustomerRestaurantMenuView from '../../features/customer-menu/page/CustomerRestaurantMenuView'
+import CustomerRestaurantView from '../../features/customer-restaurant/page/CustomerRestaurantView'
+import CustomerReservationView from '../../features/customer-reservation/page/CustomerReservationView'
+import CustomerReservationCreateView from '../../features/customer-reservation/page/CustomerReservationCreateView'
+import CustomerOrdersView from '../../features/customer-orders/page/CustomerOrdersView'
+import CustomerOrderCreateView from '../../features/customer-orders/page/CustomerOrderCreateView'
+import CustomerDetallePedidoCreateView from '../../features/customer-detallepedido/page/CustomerDetallePedidoCreateView'
+import CustomerRestaurantMapView from '../../features/customer-mapa/page/CustomerRestaurantMapView'
 
 /**
  * Configuración de rutas
@@ -141,20 +151,18 @@ const router = createBrowserRouter([
         index: true,
         element: <RestaurantPage />,
       },
-      {
-        path: 'restaurants',
         element: <RestaurantPage />,
       },
       {
-        path: 'restaurants/:id',
+        path: ':id',
         element: <RestaurantMiniMenuPage />,
       },
       {
-        path: 'restaurants/:id/reviews',
+        path: ':id/reviews',
         element: <ReviewPage />,
       },
       {
-        path: 'restaurants/:id/tables',
+        path: ':id/tables',
         element: <RestaurantTablesPage />,
       },
       {
@@ -202,13 +210,53 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <CustomerMenuPage />,
+        element: <CustomerLobbyPage />,
+      },
+      {
+        path: 'menu',
+        element: <CustomerMenuView />,
+      },
+      {
+        path: 'restaurants/:restaurantId/menu',
+        element: <CustomerRestaurantMenuView />,
+      },
+      {
+        path: 'restaurants/:restaurantId/map',
+        element: <CustomerRestaurantMapView />,
+      },
+      {
+        path: 'restaurants/:restaurantId/orders/new',
+        element: <CustomerOrderCreateView />,
+      },
+      {
+        path: 'orders',
+        element: <CustomerOrdersView />,
+      },
+      {
+        path: 'orders/:orderId/details',
+        element: <CustomerDetallePedidoCreateView />,
+      },
+      {
+        path: 'orders/new',
+        element: <CustomerOrderCreateView />,
+      },
+      {
+        path: 'restaurants',
+        element: <CustomerRestaurantView />,
+      },
+      {
+        path: 'reservations',
+        element: <CustomerReservationView />,
+      },
+      {
+        path: 'reservations/new',
+        element: <CustomerReservationCreateView />,
       },
     ],
   },
   {
-    path: '*',
-    element: <NotFoundPage />,
+    path: '/unauthorized',
+    element: <UnauthorizedPage />,
   },
 ])
 

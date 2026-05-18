@@ -62,9 +62,11 @@ const MapViewController = ({ position }) => {
   }, [map])
 
   useEffect(() => {
-    // Nota: no hacemos flyTo automático aquí para evitar
-    // condiciones de carrera en la inicialización de Leaflet.
-    // El usuario fija el punto con click y visualiza el pin.
+    if (!position) return
+
+    map.setView([position.lat, position.lng], Math.max(map.getZoom(), DEFAULT_ZOOM), {
+      animate: true,
+    })
   }, [map, position])
 
   return null
