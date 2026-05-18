@@ -77,13 +77,13 @@ const RestaurantDetails = ({ restaurant, onEdit, onClose }) => {
       <div className="flex flex-wrap gap-3 justify-end">
         <button
           onClick={() => onEdit(restaurant)}
-          className="px-5 py-3 bg-[var(--primary)] text-[var(--surface)] rounded-2xl hover:bg-[#446b5b] transition"
+          className="px-5 py-3 bg-[var(--primary)] text-[var(--surface)] rounded-2xl hover:bg-[#000000] transition"
         >
           Editar restaurante
         </button>
         <button
           onClick={onClose}
-          className="px-5 py-3 bg-[var(--accent-soft)] text-[var(--text)] rounded-2xl hover:bg-[#c1937e] transition"
+          className="px-5 py-3 bg-[var(--accent-soft)] text-[var(--text)] rounded-2xl hover:bg-[#c4c8cf] transition"
         >
           Cerrar
         </button>

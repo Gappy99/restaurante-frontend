@@ -169,15 +169,15 @@ const InventoryPage = () => {
   })
 
   return (
-    <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] p-4 md:p-8">
-      <header className="max-w-7xl mx-auto mb-8 rounded-[2rem] border border-[#7F532C]/30 bg-[#5B300E]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
+    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8">
+      <header className="max-w-7xl mx-auto mb-8 rounded-[2rem] border border-[#6b7280]/30 bg-[#1f2937]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[#946841]">Inventario</p>
-            <h1 className="mt-2 text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#FCF0CA] via-[#946841] to-[#7F532C] bg-clip-text text-transparent">
+            <p className="text-xs uppercase tracking-[0.3em] text-[#9ca3af]">Inventario</p>
+            <h1 className="mt-2 text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#f8fafc] via-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent">
               Control de insumos
             </h1>
-            <p className="mt-2 max-w-2xl text-sm text-[#FCF0CA]/80">
+            <p className="mt-2 max-w-2xl text-sm text-[#f8fafc]/80">
               Administra ingredientes, stock y proveedores para que las recetas se enlacen sin capturar IDs manualmente.
             </p>
           </div>
@@ -194,9 +194,9 @@ const InventoryPage = () => {
                 }
               }}
               placeholder="ID del restaurante"
-              className="w-full rounded-2xl border border-[#7F532C]/40 bg-[#2E160C]/80 px-4 py-3 text-[#FCF0CA] placeholder:text-[#946841]/80 outline-none transition focus:border-[#FCF0CA]/60 focus:ring-2 focus:ring-[#946841]/25"
+              className="w-full rounded-2xl border border-[#6b7280]/40 bg-[#111111]/80 px-4 py-3 text-[#f8fafc] placeholder:text-[#9ca3af]/80 outline-none transition focus:border-[#f8fafc]/60 focus:ring-2 focus:ring-[#9ca3af]/25"
             />
-            <p className="text-xs text-[#FCF0CA]/70">
+            <p className="text-xs text-[#f8fafc]/70">
               Escribe el ID del restaurante para cargar y guardar su inventario.
             </p>
             <input
@@ -204,11 +204,11 @@ const InventoryPage = () => {
               value={searchTerm}
               onChange={handleSearch}
               placeholder="Buscar por nombre, categoría o proveedor"
-              className="w-full rounded-2xl border border-[#7F532C]/40 bg-[#2E160C]/80 px-4 py-3 text-[#FCF0CA] placeholder:text-[#946841]/80 outline-none transition focus:border-[#FCF0CA]/60 focus:ring-2 focus:ring-[#946841]/25"
+              className="w-full rounded-2xl border border-[#6b7280]/40 bg-[#111111]/80 px-4 py-3 text-[#f8fafc] placeholder:text-[#9ca3af]/80 outline-none transition focus:border-[#f8fafc]/60 focus:ring-2 focus:ring-[#9ca3af]/25"
             />
             <button
               onClick={openCreateModal}
-              className="rounded-2xl bg-[#7F532C] px-6 py-3 font-bold text-[#FCF0CA] shadow-lg shadow-black/20 transition hover:bg-[#946841]"
+              className="rounded-2xl bg-[#6b7280] px-6 py-3 font-bold text-[#f8fafc] shadow-lg shadow-black/20 transition hover:bg-[#9ca3af]"
             >
               + Nuevo insumo
             </button>
@@ -222,10 +222,10 @@ const InventoryPage = () => {
             <Spinner />
           </div>
         ) : filteredItems.length > 0 ? (
-          <div className="overflow-hidden rounded-[1.75rem] border border-[#7F532C]/20 bg-[#FCF0CA] text-[#2E160C] shadow-2xl shadow-black/20">
+          <div className="overflow-hidden rounded-[1.75rem] border border-[#6b7280]/20 bg-[#f8fafc] text-[#111111] shadow-2xl shadow-black/20">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-[#7F532C]/20">
-                <thead className="bg-[#FCF0CA]/80 text-[#7F532C]">
+              <table className="min-w-full divide-y divide-[#6b7280]/20">
+                <thead className="bg-[#f8fafc]/80 text-[#6b7280]">
                   <tr>
                     <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-widest">Artículo</th>
                     <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-widest">Categoría</th>
@@ -236,14 +236,14 @@ const InventoryPage = () => {
                     <th className="px-4 py-4 text-right text-xs font-bold uppercase tracking-widest">Acciones</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#7F532C]/10 bg-white/80">
+                <tbody className="divide-y divide-[#6b7280]/10 bg-white/80">
                   {filteredItems.map((item) => {
                     const id = item?._id || item?.id
                     return (
-                      <tr key={id} className="hover:bg-[#FCF0CA]/50 transition">
+                      <tr key={id} className="hover:bg-[#f8fafc]/50 transition">
                         <td className="px-4 py-4">
-                          <div className="font-bold text-[#2E160C]">{item?.item_name}</div>
-                          <div className="text-xs text-[#7F532C]">ID: {id}</div>
+                          <div className="font-bold text-[#111111]">{item?.item_name}</div>
+                          <div className="text-xs text-[#6b7280]">ID: {id}</div>
                         </td>
                         <td className="px-4 py-4">{item?.category || '-'}</td>
                         <td className="px-4 py-4">
@@ -279,7 +279,7 @@ const InventoryPage = () => {
                             <button
                               type="button"
                               onClick={() => openEditModal(item)}
-                              className="rounded-xl border border-[#7F532C]/30 px-4 py-2 text-sm font-semibold text-[#2E160C] hover:bg-[#FCF0CA]"
+                              className="rounded-xl border border-[#6b7280]/30 px-4 py-2 text-sm font-semibold text-[#111111] hover:bg-[#f8fafc]"
                             >
                               Editar
                             </button>
@@ -287,7 +287,7 @@ const InventoryPage = () => {
                               type="button"
                               onClick={() => handleDeleteItem(item)}
                               disabled={deleting}
-                              className="rounded-xl bg-[#5B300E] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2E160C] disabled:opacity-50"
+                              className="rounded-xl bg-[#1f2937] px-4 py-2 text-sm font-semibold text-white hover:bg-[#111111] disabled:opacity-50"
                             >
                               Eliminar
                             </button>
@@ -301,12 +301,12 @@ const InventoryPage = () => {
             </div>
           </div>
         ) : (
-          <div className="rounded-[1.75rem] border border-dashed border-[#7F532C]/30 bg-[#FCF0CA]/10 p-12 text-center text-[#FCF0CA]/80">
-            <h2 className="text-2xl font-bold text-[#FCF0CA]">No hay artículos en inventario</h2>
+          <div className="rounded-[1.75rem] border border-dashed border-[#6b7280]/30 bg-[#f8fafc]/10 p-12 text-center text-[#f8fafc]/80">
+            <h2 className="text-2xl font-bold text-[#f8fafc]">No hay artículos en inventario</h2>
             <p className="mt-2">Crea tu primer insumo para empezar a vincularlo con recetas.</p>
             <button
               onClick={openCreateModal}
-              className="mt-6 rounded-2xl bg-[#7F532C] px-6 py-3 font-bold text-[#FCF0CA] hover:bg-[#946841]"
+              className="mt-6 rounded-2xl bg-[#6b7280] px-6 py-3 font-bold text-[#f8fafc] hover:bg-[#9ca3af]"
             >
               + Nuevo insumo
             </button>
@@ -316,16 +316,16 @@ const InventoryPage = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-[#7F532C]/20 bg-[#FCF0CA] text-[#2E160C] shadow-2xl">
-            <div className="flex items-start justify-between border-b border-[#7F532C]/10 px-6 py-5">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-[#6b7280]/20 bg-[#f8fafc] text-[#111111] shadow-2xl">
+            <div className="flex items-start justify-between border-b border-[#6b7280]/10 px-6 py-5">
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-[#7F532C]">Inventario</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-[#6b7280]">Inventario</p>
                 <h3 className="text-2xl font-black">{isEditing ? 'Editar insumo' : 'Nuevo insumo'}</h3>
               </div>
               <button
                 type="button"
                 onClick={closeModal}
-                className="rounded-full px-3 py-1 text-2xl font-bold text-[#7F532C] hover:bg-[#7F532C]/10"
+                className="rounded-full px-3 py-1 text-2xl font-bold text-[#6b7280] hover:bg-[#6b7280]/10"
               >
                 ×
               </button>
@@ -338,7 +338,7 @@ const InventoryPage = () => {
                   aria-label="Nombre del artículo"
                   value={formData.item_name}
                   onChange={(event) => setFormData((prev) => ({ ...prev, item_name: event.target.value }))}
-                  className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
+                  className="rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 outline-none focus:border-[#1f2937]"
                   placeholder="Ej. Tomate"
                   required
                 />
@@ -350,7 +350,7 @@ const InventoryPage = () => {
                   aria-label="Categoría"
                   value={formData.category}
                   onChange={(event) => setFormData((prev) => ({ ...prev, category: event.target.value }))}
-                  className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
+                  className="rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 outline-none focus:border-[#1f2937]"
                   placeholder="Ej. Verduras"
                   required
                 />
@@ -362,7 +362,7 @@ const InventoryPage = () => {
                   aria-label="Proveedor"
                   value={formData.provider}
                   onChange={(event) => setFormData((prev) => ({ ...prev, provider: event.target.value }))}
-                  className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
+                  className="rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 outline-none focus:border-[#1f2937]"
                   placeholder="Ej. Proveedor Central"
                   required
                 />
@@ -377,7 +377,7 @@ const InventoryPage = () => {
                   step="0.01"
                   value={formData.quantity}
                   onChange={(event) => setFormData((prev) => ({ ...prev, quantity: event.target.value }))}
-                  className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
+                  className="rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 outline-none focus:border-[#1f2937]"
                   required
                 />
               </div>
@@ -388,7 +388,7 @@ const InventoryPage = () => {
                   aria-label="Unidad"
                   value={formData.unit}
                   onChange={(event) => setFormData((prev) => ({ ...prev, unit: event.target.value }))}
-                  className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
+                  className="rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 outline-none focus:border-[#1f2937]"
                   required
                 >
                   {unitOptions.map((unit) => (
@@ -406,7 +406,7 @@ const InventoryPage = () => {
                   step="0.01"
                   value={formData.price}
                   onChange={(event) => setFormData((prev) => ({ ...prev, price: event.target.value }))}
-                  className="rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 outline-none focus:border-[#5B300E]"
+                  className="rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 outline-none focus:border-[#1f2937]"
                   required
                 />
               </div>
@@ -417,19 +417,19 @@ const InventoryPage = () => {
                   aria-label="Restaurant ID"
                   value={formData.restaurant_id}
                   onChange={(event) => setFormData((prev) => ({ ...prev, restaurant_id: event.target.value }))}
-                  className="rounded-2xl border border-[#7F532C]/20 bg-[#f5ead2] px-4 py-3 outline-none"
+                  className="rounded-2xl border border-[#6b7280]/20 bg-[#f5ead2] px-4 py-3 outline-none"
                   placeholder="Ingresa el ID del restaurante"
                 />
-                <span className="text-xs text-[#7F532C]">Este campo se captura manualmente por ahora.</span>
+                <span className="text-xs text-[#6b7280]">Este campo se captura manualmente por ahora.</span>
               </div>
 
-              <div className="flex items-center gap-3 rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 md:col-span-2">
+              <div className="flex items-center gap-3 rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 md:col-span-2">
                 <input
                   aria-label="Activo"
                   type="checkbox"
                   checked={formData.estado}
                   onChange={(event) => setFormData((prev) => ({ ...prev, estado: event.target.checked }))}
-                  className="h-4 w-4 accent-[#5B300E]"
+                  className="h-4 w-4 accent-[#1f2937]"
                 />
                 <span className="sr-only">Activo</span>
               </div>
@@ -438,14 +438,14 @@ const InventoryPage = () => {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 rounded-2xl border border-[#7F532C]/20 bg-white px-4 py-3 font-bold text-[#2E160C] hover:bg-[#FCF0CA]/60"
+                  className="flex-1 rounded-2xl border border-[#6b7280]/20 bg-white px-4 py-3 font-bold text-[#111111] hover:bg-[#f8fafc]/60"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 rounded-2xl bg-[#5B300E] px-4 py-3 font-bold text-white hover:bg-[#2E160C] disabled:opacity-60"
+                  className="flex-1 rounded-2xl bg-[#1f2937] px-4 py-3 font-bold text-white hover:bg-[#111111] disabled:opacity-60"
                 >
                   {saving ? 'Guardando...' : 'Guardar insumo'}
                 </button>

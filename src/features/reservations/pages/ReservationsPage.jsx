@@ -49,7 +49,7 @@ const ReservationsPage = () => {
   }
 
   const handleOpenModal = (reservation = null) => {
-    console.log('✏️ Editar reservación seleccionado:', reservation)
+    console.log('Editar reservacion seleccionado:', reservation)
     setEditingReservation(reservation)
     setIsModalOpen(true)
   }
@@ -60,10 +60,10 @@ const ReservationsPage = () => {
   }
 
   const handleCancel = async (id) => {
-    console.log('🛑 Cancelar reservación seleccionado:', id)
+    console.log('Cancelar reservacion seleccionado:', id)
     if (!window.confirm('¿Deseas cancelar esta reservación?')) return
     const result = await reservationService.cancelReservation(id)
-    console.log('🛑 Cancelar reservación resultado:', result)
+    console.log('Cancelar reservacion resultado:', result)
     await loadReservations()
   }
 
@@ -131,7 +131,7 @@ const ReservationsPage = () => {
 }
 
 const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, restaurants, onSuccess }) => {
-  console.log('🎯 ReservationModal render:', { isOpen, currentUser, isAdmin, reservation })
+  console.log('ReservationModal render:', { isOpen, currentUser, isAdmin, reservation })
   const {
     register,
     handleSubmit,
@@ -255,17 +255,17 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
   }, [selectedRestaurantId, reset])
 
   const onError = (formErrors) => {
-    console.log('❌ Form validation errors:', formErrors)
+    console.log('Form validation errors:', formErrors)
   }
 
   const onSubmit = async (data) => {
     try {
-      console.log('🚀 onSubmit function called with data:', data)
-      console.log('🚀 Current user:', currentUser)
-      console.log('🚀 Is admin:', isAdmin)
+      console.log('onSubmit function called with data:', data)
+      console.log('Current user:', currentUser)
+      console.log('Is admin:', isAdmin)
 
       if (!isAdmin) {
-        console.log('❌ User is not admin - blocking submission')
+        console.log('User is not admin - blocking submission')
         toast.error('Solo los administradores pueden crear reservaciones')
         return
       }
@@ -340,7 +340,7 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
     setIsSubmitting(false)
     onSuccess()
     } catch (error) {
-      console.error('❌ Error in onSubmit:', error)
+      console.error('Error in onSubmit:', error)
       setIsSubmitting(false)
     }
   }
@@ -351,7 +351,7 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
       onClose={onClose}
       title={reservation ? 'Editar Reservación' : 'Nueva Reservación'}
     >
-      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4" onSubmitCapture={(e) => console.log('📝 Form onSubmit triggered', e)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4" onSubmitCapture={(e) => console.log('Form onSubmit triggered', e)}>
         <div>
           <select
             aria-label="Restaurante"
@@ -514,7 +514,7 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
             type="submit"
             disabled={isSubmitting}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50"
-            onClick={() => console.log('🔥 Submit button clicked!')}
+            onClick={() => console.log('Submit button clicked!')}
           >
             {isSubmitting ? 'Guardando...' : reservation ? 'Actualizar' : 'Crear reservación'}
           </button>

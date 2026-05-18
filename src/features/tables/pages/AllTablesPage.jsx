@@ -20,7 +20,7 @@ const AllTablesPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-[#FCF0CA] mb-8">Todas las Mesas</h1>
+      <h1 className="text-2xl font-bold text-[#f8fafc] mb-8">Todas las Mesas</h1>
       <TablesDisplay tables={tables} loading={loading} />
     </div>
   )

@@ -1,15 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@400;600;700&display=swap');
 @import 'tailwindcss';
 
 :root {
-  --bg: #E2DFCE;
-  --surface: #FFFFFF;
-  --surface-dark: #2F2F2F;
-  --primary: #517360;
-  --accent: #A66F5B;
-  --accent-soft: #DDB7A2;
-  --text: #2F2F2F;
-  --muted: #7A7A79;
+  --font-display: 'Roboto Condensed', 'Segoe UI', sans-serif;
+  --font-body: 'Roboto', 'Segoe UI', sans-serif;
+  --font-accent: 'Raleway', 'Segoe UI', sans-serif;
+
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --surface-dark: #111111;
+  --primary: #111111;
+  --accent: #6b7280;
+  --accent-soft: #d1d5db;
+  --text: #111111;
+  --muted: #6b7280;
   --danger: #b02a2a;
+
+  --theme-font-family: var(--font-body);
+  --theme-font-size: 16px;
+  --theme-font-weight: 400;
+  --theme-line-height: 1.65;
+  --theme-letter-spacing: 0.01em;
+  --theme-button-font-family: var(--font-accent);
+  --theme-button-font-weight: 800;
+  --theme-button-font-size: 13px;
+  --theme-button-letter-spacing: 0.03em;
 }
 
 /* Estilos globales personalizados */
@@ -21,10 +36,68 @@
 body {
   background: var(--bg);
   color: var(--text);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size);
+  line-height: var(--theme-line-height);
+  letter-spacing: var(--theme-letter-spacing);
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html * {
+    transition-delay: 0s !important;
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+.simple-banner,
+.simple-banner_2,
+.simple-banner_3,
+.simple-banner_4,
+.simple-banner_5 {
+  width: 100%;
+  text-align: center;
+  position: relative;
+  display: block;
+  color: #ffffff;
+  background: linear-gradient(90deg, #0f1012 0%, #535861 55%, #0f1012 100%);
+}
+
+.simple-banner .simple-banner-text,
+.simple-banner_2 .simple-banner-text_2,
+.simple-banner_3 .simple-banner-text_3,
+.simple-banner_4 .simple-banner-text_4,
+.simple-banner_5 .simple-banner-text_5 {
+  font-weight: 700;
+  padding: 10px 20px;
+  position: relative;
+  letter-spacing: 0.04em;
+  font-family: var(--font-accent);
+}
+
+.simple-banner .simple-banner-text {
+  font-size: 11.5px;
 }
 
 /* Scrollbar personalizado */
@@ -76,7 +149,7 @@ html {
 }
 
 .btn-primary:hover {
-  background: #446b5b;
+  background: #000000;
 }
 
 .btn-secondary {
@@ -86,7 +159,7 @@ html {
 }
 
 .btn-secondary:hover {
-  background: #c1937e;
+  background: #c4c8cf;
 }
 
 .input-base {
@@ -96,7 +169,7 @@ html {
 
 .input-base:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(81, 115, 96, 0.12);
+  box-shadow: 0 0 0 4px rgba(156, 163, 175, 0.22);
 }
 
 .card {
@@ -138,4 +211,46 @@ form select option {
 
 .menu-modal select option {
   color: #000000 !important;
+}
+
+/* Tema de formularios: negro, blanco y plateado */
+form input:not([type='checkbox']):not([type='radio']),
+form textarea,
+form select {
+  background: #ffffff !important;
+  border: 1px solid #c4c8cf !important;
+  color: #111111 !important;
+}
+
+form input:not([type='checkbox']):not([type='radio'])::placeholder,
+form textarea::placeholder {
+  color: #707783 !important;
+  opacity: 1;
+}
+
+form input:not([type='checkbox']):not([type='radio']):focus,
+form textarea:focus,
+form select:focus {
+  border-color: #111111 !important;
+  box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.35) !important;
+}
+
+form button[type='submit'] {
+  background: #111111 !important;
+  border-color: #111111 !important;
+  color: #ffffff !important;
+}
+
+form button[type='submit']:hover {
+  background: #000000 !important;
+}
+
+form button[type='button']:not([class*='red']):not([class*='danger']) {
+  background: #e5e7eb !important;
+  border-color: #c4c8cf !important;
+  color: #111111 !important;
+}
+
+form button[type='button']:not([class*='red']):not([class*='danger']):hover {
+  background: #d1d5db !important;
 }

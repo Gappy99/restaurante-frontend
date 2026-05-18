@@ -85,7 +85,7 @@ const CustomerSidebar = ({ isOpen = true }) => {
         
         <button
           onClick={handleLogout}
-          className="mt-4 w-full px-4 py-2 bg-[var(--accent)] text-[var(--surface)] rounded-xl hover:bg-[#8a5c4f] transition"
+          className="mt-4 w-full px-4 py-2 bg-[var(--accent)] text-[var(--surface)] rounded-xl hover:bg-[#4b5563] transition"
         >
           Cerrar Sesión
         </button>

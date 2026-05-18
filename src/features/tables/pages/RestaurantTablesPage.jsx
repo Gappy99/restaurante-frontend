@@ -103,13 +103,13 @@ const RestaurantTablesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] p-4 md:p-8 font-sans">
-      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10 p-8 rounded-[2.5rem] bg-[#5B300E]/20 border border-[#7F532C]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
+    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8 font-sans">
+      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10 p-8 rounded-[2.5rem] bg-[#1f2937]/20 border border-[#6b7280]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
         <div className="text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic bg-gradient-to-r from-[#FCF0CA] via-[#946841] to-[#7F532C] bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic bg-gradient-to-r from-[#f8fafc] via-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent">
             Plano de Mesas
           </h1>
-          <p className="text-[#946841] mt-2 font-medium tracking-widest text-xs uppercase">
+          <p className="text-[#9ca3af] mt-2 font-medium tracking-widest text-xs uppercase">
             {currentRestaurant?.restaurant_name || 'Restaurante seleccionado'}
           </p>
         </div>

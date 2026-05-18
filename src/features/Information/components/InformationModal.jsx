@@ -164,7 +164,7 @@ const InformationModal = ({
             <button
               type="submit"
               disabled={isSaving}
-              className="w-full rounded-xl bg-[var(--primary)] px-5 py-2.5 font-medium text-[var(--surface)] transition hover:bg-[#446b5b] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+              className="w-full rounded-xl bg-[var(--primary)] px-5 py-2.5 font-medium text-[var(--surface)] transition hover:bg-[#000000] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
               {isSaving ? 'Guardando...' : information ? 'Guardar cambios' : 'Crear información'}
             </button>

@@ -1,4 +1,5 @@
 import TableCard from './TableCard.jsx'
+import { FiGrid } from 'react-icons/fi'
 
 /* eslint-disable react/prop-types */
 const Tables = ({ tables, onEdit, onDelete, loading }) => {
@@ -14,7 +15,7 @@ const Tables = ({ tables, onEdit, onDelete, loading }) => {
 	if (!tables || tables.length === 0) {
 		return (
 			<div className="empty-state">
-				<div className="empty-icon">🪑</div>
+				<FiGrid className="empty-icon" aria-hidden="true" />
 				<h3>No hay mesas registradas</h3>
 				<p>Crea una nueva mesa para comenzar</p>
 			</div>

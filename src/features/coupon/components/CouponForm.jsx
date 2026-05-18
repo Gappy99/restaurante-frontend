@@ -70,6 +70,8 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
 
   const discount_type = useWatch({ control, name: 'discount_type' })
   const active = useWatch({ control, name: 'active' })
+  const labelClass = 'block text-sm font-medium text-zinc-700 mb-2'
+  const inputClass = 'w-full px-3 py-2 border border-zinc-300 bg-white text-zinc-900 placeholder:text-zinc-400 caret-zinc-900 rounded-md focus:outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-300'
 
   const onFormSubmit = (data) => {
     const submitData = {
@@ -90,7 +92,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
     <form onSubmit={handleSubmit(onFormSubmit)} autoComplete="off" className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input
             type="text"
@@ -99,7 +101,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               minLength: { value: 3, message: 'Mínimo 3 caracteres' },
             })}
             autoComplete="off"
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
             placeholder="Ej: DESC10"
           />
           {errors.code && (
@@ -108,7 +110,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input
             type="text"
@@ -116,7 +118,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               required: 'La descripción es requerida',
             })}
             autoComplete="off"
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
             placeholder="Ej: 10% de descuento en menú"
           />
           {errors.description && (
@@ -125,12 +127,12 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <select
             {...register('discount_type', { required: 'Selecciona un tipo' })}
             autoComplete="off"
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
           >
             <option value="percentage">Porcentaje</option>
             <option value="amount">Monto fijo</option>
@@ -141,7 +143,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input
             type="number"
@@ -152,7 +154,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               max: discount_type === 'percentage' ? { value: 100, message: 'Máximo 100%' } : undefined,
             })}
             autoComplete="off"
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
             placeholder={discount_type === 'percentage' ? 'Ej: 10 (porcentaje)' : 'Ej: 50 (monto fijo)'}
           />
           {errors.discount_value && (
@@ -161,7 +163,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input
             type="number"
@@ -169,23 +171,23 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               required: 'El uso máximo total es requerido',
               min: { value: 1, message: 'Debe ser mayor a 0' },
             })}
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
             placeholder="Ej: 100"
           />
-          <p className="mt-1 text-xs text-[#5B300E]">Cuántas veces puede usarse este cupón en total.</p>
+          <p className="mt-1 text-xs text-zinc-600">Cuántas veces puede usarse este cupón en total.</p>
           {errors.max_uses && (
             <p className="mt-1 text-sm text-red-600">{errors.max_uses.message}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input
             type="datetime-local"
             {...register('expiration_date', { required: 'La fecha de expiración es requerida' })}
             autoComplete="off"
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
           />
           {errors.expiration_date && (
             <p className="mt-1 text-sm text-red-600">{errors.expiration_date.message}</p>
@@ -193,14 +195,14 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <select
             {...register('restaurant_ids', {
               required: 'Selecciona un restaurante',
             })}
             autoComplete="off"
-            className="w-full rounded-md border border-[#B08851]/40 bg-[#FFF8F8] px-3 py-2 text-[#5B300E] placeholder:text-[#5B300E] focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
           >
             <option value="">Selecciona un restaurante</option>
             {restaurants.map((restaurant) => {
@@ -218,7 +220,7 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input
             type="number"
@@ -227,17 +229,17 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               min: { value: 1, message: 'Debe ser mayor a 0' },
             })}
             autoComplete="off"
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
             placeholder="Ej: 1"
           />
-          <p className="mt-1 text-xs text-[#5B300E]">Cantidad máxima de usos del cupón por cada cliente.</p>
+          <p className="mt-1 text-xs text-zinc-600">Cantidad máxima de usos del cupón por cada cliente.</p>
           {errors.max_uses_per_user && (
             <p className="mt-1 text-sm text-red-600">{errors.max_uses_per_user.message}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input
             type="number"
@@ -246,54 +248,54 @@ const CouponForm = ({ coupon, restaurants = [], onSubmit, onCancel, loading }) =
               min: { value: 0, message: 'Debe ser mayor o igual a 0' },
             })}
             autoComplete="off"
-            className="w-full px-3 py-2 border border-[#B08851]/40 bg-[#FFFDF8] text-[#5B300E] placeholder:text-[#5B300E] caret-[#5B300E] rounded-md focus:outline-none focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]"
+            className={inputClass}
             placeholder="Ej: 100"
           />
-          <p className="mt-1 text-xs text-[#5B300E]">Monto mínimo de compra para que el cupón sea aplicable.</p>
+          <p className="mt-1 text-xs text-zinc-600">Monto mínimo de compra para que el cupón sea aplicable.</p>
           {errors.min_order_amount && (
             <p className="mt-1 text-sm text-red-600">{errors.min_order_amount.message}</p>
           )}
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-[#5B300E] mb-2">
+          <label className={labelClass}>
           </label>
           <input type="hidden" {...register('active')} />
-          <div className="inline-flex rounded-full border border-[#B08851]/40 bg-[#FFFDF8] p-1">
+          <div className="inline-flex rounded-full border border-zinc-300 bg-white p-1">
             <button
               type="button"
               onClick={() => setValue('active', true, { shouldDirty: true, shouldValidate: true })}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${active ? 'bg-[#5B300E] text-white' : 'text-[#5B300E]'}`}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${active ? 'bg-zinc-900 text-white' : 'text-zinc-700'}`}
             >
               Vigente
             </button>
             <button
               type="button"
               onClick={() => setValue('active', false, { shouldDirty: true, shouldValidate: true })}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!active ? 'bg-[#5B300E] text-white' : 'text-[#5B300E]'}`}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!active ? 'bg-zinc-900 text-white' : 'text-zinc-700'}`}
             >
               No vigente
             </button>
           </div>
-          <p className="mt-2 text-xs text-[#5B300E]">Elige si el cupón estará disponible para uso inmediato.</p>
+          <p className="mt-2 text-xs text-zinc-600">Elige si el cupón estará disponible para uso inmediato.</p>
           {errors.active && (
             <p className="mt-1 text-sm text-red-600">{errors.active.message}</p>
           )}
         </div>
       </div>
 
-      <div className="flex justify-end gap-4 pt-6 border-t border-[#B08851]/20">
+      <div className="flex justify-end gap-4 pt-6 border-t border-zinc-200">
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-[#5B300E] bg-[#FEF5E5] border border-[#D4B27C] rounded-md hover:bg-[#FCE9C6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#946841]/30"
+          className="px-4 py-2 text-sm font-medium text-zinc-900 bg-zinc-200 border border-zinc-300 rounded-md hover:bg-zinc-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-300"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 text-sm font-medium text-white bg-[#5B300E] border border-transparent rounded-md hover:bg-[#4C2E0C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#946841]/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 text-sm font-medium text-white bg-zinc-900 border border-transparent rounded-md hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Guardando...' : coupon ? 'Actualizar' : 'Crear'}
         </button>

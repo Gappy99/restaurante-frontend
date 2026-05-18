@@ -3,6 +3,8 @@ import {
 	getTableStateLabel,
 	getTableStatusLabel,
 } from '../utils/tableUtils.js'
+import { FiClock, FiEdit2, FiHash, FiMapPin, FiTrash2, FiUsers } from 'react-icons/fi'
+import { RiStore2Line } from 'react-icons/ri'
 
 /* eslint-disable react/prop-types */
 const TableCard = ({ table, onEdit, onDelete }) => {
@@ -23,19 +25,19 @@ const TableCard = ({ table, onEdit, onDelete }) => {
 
 				<div className="table-details">
 					<p>
-						<strong>🔢 Número:</strong> {table.table_number}
+						<strong><FiHash className="inline mr-1" aria-hidden="true" />Número:</strong> {table.table_number}
 					</p>
 					<p>
-						<strong>📍 Ubicación:</strong> {table.table_ubication}
+						<strong><FiMapPin className="inline mr-1" aria-hidden="true" />Ubicación:</strong> {table.table_ubication}
 					</p>
 					<p>
-						<strong>👥 Capacidad:</strong> {table.table_capacity}
+						<strong><FiUsers className="inline mr-1" aria-hidden="true" />Capacidad:</strong> {table.table_capacity}
 					</p>
 					<p>
-						<strong>🕒 Horario:</strong> {table.table_time_available || 'Sin horario'}
+						<strong><FiClock className="inline mr-1" aria-hidden="true" />Horario:</strong> {table.table_time_available || 'Sin horario'}
 					</p>
 					<p>
-						<strong>🏪 Restaurante:</strong> {getTableRestaurantLabel(table)}
+						<strong><RiStore2Line className="inline mr-1" aria-hidden="true" />Restaurante:</strong> {getTableRestaurantLabel(table)}
 					</p>
 				</div>
 
@@ -52,14 +54,14 @@ const TableCard = ({ table, onEdit, onDelete }) => {
 					className="btn btn-edit"
 					title="Editar mesa"
 				>
-					✏️ Editar
+					<FiEdit2 className="inline mr-1" aria-hidden="true" /> Editar
 				</button>
 				<button
 					onClick={handleDelete}
 					className="btn btn-delete"
 					title="Eliminar mesa"
 				>
-					🗑️ Eliminar
+					<FiTrash2 className="inline mr-1" aria-hidden="true" /> Eliminar
 				</button>
 			</div>
 		</div>

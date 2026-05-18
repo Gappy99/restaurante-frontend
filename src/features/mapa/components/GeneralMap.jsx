@@ -26,7 +26,7 @@ const RESTAURANT_ICON = L.divIcon({
   html: `
     <div class="restaurant-pin">
       <span class="restaurant-pin__pulse"></span>
-      <span class="restaurant-pin__core">🍽️</span>
+      <span class="restaurant-pin__core"></span>
     </div>
   `,
   iconSize: [42, 42],
@@ -104,8 +104,8 @@ const GeneralMap = ({ restaurants = [] }) => {
         width: 42px;
         height: 42px;
         border-radius: 9999px;
-        background: rgba(127, 83, 44, 0.35);
-        box-shadow: 0 0 0 0 rgba(127, 83, 44, 0.5);
+        background: rgba(107, 114, 128, 0.35);
+        box-shadow: 0 0 0 0 rgba(107, 114, 128, 0.5);
         animation: restaurantPinPulse 2s ease-out infinite;
       }
 
@@ -115,32 +115,51 @@ const GeneralMap = ({ restaurants = [] }) => {
         width: 34px;
         height: 34px;
         border-radius: 9999px;
-        background: linear-gradient(135deg, #7F532C 0%, #5B300E 100%);
-        border: 2px solid #FCF0CA;
+        background: linear-gradient(135deg, #6b7280 0%, #1f2937 100%);
+        border: 2px solid #f8fafc;
         box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
         transform: translateY(-2px);
         animation: restaurantPinFloat 2.2s ease-in-out infinite;
+      }
+
+      .restaurant-pin__core::before,
+      .restaurant-pin__core::after {
+        content: '';
+        position: absolute;
+        background: #f8fafc;
+        border-radius: 9999px;
+      }
+
+      .restaurant-pin__core::before {
+        width: 4px;
+        height: 14px;
+        transform: rotate(25deg) translateX(-4px);
+      }
+
+      .restaurant-pin__core::after {
+        width: 12px;
+        height: 4px;
+        transform: rotate(25deg) translateX(3px) translateY(2px);
       }
 
       @keyframes restaurantPinPulse {
         0% {
           transform: scale(0.78);
           opacity: 0.85;
-          box-shadow: 0 0 0 0 rgba(127, 83, 44, 0.45);
+          box-shadow: 0 0 0 0 rgba(107, 114, 128, 0.45);
         }
         70% {
           transform: scale(1.15);
           opacity: 0.12;
-          box-shadow: 0 0 0 14px rgba(127, 83, 44, 0);
+          box-shadow: 0 0 0 14px rgba(107, 114, 128, 0);
         }
         100% {
           transform: scale(1.22);
           opacity: 0;
-          box-shadow: 0 0 0 0 rgba(127, 83, 44, 0);
+          box-shadow: 0 0 0 0 rgba(107, 114, 128, 0);
         }
       }
 
@@ -274,16 +293,16 @@ const GeneralMap = ({ restaurants = [] }) => {
   return (
     <div className="relative w-full h-full">
       {infoRuta && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] rounded-xl border border-[#7F532C]/70 bg-[#2E160C]/95 px-4 py-3 text-[#FCF0CA] shadow-2xl shadow-black/40 backdrop-blur-md">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] rounded-xl border border-[#6b7280]/70 bg-[#111111]/95 px-4 py-3 text-[#f8fafc] shadow-2xl shadow-black/40 backdrop-blur-md">
           <div className="flex items-center gap-4 text-sm">
-            <p>🚗 <b>{infoRuta.tiempo} min</b> de viaje</p>
-            <p>📏 <b>{infoRuta.distancia} km</b> de distancia</p>
+            <p>Ruta: <b>{infoRuta.tiempo} min</b> de viaje</p>
+            <p>Distancia: <b>{infoRuta.distancia} km</b></p>
             <button
               type="button"
               onClick={limpiarRuta}
               className="rounded-md border border-red-400/60 px-2 py-1 text-red-300 hover:bg-red-400/20"
             >
-              ✕ Cerrar ruta
+              Cerrar ruta
             </button>
           </div>
         </div>
@@ -322,22 +341,22 @@ const GeneralMap = ({ restaurants = [] }) => {
             icon={RESTAURANT_ICON}
           >
             <Popup className="leaflet-popup-dark">
-              <div className="min-w-[255px] max-w-[290px] rounded-2xl bg-[#FCF0CA] p-4 border-2 border-[#7F532C]/25 shadow-[0_14px_30px_rgba(46,22,12,0.22)]">
+              <div className="min-w-[255px] max-w-[290px] rounded-2xl bg-[#f8fafc] p-4 border-2 border-[#6b7280]/25 shadow-[0_14px_30px_rgba(46,22,12,0.22)]">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="font-black text-sm text-[#2E160C] leading-tight tracking-wide uppercase">
+                  <p className="font-black text-sm text-[#111111] leading-tight tracking-wide uppercase">
                     {restaurante.restaurant_name}
                   </p>
-                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-gradient-to-r from-[#7F532C] to-[#5B300E] text-[#FCF0CA] font-semibold shadow-sm">
+                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-gradient-to-r from-[#6b7280] to-[#1f2937] text-[#f8fafc] font-semibold shadow-sm">
                     Sede
                   </span>
                 </div>
 
-                <div className="mt-3 h-px bg-[#7F532C]/20" />
+                <div className="mt-3 h-px bg-[#6b7280]/20" />
 
                 {restaurante.restaurant_direction && (
                   <div className="mt-3 flex items-start gap-2">
-                    <span className="text-[#7F532C]">📍</span>
-                    <p className="text-xs text-[#5B300E] leading-snug">
+                    <span className="text-[#6b7280]">Dirección:</span>
+                    <p className="text-xs text-[#1f2937] leading-snug">
                       {restaurante.restaurant_direction}
                     </p>
                   </div>
@@ -346,12 +365,12 @@ const GeneralMap = ({ restaurants = [] }) => {
                 {(restaurante.restaurant_type || restaurante.restaurant_type_gastronomic) && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {restaurante.restaurant_type && (
-                      <span className="text-[10px] px-2.5 py-1 rounded-full border border-[#7F532C]/40 text-[#5B300E] font-semibold bg-white/70">
+                      <span className="text-[10px] px-2.5 py-1 rounded-full border border-[#6b7280]/40 text-[#1f2937] font-semibold bg-white/70">
                         {restaurante.restaurant_type}
                       </span>
                     )}
                     {restaurante.restaurant_type_gastronomic && (
-                      <span className="text-[10px] px-2.5 py-1 rounded-full border border-[#7F532C]/40 text-[#5B300E] font-semibold bg-white/70">
+                      <span className="text-[10px] px-2.5 py-1 rounded-full border border-[#6b7280]/40 text-[#1f2937] font-semibold bg-white/70">
                         {restaurante.restaurant_type_gastronomic}
                       </span>
                     )}
@@ -359,18 +378,18 @@ const GeneralMap = ({ restaurants = [] }) => {
                 )}
 
                 {restaurante.restaurant_time_start && restaurante.restaurant_time_close && (
-                  <p className="mt-2 text-xs text-[#5B300E] font-medium">
-                    🕐 {restaurante.restaurant_time_start} – {restaurante.restaurant_time_close}
+                  <p className="mt-2 text-xs text-[#1f2937] font-medium">
+                    Horario: {restaurante.restaurant_time_start} – {restaurante.restaurant_time_close}
                   </p>
                 )}
 
                 {restaurante.restaurant_mean_price !== undefined && restaurante.restaurant_mean_price !== null && (
-                  <p className="mt-1 text-xs text-[#2E160C] font-bold">
-                    💵 Precio promedio: Q{restaurante.restaurant_mean_price}
+                  <p className="mt-1 text-xs text-[#111111] font-bold">
+                    Precio promedio: Q{restaurante.restaurant_mean_price}
                   </p>
                 )}
 
-                <div className="mt-2 text-[10px] text-[#7F532C]/80 font-medium">
+                <div className="mt-2 text-[10px] text-[#6b7280]/80 font-medium">
                   Coordenadas: {restaurante.lat.toFixed(5)}, {restaurante.lng.toFixed(5)}
                 </div>
 
@@ -379,15 +398,15 @@ const GeneralMap = ({ restaurants = [] }) => {
                     href={`https://waze.com/ul?ll=${restaurante.lat},${restaurante.lng}&navigate=yes`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-xl border border-[#7F532C]/50 bg-[#FCF0CA] px-3 py-2 text-center text-xs font-bold text-[#5B300E] no-underline hover:bg-[#f5e6bf]"
+                    className="rounded-xl border border-[#6b7280]/50 bg-[#f8fafc] px-3 py-2 text-center text-xs font-bold text-[#1f2937] no-underline hover:bg-[#f5e6bf]"
                   >
-                    🧭 Abrir en Waze
+                    Abrir en Waze
                   </a>
                   <button
                     type="button"
                     onClick={() => trazarRuta(restaurante)}
                     disabled={cargandoRuta}
-                    className="rounded-xl bg-gradient-to-r from-[#7F532C] to-[#5B300E] px-3 py-2 text-xs font-bold text-[#FCF0CA] shadow-[0_8px_18px_rgba(46,22,12,0.28)] hover:brightness-110 disabled:opacity-60"
+                    className="rounded-xl bg-gradient-to-r from-[#6b7280] to-[#1f2937] px-3 py-2 text-xs font-bold text-[#f8fafc] shadow-[0_8px_18px_rgba(46,22,12,0.28)] hover:brightness-110 disabled:opacity-60"
                   >
                     {cargandoRuta && restauranteRutaId === (restaurante._id || restaurante.id)
                       ? 'Calculando...'

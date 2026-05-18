@@ -25,10 +25,8 @@ const MainLayout = () => {
         <NavbarBlack isSidebarOpen={isSidebarOpen} onToggleSidebar={handleToggleSidebar} />
 
         {/* Página */}
-        <main className="flex-1 overflow-auto p-6">
-          <div className="max-w-7xl mx-auto">
-            <Outlet />
-          </div>
+        <main className="flex-1 overflow-auto p-4 md:p-6">
+          <Outlet />
         </main>
       </div>
     </div>

@@ -69,16 +69,16 @@ const RestaurantPage = () => {
   })
 
   return (
-    // Fondo principal en el marrón más oscuro según tu paleta
-    <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] p-4 md:p-8 font-sans">
+    // Fondo principal en tono oscuro monocromático
+    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8 font-sans">
       
-      {/* Header con estilo sofisticado y bordes bronce */}
-      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-16 p-8 rounded-[2.5rem] bg-[#5B300E]/20 border border-[#7F532C]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
+      {/* Header monocromático con alto contraste */}
+      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-16 p-8 rounded-[2.5rem] bg-[#1f2937]/20 border border-[#6b7280]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
         <div className="text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic bg-gradient-to-r from-[#FCF0CA] via-[#946841] to-[#7F532C] bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic bg-gradient-to-r from-[#f8fafc] via-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent">
             Gestión de Sedes
           </h1>
-          <p className="text-[#946841] mt-2 font-medium tracking-widest text-xs uppercase">
+          <p className="text-[#9ca3af] mt-2 font-medium tracking-widest text-xs uppercase">
             Sistema de Administración Gastronómica Premium
           </p>
         </div>
@@ -90,13 +90,13 @@ const RestaurantPage = () => {
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="Buscar restaurante o dirección"
-              className="w-full rounded-2xl border border-[#7F532C]/30 bg-[#2E160C]/80 py-4 pl-12 pr-4 text-[#FCF0CA] placeholder:text-[#946841]/80 outline-none transition focus:border-[#FCF0CA]/60 focus:ring-2 focus:ring-[#946841]/25"
+              className="w-full rounded-2xl border border-[#6b7280]/30 bg-[#111111]/80 py-4 pl-12 pr-4 text-[#f8fafc] placeholder:text-[#9ca3af]/80 outline-none transition focus:border-[#f8fafc]/60 focus:ring-2 focus:ring-[#9ca3af]/25"
             />
           </div>
 
           <button
             onClick={handleCreateNew}
-            className="px-10 py-4 bg-[#7F532C] hover:bg-[#946841] text-[#FCF0CA] hover:scale-105 active:scale-95 transition-all duration-300 rounded-2xl font-bold shadow-lg shadow-black/20 flex items-center gap-3 border border-[#FCF0CA]/10"
+            className="px-10 py-4 bg-[#6b7280] hover:bg-[#9ca3af] text-[#f8fafc] hover:scale-105 active:scale-95 transition-all duration-300 rounded-2xl font-bold shadow-lg shadow-black/20 flex items-center gap-3 border border-[#f8fafc]/10"
             disabled={loading}
           >
             <span className="text-xl">+</span> Nuevo Restaurante
@@ -117,8 +117,8 @@ const RestaurantPage = () => {
         </section>
 
         {/* Decoración de fondo sutil para dar profundidad */}
-        <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#5B300E]/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-        <div className="fixed bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-[#7F532C]/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+        <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#1f2937]/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+        <div className="fixed bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-[#6b7280]/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
       </main>
 
       {/* El modal se renderiza dentro del componente RestaurantModal que modificamos antes */}

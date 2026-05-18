@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useRecipes } from '../hooks';
 import { getInventoryByRestaurantService } from '../../inventory/services/InventoryService';
 import { Spinner } from '../../../shared/components/Spinner';
+import { FiX } from 'react-icons/fi'
 
 export const RecipeModal = ({ isOpen, onClose, productId, productType, restaurantId }) => {
   const { createRecipe, addIngredient, loading } = useRecipes();
@@ -152,15 +153,16 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 flex justify-between items-center">
+        <div className="sticky top-0 bg-gradient-to-r from-zinc-800 to-black text-white p-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold">
             Agregar Receta - {productType === 'dish' ? 'Platillo' : 'Bebida'}
           </h2>
           <button
             onClick={onClose}
-            className="text-white hover:bg-orange-700 rounded-full w-8 h-8 flex items-center justify-center"
+            className="text-white hover:bg-zinc-700 rounded-full w-8 h-8 flex items-center justify-center"
+            aria-label="Cerrar"
           >
-            ✕
+            <FiX aria-hidden="true" />
           </button>
         </div>
 
@@ -172,7 +174,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
               aria-label="Descripción (opcional)"
               {...register('description')}
               rows="3"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-500"
               placeholder="Describe los pasos de preparación..."
             />
           </div>
@@ -185,7 +187,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
                 type="number"
                 {...register('preparation_time')}
                 min="0"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-500"
                 placeholder="0"
               />
             </div>
@@ -194,7 +196,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
               <select
                 aria-label="Dificultad"
                 {...register('difficulty')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-500"
               >
                 <option value="Fácil">Fácil</option>
                 <option value="Medio">Medio</option>
@@ -226,7 +228,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
                         unit: getInventoryItemUnit(e.target.value),
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-500"
                   >
                     <option value="">-- Selecciona un ingrediente --</option>
                     {inventoryItems.map((item) => (
@@ -251,7 +253,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
                           quantity: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-500"
                       placeholder="0.00"
                     />
                   </div>
@@ -303,8 +305,9 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
                         type="button"
                         onClick={() => removeIngredient(index)}
                         className="text-red-500 hover:text-red-700 font-bold"
+                        aria-label="Quitar ingrediente"
                       >
-                        ✕
+                        <FiX aria-hidden="true" />
                       </button>
                     </div>
                   ))}
@@ -331,7 +334,7 @@ export const RecipeModal = ({ isOpen, onClose, productId, productType, restauran
             <button
               type="submit"
               disabled={loading || submitting || selectedIngredients.length === 0}
-              className="flex-1 px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-medium rounded-md transition-colors flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 bg-zinc-900 hover:bg-black disabled:bg-gray-400 text-white font-medium rounded-md transition-colors flex items-center justify-center gap-2"
             >
               {loading || submitting ? (
                 <>

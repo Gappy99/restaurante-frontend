@@ -1,5 +1,8 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { restaurantService } from '../../restaurant/services/restaurantService'
+import { FiAlertTriangle, FiMap, FiMapPin, FiSearch } from 'react-icons/fi'
+import { RiStore2Line } from 'react-icons/ri'
+import PropTypes from 'prop-types'
 
 /**
  * GeneralMap se carga de forma diferida para evitar errores de SSR/window
@@ -20,15 +23,21 @@ const MapLoader = () => (
 /* ──────────────────────────────────────────────────────────
    Tarjeta de estadística rápida
 ────────────────────────────────────────────────────────── */
-const StatCard = ({ label, value, icon }) => (
+const StatCard = ({ label, value, icon: Icon }) => (
   <div className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 flex items-center gap-4">
-    <span className="text-2xl">{icon}</span>
+    <Icon className="text-2xl" aria-hidden="true" />
     <div>
       <p className="text-2xl font-bold text-white leading-none">{value}</p>
       <p className="text-xs text-white/50 mt-0.5">{label}</p>
     </div>
   </div>
 )
+
+StatCard.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
+  icon: PropTypes.elementType.isRequired,
+}
 
 /* ──────────────────────────────────────────────────────────
    Página principal
@@ -65,7 +74,7 @@ const MapaDeSedePage = () => {
       {/* ── Encabezado ── */}
       <header className="px-8 pt-8 pb-4 flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">🗺️</span>
+          <FiMap className="text-2xl" aria-hidden="true" />
           <h1 className="text-2xl font-bold tracking-tight">Mapa de Sedes</h1>
         </div>
         <p className="text-sm text-white/50">
@@ -75,10 +84,10 @@ const MapaDeSedePage = () => {
 
       {/* ── Estadísticas rápidas ── */}
       <section className="px-8 py-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <StatCard icon="🏢" label="Total registrados" value={restaurants.length} />
-        <StatCard icon="📍" label="Con ubicación" value={ubicados.length} />
+        <StatCard icon={RiStore2Line} label="Total registrados" value={restaurants.length} />
+        <StatCard icon={FiMapPin} label="Con ubicación" value={ubicados.length} />
         <StatCard
-          icon="🔍"
+          icon={FiSearch}
           label="Sin ubicación"
           value={restaurants.length - ubicados.length}
         />
@@ -98,7 +107,7 @@ const MapaDeSedePage = () => {
 
           {error && !loading && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10 rounded-2xl gap-3">
-              <span className="text-4xl">⚠️</span>
+              <FiAlertTriangle className="text-4xl" aria-hidden="true" />
               <p className="text-white/70 text-sm text-center max-w-xs">{error}</p>
             </div>
           )}

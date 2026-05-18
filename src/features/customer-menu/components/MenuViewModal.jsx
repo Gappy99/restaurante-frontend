@@ -138,34 +138,34 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
     return (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 px-4 py-6 font-serif">
             {/* Contenedor Principal Estilo Carta de Restaurante Clásico */}
-            <div className="bg-[#FAF6EE] text-[#1C1A17] rounded-none shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto p-8 md:p-12 relative border-8 border-[#1C1A17] outline outline-1 outline-offset-[-12px] outline-[#1C1A17]/40">
+            <div className="bg-[#ffffff] text-[#111827] rounded-none shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto p-8 md:p-12 relative border-8 border-[#111827] outline outline-1 outline-offset-[-12px] outline-[#111827]/40">
                 
                 {/* Botón de cerrar elegante arriba a la derecha */}
                 <button 
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-xs tracking-widest uppercase border border-[#1C1A17]/30 px-3 py-1 hover:bg-[#1C1A17] hover:text-[#FAF6EE] transition font-sans"
+                    className="absolute top-4 right-4 text-xs tracking-widest uppercase border border-[#111827]/30 px-3 py-1 hover:bg-[#111827] hover:text-[#ffffff] transition font-sans"
                 >
                     [ Cerrar ]
                 </button>
 
                 {/* Encabezado Principal */}
-                <header className="text-center max-w-xl mx-auto mb-12 border-b border-[#1C1A17]/20 pb-8">
-                    <span className="text-[10px] font-sans font-bold uppercase tracking-[0.4em] text-[#1C1A17]/60 block mb-3">
-                        {isAvailable ? '✦ Disponible para Servicio ✦' : '✦ No Disponible Temporalmente ✦'}
+                <header className="text-center max-w-xl mx-auto mb-12 border-b border-[#111827]/20 pb-8">
+                    <span className="text-[10px] font-sans font-bold uppercase tracking-[0.4em] text-[#111827]/60 block mb-3">
+                        {isAvailable ? 'Disponible para servicio' : 'No disponible temporalmente'}
                     </span>
-                    <h2 className="text-4xl md:text-5xl font-normal tracking-wide uppercase font-serif mb-3 text-[#1C1A17]">
+                    <h2 className="text-4xl md:text-5xl font-normal tracking-wide uppercase font-serif mb-3 text-[#111827]">
                         {menuName}
                     </h2>
                     {restaurantName && (
-                        <p className="text-sm font-sans text-[#1C1A17]/80 uppercase tracking-wider mb-2">
+                        <p className="text-sm font-sans text-[#111827]/80 uppercase tracking-wider mb-2">
                             {restaurantName}
                         </p>
                     )}
-                    <p className="text-sm italic text-[#1C1A17]/70 leading-relaxed font-serif">
+                    <p className="text-sm italic text-[#111827]/70 leading-relaxed font-serif">
                         {menuDescription}
                     </p>
                     {menuPromotion && menuPromotion !== "Sin promoción" && (
-                        <span className="inline-block mt-4 text-xs font-sans uppercase tracking-widest bg-[#1C1A17] text-[#FAF6EE] px-4 py-1">
+                        <span className="inline-block mt-4 text-xs font-sans uppercase tracking-widest bg-[#111827] text-[#ffffff] px-4 py-1">
                             Especial: {menuPromotion}
                         </span>
                     )}
@@ -173,7 +173,7 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                 </header>
 
                 {loadingDetails ? (
-                    <div className="py-20 text-center text-sm tracking-widest uppercase font-sans text-[#1C1A17]/60">
+                    <div className="py-20 text-center text-sm tracking-widest uppercase font-sans text-[#111827]/60">
                         Generando la carta de menús...
                     </div>
                 ) : (
@@ -181,12 +181,12 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 relative">
                         
                         {/* Línea divisoria central decorativa para pantallas grandes */}
-                        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#1C1A17]/10 -translate-x-1/2" />
+                        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111827]/10 -translate-x-1/2" />
 
                         {/* COLUMNA IZQUIERDA: PLATILLOS */}
                         <section className="space-y-8">
                             <div className="text-center mb-8">
-                                <h3 className="text-2xl font-normal uppercase tracking-wider border-b-2 border-[#1C1A17] inline-block pb-1 px-6">
+                                <h3 className="text-2xl font-normal uppercase tracking-wider border-b-2 border-[#111827] inline-block pb-1 px-6">
                                     Food Menu
                                 </h3>
                             </div>
@@ -203,19 +203,19 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                                             <article key={idx} className="group">
                                                 {/* Fila Título y Precio unidos por una estética limpia */}
                                                 <div className="flex justify-between items-baseline gap-2">
-                                                    <h4 className="font-bold text-base uppercase tracking-wide text-[#1C1A17]">
+                                                    <h4 className="font-bold text-base uppercase tracking-wide text-[#111827]">
                                                         {dishName}
                                                         <span className="ml-2 font-sans font-normal text-[10px] text-stone-500 lowercase italic border border-stone-300 px-1 rounded-sm">
                                                             {dishType}
                                                         </span>
                                                     </h4>
-                                                    <span className="font-bold text-base font-serif text-[#1C1A17]">
+                                                    <span className="font-bold text-base font-serif text-[#111827]">
                                                         Q{dishPrice}
                                                     </span>
                                                 </div>
                                                 {/* Descripción en cursiva tipo menú parisino */}
                                                 {dishDescription && (
-                                                    <p className="text-xs text-[#1C1A17]/60 italic mt-1 font-serif leading-relaxed">
+                                                    <p className="text-xs text-[#111827]/60 italic mt-1 font-serif leading-relaxed">
                                                         {dishDescription}
                                                     </p>
                                                 )}
@@ -224,14 +224,14 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                                     })}
                                 </div>
                             ) : (
-                                <p className="text-center text-xs italic text-[#1C1A17]/40 py-4">No hay platillos en esta sección.</p>
+                                <p className="text-center text-xs italic text-[#111827]/40 py-4">No hay platillos en esta sección.</p>
                             )}
                         </section>
 
                         {/* COLUMNA DERECHA: BEBIDAS */}
                         <section className="space-y-8">
                             <div className="text-center mb-8">
-                                <h3 className="text-2xl font-normal uppercase tracking-wider border-b-2 border-[#1C1A17] inline-block pb-1 px-6">
+                                <h3 className="text-2xl font-normal uppercase tracking-wider border-b-2 border-[#111827] inline-block pb-1 px-6">
                                     Drinks Menu
                                 </h3>
                             </div>
@@ -247,18 +247,18 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                                         return (
                                             <article key={idx} className="group">
                                                 <div className="flex justify-between items-baseline gap-2">
-                                                    <h4 className="font-bold text-base uppercase tracking-wide text-[#1C1A17]">
+                                                    <h4 className="font-bold text-base uppercase tracking-wide text-[#111827]">
                                                         {bevName}
                                                         <span className="ml-2 font-sans font-normal text-[10px] text-stone-500 lowercase italic border border-stone-300 px-1 rounded-sm">
                                                             {bevType}
                                                         </span>
                                                     </h4>
-                                                    <span className="font-bold text-base font-serif text-[#1C1A17]">
+                                                    <span className="font-bold text-base font-serif text-[#111827]">
                                                         Q{bevPrice}
                                                     </span>
                                                 </div>
                                                 {bevDescription && (
-                                                    <p className="text-xs text-[#1C1A17]/60 italic mt-1 font-serif leading-relaxed">
+                                                    <p className="text-xs text-[#111827]/60 italic mt-1 font-serif leading-relaxed">
                                                         {bevDescription}
                                                     </p>
                                                 )}
@@ -267,7 +267,7 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                                     })}
                                 </div>
                             ) : (
-                                <p className="text-center text-xs italic text-[#1C1A17]/40 py-4">No hay bebidas en esta sección.</p>
+                                <p className="text-center text-xs italic text-[#111827]/40 py-4">No hay bebidas en esta sección.</p>
                             )}
                         </section>
 
@@ -275,13 +275,13 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                 )}
 
                 {/* Footer Decorativo */}
-                <footer className="mt-16 pt-6 border-t border-[#1C1A17]/10 text-center">
-                    <p className="text-[10px] uppercase tracking-[0.3em] font-sans text-[#1C1A17]/50">
+                <footer className="mt-16 pt-6 border-t border-[#111827]/10 text-center">
+                    <p className="text-[10px] uppercase tracking-[0.3em] font-sans text-[#111827]/50">
                         Gracias por su preferencia
                     </p>
                     <button
                         onClick={onClose}
-                        className="mt-6 font-sans text-xs font-bold uppercase tracking-widest bg-[#1C1A17] text-[#FAF6EE] px-8 py-3 hover:bg-[#1C1A17]/80 transition md:hidden w-full"
+                        className="mt-6 font-sans text-xs font-bold uppercase tracking-widest bg-[#111827] text-[#ffffff] px-8 py-3 hover:bg-[#111827]/80 transition md:hidden w-full"
                     >
                         Cerrar Menú
                     </button>

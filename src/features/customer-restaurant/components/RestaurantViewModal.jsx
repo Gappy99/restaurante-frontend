@@ -55,7 +55,7 @@ export default function RestaurantViewModal({ isOpen, onClose, restaurant }) {
           onClick={onClose}
           className="absolute top-6 right-8 text-xs uppercase tracking-widest text-zinc-400 hover:text-white transition-colors"
         >
-          Cerrar ✕
+          Cerrar
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">

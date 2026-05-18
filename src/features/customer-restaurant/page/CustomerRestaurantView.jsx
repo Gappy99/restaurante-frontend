@@ -31,14 +31,14 @@ export default function CustomerRestaurantView() {
   }
 
   return (
-    <div className="min-h-full bg-[#2E160C] text-[#FCF0CA] px-4 py-8 sm:px-6 lg:px-10">
-      <section className="mx-auto max-w-7xl rounded-[2.5rem] border border-[#7F532C]/30 bg-[#5B300E]/20 px-6 py-8 shadow-2xl">
+    <div className="min-h-full bg-[#111111] text-[#f8fafc] px-4 py-8 sm:px-6 lg:px-10">
+      <section className="mx-auto max-w-7xl rounded-[2.5rem] border border-[#6b7280]/30 bg-[#1f2937]/20 px-6 py-8 shadow-2xl">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#946841]">Restaurantes</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af]">Restaurantes</p>
             <h1 className="mt-2 text-3xl font-black">Explora nuestros locales</h1>
           </div>
-          <div className="text-sm text-[#FCF0CA]">{restaurants?.length || 0} locales</div>
+          <div className="text-sm text-[#f8fafc]">{restaurants?.length || 0} locales</div>
         </div>
 
         <CustomerRestaurantList restaurants={restaurants} loading={loading} onView={handleView} />

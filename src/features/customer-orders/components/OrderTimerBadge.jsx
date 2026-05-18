@@ -92,22 +92,22 @@ export default function OrderTimerBadge({ orderId }) {
   const seconds = remainingSeconds % 60
 
   const getColor = () => {
-    if (percentage < 33) return '#7F532C' // Marrón
-    if (percentage < 66) return '#F5A623' // Naranja
+    if (percentage < 33) return '#6b7280' // Gris
+    if (percentage < 66) return '#9ca3af' // Gris claro
     return '#E74C3C' // Rojo
   }
 
   return (
     <div className="w-full space-y-1">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-bold text-[#5B300E]">
+        <span className="font-bold text-[#1f2937]">
           {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
         </span>
-        <span className="text-[#7F532C]">{estimatedMinutes} min</span>
+        <span className="text-[#6b7280]">{estimatedMinutes} min</span>
       </div>
 
       {/* Barra de progreso */}
-      <div className="w-full h-3 rounded-full bg-[#FCF0CA]/30 overflow-hidden">
+      <div className="w-full h-3 rounded-full bg-[#f8fafc]/30 overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-1000"
           style={{
@@ -118,7 +118,7 @@ export default function OrderTimerBadge({ orderId }) {
       </div>
 
       {/* Indicador de estado */}
-      <div className="text-[10px] text-[#946841] text-center">
+      <div className="text-[10px] text-[#9ca3af] text-center">
         {percentage < 100 ? 'Preparando' : 'Listo'}
       </div>
     </div>

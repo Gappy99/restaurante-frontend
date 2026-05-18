@@ -6,6 +6,7 @@ import { createDishService, updateDishService } from "../../dishes/services/Dish
 import { createBeverageService, updateBeverageService } from "../../beverages/services/BeverageService";
 import { Spinner } from "./layouts/Spinner.jsx";
 import { RecipeModal } from "../../recipes/components/RecipeModal";
+import { FiBookOpen, FiCoffee } from 'react-icons/fi'
 
 export const MenuModal = ({ isOpen, onClose, menu }) => {
     const {
@@ -493,11 +494,11 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-[#2E160C]/60 backdrop-blur-sm flex justify-center items-center z-50 px-3">
-            <div className="menu-modal bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden border border-[#FCF0CA] flex flex-col">
+        <div className="fixed inset-0 bg-[#111111]/60 backdrop-blur-sm flex justify-center items-center z-50 px-3">
+            <div className="menu-modal bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden border border-[#f8fafc] flex flex-col">
                 
                 {/* Cabecera dinámica según el paso */}
-                <div className="p-6 text-white bg-[#5B300E] shrink-0">
+                <div className="p-6 text-white bg-[#1f2937] shrink-0">
                     <h2 className="text-2xl font-bold">
                         {step === 1 && "Crear Nuevo Menú"}
                         {step === 2 && "Personaliza tu Menú"}
@@ -519,12 +520,12 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                     {step === 1 && (
                         <form onSubmit={handleSubmit(onSubmitMenu)} className="space-y-4">
                             <div>
-                                <input aria-label="Nombre del Menú" {...register("Menu_Plate", { required: "El nombre es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="Ej. Menu del Día" />
+                                <input aria-label="Nombre del Menú" {...register("Menu_Plate", { required: "El nombre es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#f8fafc] focus:border-[#1f2937] outline-none transition bg-gray-50/50" placeholder="Ej. Menu del Día" />
                                 {errors.Menu_Plate && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_Plate.message}</p>}
                             </div>
 
                             <div>
-                                <select aria-label="Promoción" className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" {...register("Menu_Promotion")}>
+                                <select aria-label="Promoción" className="w-full px-4 py-2.5 rounded-xl border-2 border-[#f8fafc] focus:border-[#1f2937] outline-none transition bg-gray-50/50" {...register("Menu_Promotion")}>
                                     <option value="">Sin promoción</option>
                                     <option value="Promoción_Familiar">Promoción familiar</option>
                                     <option value="Promoción_de_Quincena">Promoción de quincena</option>
@@ -534,17 +535,17 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                 </select>
                             </div>
                             <div>
-                                <input aria-label="Restaurant ID" {...register("Restaurant_id", { required: "El restaurante es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50" placeholder="ID del restaurante" />
+                                <input aria-label="Restaurant ID" {...register("Restaurant_id", { required: "El restaurante es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#f8fafc] focus:border-[#1f2937] outline-none transition bg-gray-50/50" placeholder="ID del restaurante" />
                                 {errors.Restaurant_id && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Restaurant_id.message}</p>}
                             </div>
 
                             <div>
-                                <textarea aria-label="Descripción del Menú" rows="3" {...register("Menu_description_plate")} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#FCF0CA] focus:border-[#5B300E] outline-none transition bg-gray-50/50 resize-none" placeholder="Describe el menú..." />
+                                <textarea aria-label="Descripción del Menú" rows="3" {...register("Menu_description_plate")} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#f8fafc] focus:border-[#1f2937] outline-none transition bg-gray-50/50 resize-none" placeholder="Describe el menú..." />
                                 {errors.Menu_description_plate && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Menu_description_plate.message}</p>}
                             </div>
 
-                            <div className="flex items-center gap-3 rounded-xl border border-[#FCF0CA] px-4 py-3 bg-[#FCF0CA]/40">
-                                <input aria-label="Disponible" type="checkbox" className="h-4 w-4 accent-[#5B300E]" {...register("Menu_available")} />
+                            <div className="flex items-center gap-3 rounded-xl border border-[#f8fafc] px-4 py-3 bg-[#f8fafc]/40">
+                                <input aria-label="Disponible" type="checkbox" className="h-4 w-4 accent-[#1f2937]" {...register("Menu_available")} />
                                 <span className="sr-only">Disponible</span>
                             </div>
 
@@ -552,14 +553,14 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="flex-1 py-3 rounded-xl font-bold text-[#7F532C] bg-[#FCF0CA] hover:bg-[#946841] transition"
+                                    className="flex-1 py-3 rounded-xl font-bold text-[#6b7280] bg-[#f8fafc] hover:bg-[#9ca3af] transition"
                                 >
                                     Cancelar
                                 </button>
                                 <button 
                                     type="submit"
                                     disabled={loading}
-                                    className="flex-1 py-3 bg-[#5B300E] text-white rounded-xl font-bold shadow-lg hover:bg-[#2E160C] transition disabled:opacity-50"
+                                    className="flex-1 py-3 bg-[#1f2937] text-white rounded-xl font-bold shadow-lg hover:bg-[#111111] transition disabled:opacity-50"
                                 >
                                     {loading ? <Spinner /> : "Continuar"}
                                 </button>
@@ -570,28 +571,28 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                     {/* PASO 2: SELECCIÓN DE TIPO */}
                     {step === 2 && (
                         <div className="space-y-4">
-                            <p className="text-[#2E160C] text-sm mb-4">Selecciona qué deseas agregar a tu menú:</p>
+                            <p className="text-[#111111] text-sm mb-4">Selecciona qué deseas agregar a tu menú:</p>
                             <div className="grid grid-cols-2 gap-4">
                                 <button 
                                     onClick={() => { setSubType('dish'); setStep(3); }}
-                                    className="flex flex-col items-center p-6 border-2 border-[#FCF0CA] rounded-2xl hover:bg-[#FCF0CA] transition"
+                                    className="flex flex-col items-center p-6 border-2 border-[#f8fafc] rounded-2xl hover:bg-[#f8fafc] transition"
                                 >
-                                    <span className="text-3xl mb-2">🍲</span>
-                                    <span className="font-bold text-[#5B300E]">Platillo</span>
+                                    <FiBookOpen className="text-3xl mb-2" aria-hidden="true" />
+                                    <span className="font-bold text-[#1f2937]">Platillo</span>
                                 </button>
                                 <button 
                                     onClick={() => { setSubType('beverage'); setStep(3); }}
-                                    className="flex flex-col items-center p-6 border-2 border-[#FCF0CA] rounded-2xl hover:bg-[#FCF0CA] transition"
+                                    className="flex flex-col items-center p-6 border-2 border-[#f8fafc] rounded-2xl hover:bg-[#f8fafc] transition"
                                 >
-                                    <span className="text-3xl mb-2">🥤</span>
-                                    <span className="font-bold text-[#5B300E]">Bebida</span>
+                                    <FiCoffee className="text-3xl mb-2" aria-hidden="true" />
+                                    <span className="font-bold text-[#1f2937]">Bebida</span>
                                 </button>
                             </div>
                             
                             <div className="flex gap-2 pt-4">
                                 <button 
                                     onClick={() => setStep(1)}
-                                    className="flex-1 py-3 bg-gray-200 rounded-xl font-bold text-[#2E160C] hover:bg-gray-300 transition"
+                                    className="flex-1 py-3 bg-gray-200 rounded-xl font-bold text-[#111111] hover:bg-gray-300 transition"
                                 >
                                     Volver
                                 </button>
@@ -601,7 +602,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                         const values = menuDraft || getValues();
                                         onSubmitFinal(values);
                                     }}
-                                    className="flex-1 py-3 bg-[#5B300E] text-white rounded-xl font-bold hover:bg-[#2E160C] transition disabled:opacity-50"
+                                    className="flex-1 py-3 bg-[#1f2937] text-white rounded-xl font-bold hover:bg-[#111111] transition disabled:opacity-50"
                                 >
                                     {submittingFinal ? <Spinner /> : "Finalizar"}
                                 </button>
@@ -629,7 +630,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                                             }}
                                                             className="text-xs bg-blue-500 text-white px-2 py-1 rounded"
                                                         >
-                                                            📝 Receta
+                                                            <FiBookOpen className="inline mr-1" aria-hidden="true" /> Receta
                                                         </button>
                                                     )}
                                                 </div>
@@ -671,7 +672,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                                             }}
                                                             className="text-xs bg-blue-500 text-white px-2 py-1 rounded"
                                                         >
-                                                            📝 Receta
+                                                            <FiBookOpen className="inline mr-1" aria-hidden="true" /> Receta
                                                         </button>
                                                     )}
                                                 </div>
@@ -716,13 +717,13 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                             setBeverageForms(prev => [...prev, { name: '', price: '', type: '', description: '', image: '', available: true, estado: true }]);
                                         }
                                     }}
-                                    className="flex-1 py-2 bg-[#5B300E] text-white rounded-xl font-bold"
+                                    className="flex-1 py-2 bg-[#1f2937] text-white rounded-xl font-bold"
                                 >
                                     Agregar otro
                                 </button>
                                 <button 
                                     onClick={() => setStep(2)}
-                                    className="flex-1 py-2 bg-gray-200 rounded-xl font-bold text-[#2E160C]"
+                                    className="flex-1 py-2 bg-gray-200 rounded-xl font-bold text-[#111111]"
                                 >
                                     Volver
                                 </button>
@@ -756,7 +757,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                             }}
                                             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition"
                                         >
-                                            📝 Receta
+                                            <FiBookOpen className="inline mr-1" aria-hidden="true" /> Receta
                                         </button>
                                     </div>
                                 ))}

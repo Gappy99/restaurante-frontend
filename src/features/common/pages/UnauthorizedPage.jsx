@@ -10,7 +10,7 @@ const UnauthorizedPage = () => {
         <p className="text-[var(--muted)] mt-2">No tienes permiso para acceder a esta página</p>
         <a
           href="/"
-          className="mt-6 inline-block px-6 py-2 bg-[var(--primary)] hover:bg-[#446b5b] text-[var(--surface)] rounded-lg font-semibold transition"
+          className="mt-6 inline-block px-6 py-2 bg-[var(--primary)] hover:bg-[#000000] text-[var(--surface)] rounded-lg font-semibold transition"
         >
           Volver al inicio
         </a>

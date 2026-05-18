@@ -32,7 +32,7 @@ export default function CustomerRestaurantMapView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#111111] text-[#f8fafc] flex items-center justify-center p-4">
         <MapLoader />
       </div>
     )
@@ -40,7 +40,7 @@ export default function CustomerRestaurantMapView() {
 
   if (error || !restaurant) {
     return (
-      <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#111111] text-[#f8fafc] flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-lg">{error || 'Restaurante no encontrado'}</p>
         </div>

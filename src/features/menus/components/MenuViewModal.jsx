@@ -4,6 +4,8 @@ import { getDishByIdService } from '../../dishes/services/DishService'
 import { getBeverageByIdService } from '../../beverages/services/BeverageService'
 import { getDishesByRestaurantService } from '../../dishes/services/DishService'
 import { getBeveragesByRestaurantService } from '../../beverages/services/BeverageService'
+import { FiCoffee } from 'react-icons/fi'
+import { FiCheckCircle, FiXCircle, FiBookOpen } from 'react-icons/fi'
 
 export const MenuViewModal = ({ isOpen, onClose, menu }) => {
     const [loadingDetails, setLoadingDetails] = useState(false)
@@ -113,11 +115,11 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
     if (!isOpen || !menu) return null;
 
     return (
-        <div className="fixed inset-0 bg-[#2E160C]/60 backdrop-blur-sm flex justify-center items-center z-50 px-3">
-            <div className="bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-[#FCF0CA]">
+        <div className="fixed inset-0 bg-[#111111]/60 backdrop-blur-sm flex justify-center items-center z-50 px-3">
+            <div className="bg-[#FFFFFF] rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-[#f8fafc]">
                 
                 {/* Cabecera */}
-                <div className="sticky top-0 p-6 text-white bg-[#5B300E] border-b border-[#FCF0CA]">
+                <div className="sticky top-0 p-6 text-white bg-[#1f2937] border-b border-[#f8fafc]">
                     <h2 className="text-3xl font-bold">{menuName}</h2>
                     <p className="text-sm opacity-90 mt-1">{menuDescription}</p>
                 </div>
@@ -125,14 +127,14 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                 <div className="p-6 space-y-6">
                     {/* Información del Menú */}
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="p-4 bg-[#FCF0CA]/40 rounded-xl">
-                            <p className="text-xs font-bold text-[#7F532C] uppercase">Promoción</p>
-                            <p className="text-[#2E160C] font-semibold mt-1">{menuPromotion}</p>
+                        <div className="p-4 bg-[#f8fafc]/40 rounded-xl">
+                            <p className="text-xs font-bold text-[#6b7280] uppercase">Promoción</p>
+                            <p className="text-[#111111] font-semibold mt-1">{menuPromotion}</p>
                         </div>
-                        <div className="p-4 bg-[#FCF0CA]/40 rounded-xl">
-                            <p className="text-xs font-bold text-[#7F532C] uppercase">Estado</p>
+                        <div className="p-4 bg-[#f8fafc]/40 rounded-xl">
+                            <p className="text-xs font-bold text-[#6b7280] uppercase">Estado</p>
                             <p className={`font-semibold mt-1 ${isAvailable ? 'text-green-600' : 'text-red-600'}`}>
-                                {isAvailable ? '✓ Disponible' : '✗ No disponible'}
+                                {isAvailable ? <><FiCheckCircle className="inline mr-1" aria-hidden="true" />Disponible</> : <><FiXCircle className="inline mr-1" aria-hidden="true" />No disponible</>}
                             </p>
                         </div>
                     </div>
@@ -140,8 +142,8 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                     {/* PLATILLOS */}
                     <div>
                         <div className="flex items-center gap-2 mb-4">
-                            <span className="text-2xl">🍲</span>
-                            <h3 className="text-xl font-bold text-[#2E160C]">
+                            <FiBookOpen className="text-2xl" aria-hidden="true" />
+                            <h3 className="text-xl font-bold text-[#111111]">
                                 Platillos ({resolvedDishes.length})
                             </h3>
                         </div>
@@ -162,17 +164,17 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                                     return (
                                         <div 
                                             key={idx} 
-                                            className="p-4 border-2 border-[#FCF0CA] rounded-2xl hover:bg-[#FCF0CA]/20 transition"
+                                            className="p-4 border-2 border-[#f8fafc] rounded-2xl hover:bg-[#f8fafc]/20 transition"
                                         >
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
-                                                    <h4 className="font-bold text-[#2E160C] text-lg">{dishName}</h4>
-                                                    <span className="text-xs bg-[#7F532C]/10 text-[#7F532C] px-2 py-1 rounded mt-1 inline-block">
+                                                    <h4 className="font-bold text-[#111111] text-lg">{dishName}</h4>
+                                                    <span className="text-xs bg-[#6b7280]/10 text-[#6b7280] px-2 py-1 rounded mt-1 inline-block">
                                                         {dishType}
                                                     </span>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-lg font-bold text-[#5B300E]">Q{dishPrice}</p>
+                                                    <p className="text-lg font-bold text-[#1f2937]">Q{dishPrice}</p>
                                                     <p className={`text-xs font-semibold ${dishAvailable ? 'text-green-600' : 'text-red-600'}`}>
                                                         {dishAvailable ? 'Disponible' : 'No disponible'}
                                                     </p>
@@ -193,8 +195,8 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                     {/* BEBIDAS */}
                     <div>
                         <div className="flex items-center gap-2 mb-4">
-                            <span className="text-2xl">🥤</span>
-                            <h3 className="text-xl font-bold text-[#2E160C]">
+                            <FiCoffee className="text-2xl" aria-hidden="true" />
+                            <h3 className="text-xl font-bold text-[#111111]">
                                 Bebidas ({resolvedBeverages.length})
                             </h3>
                         </div>
@@ -215,17 +217,17 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                                     return (
                                         <div 
                                             key={idx} 
-                                            className="p-4 border-2 border-[#FCF0CA] rounded-2xl hover:bg-[#FCF0CA]/20 transition"
+                                            className="p-4 border-2 border-[#f8fafc] rounded-2xl hover:bg-[#f8fafc]/20 transition"
                                         >
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
-                                                    <h4 className="font-bold text-[#2E160C] text-lg">{bevName}</h4>
-                                                    <span className="text-xs bg-[#7F532C]/10 text-[#7F532C] px-2 py-1 rounded mt-1 inline-block">
+                                                    <h4 className="font-bold text-[#111111] text-lg">{bevName}</h4>
+                                                    <span className="text-xs bg-[#6b7280]/10 text-[#6b7280] px-2 py-1 rounded mt-1 inline-block">
                                                         {bevType}
                                                     </span>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-lg font-bold text-[#5B300E]">Q{bevPrice}</p>
+                                                    <p className="text-lg font-bold text-[#1f2937]">Q{bevPrice}</p>
                                                     <p className={`text-xs font-semibold ${bevAvailable ? 'text-green-600' : 'text-red-600'}`}>
                                                         {bevAvailable ? 'Disponible' : 'No disponible'}
                                                     </p>
@@ -245,10 +247,10 @@ export const MenuViewModal = ({ isOpen, onClose, menu }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="sticky bottom-0 p-6 bg-[#FCF0CA]/40 border-t border-[#FCF0CA] flex gap-3">
+                <div className="sticky bottom-0 p-6 bg-[#f8fafc]/40 border-t border-[#f8fafc] flex gap-3">
                     <button
                         onClick={onClose}
-                        className="flex-1 py-3 rounded-xl font-bold text-[#7F532C] bg-[#FCF0CA] hover:bg-[#946841] hover:text-white transition"
+                        className="flex-1 py-3 rounded-xl font-bold text-[#6b7280] bg-[#f8fafc] hover:bg-[#9ca3af] hover:text-white transition"
                     >
                         Cerrar
                     </button>

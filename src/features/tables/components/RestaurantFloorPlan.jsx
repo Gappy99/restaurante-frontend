@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
+import { FiGrid } from 'react-icons/fi'
 
 const STORAGE_PREFIX = 'restaurant-floor-plan'
 const BOARD_WIDTH = 1200
@@ -238,14 +239,14 @@ const RestaurantFloorPlan = ({
 
   if (!tables || tables.length === 0) {
     return (
-      <div className="rounded-[2rem] border border-dashed border-[#7F532C]/30 bg-[#5B300E]/10 p-10 text-center text-[#FCF0CA]">
-        <div className="text-5xl mb-4">🪑</div>
+      <div className="rounded-[2rem] border border-dashed border-[#6b7280]/30 bg-[#1f2937]/10 p-10 text-center text-[#f8fafc]">
+        <FiGrid className="text-5xl mb-4 mx-auto" aria-hidden="true" />
         <h3 className="text-xl font-bold">No hay mesas para este restaurante</h3>
-        <p className="text-[#946841] mt-2">Crea una mesa para comenzar a dibujar el plano.</p>
+        <p className="text-[#9ca3af] mt-2">Crea una mesa para comenzar a dibujar el plano.</p>
         {!readOnly && onCreate && (
           <button
             onClick={onCreate}
-            className="mt-6 px-6 py-3 rounded-xl bg-[#7F532C] hover:bg-[#946841] transition-colors font-semibold"
+            className="mt-6 px-6 py-3 rounded-xl bg-[#6b7280] hover:bg-[#9ca3af] transition-colors font-semibold"
           >
             + Crear mesa
           </button>
@@ -258,20 +259,20 @@ const RestaurantFloorPlan = ({
     <div className="space-y-4">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 className="text-2xl font-black uppercase italic text-[#FCF0CA]">Plano interactivo</h2>
-          <p className="text-sm text-[#946841]">
+          <h2 className="text-2xl font-black uppercase italic text-[#f8fafc]">Plano interactivo</h2>
+          <p className="text-sm text-[#9ca3af]">
             {readOnly
               ? 'Vista solo lectura de la distribucion de mesas.'
               : 'Arrastra las mesas dentro del espacio del restaurante. El sistema evita solapamientos básicos.'}
           </p>
         </div>
 
-        <div className="flex items-center gap-3 text-xs text-[#946841]">
-          <span className="rounded-full border border-[#7F532C]/40 px-3 py-1">Restaurante: {restaurantName || restaurantId}</span>
+        <div className="flex items-center gap-3 text-xs text-[#9ca3af]">
+          <span className="rounded-full border border-[#6b7280]/40 px-3 py-1">Restaurante: {restaurantName || restaurantId}</span>
           {!readOnly && onCreate && (
             <button
               onClick={onCreate}
-              className="rounded-full bg-[#7F532C] px-4 py-2 text-[#FCF0CA] font-semibold hover:bg-[#946841] transition-colors"
+              className="rounded-full bg-[#6b7280] px-4 py-2 text-[#f8fafc] font-semibold hover:bg-[#9ca3af] transition-colors"
             >
               + Nueva mesa
             </button>
@@ -279,13 +280,13 @@ const RestaurantFloorPlan = ({
         </div>
       </div>
 
-      <div className="overflow-auto rounded-[2rem] border border-[#7F532C]/30 bg-[#241007] p-4 shadow-2xl shadow-black/30">
+      <div className="overflow-auto rounded-[2rem] border border-[#6b7280]/30 bg-[#111827] p-4 shadow-2xl shadow-black/30">
         <div
           ref={boardRef}
-          className="relative mx-auto rounded-[1.75rem] border border-[#7F532C]/40 bg-[linear-gradient(rgba(252,240,202,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(252,240,202,0.03)_1px,transparent_1px)] bg-[size:48px_48px]"
+          className="relative mx-auto rounded-[1.75rem] border border-[#6b7280]/40 bg-[linear-gradient(rgba(252,240,202,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(252,240,202,0.03)_1px,transparent_1px)] bg-[size:48px_48px]"
           style={{ width: BOARD_WIDTH, height: BOARD_HEIGHT }}
         >
-          <div className="absolute left-4 top-4 rounded-full border border-[#7F532C]/40 bg-[#2E160C]/80 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-[#946841]">
+          <div className="absolute left-4 top-4 rounded-full border border-[#6b7280]/40 bg-[#111111]/80 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-[#9ca3af]">
             Plano del restaurante
           </div>
 
@@ -302,7 +303,7 @@ const RestaurantFloorPlan = ({
                 onPointerDown={(event) => handlePointerDown(event, table)}
                 className={`absolute select-none rounded-2xl border-2 px-3 py-2 shadow-xl transition-all duration-150 ${
                   isActive ? 'scale-[1.02]' : !readOnly ? 'hover:scale-[1.01]' : ''
-                } ${isColliding ? 'border-red-500 bg-red-950/80' : 'border-[#7F532C]/70 bg-[#5B300E]/85'} text-[#FCF0CA]`}
+                } ${isColliding ? 'border-red-500 bg-red-950/80' : 'border-[#6b7280]/70 bg-[#1f2937]/85'} text-[#f8fafc]`}
                 style={{
                   width: size.width,
                   height: size.height,
@@ -316,21 +317,21 @@ const RestaurantFloorPlan = ({
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-bold">{table.table_name}</p>
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-[#FCF0CA]/60">
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-[#f8fafc]/60">
                         Mesa {table.table_number}
                       </p>
                     </div>
-                    <span className="rounded-full bg-[#FCF0CA] px-2 py-0.5 text-[10px] font-bold text-[#2E160C]">
+                    <span className="rounded-full bg-[#f8fafc] px-2 py-0.5 text-[10px] font-bold text-[#111111]">
                       {table.table_state || 'Disponible'}
                     </span>
                   </div>
 
-                  <div className="text-[11px] text-[#FCF0CA]/80">
+                  <div className="text-[11px] text-[#f8fafc]/80">
                     <p>Capacidad: {table.table_capacity}</p>
                     <p className="truncate">{table.table_ubication}</p>
                   </div>
 
-                  <div className="flex items-center justify-between gap-2 text-[10px] text-[#FCF0CA]/60">
+                  <div className="flex items-center justify-between gap-2 text-[10px] text-[#f8fafc]/60">
                     <span>{readOnly ? 'Solo visualizacion' : 'Arrastra para mover'}</span>
                     {!readOnly && (
                       <div className="flex gap-1">
@@ -340,7 +341,7 @@ const RestaurantFloorPlan = ({
                           event.stopPropagation()
                           onEdit?.(table)
                         }}
-                        className="rounded-full border border-[#FCF0CA]/15 px-2 py-0.5 hover:bg-[#FCF0CA]/10"
+                        className="rounded-full border border-[#f8fafc]/15 px-2 py-0.5 hover:bg-[#f8fafc]/10"
                       >
                         Editar
                       </button>
@@ -350,7 +351,7 @@ const RestaurantFloorPlan = ({
                           event.stopPropagation()
                           onDelete?.(tableId)
                         }}
-                        className="rounded-full border border-[#FCF0CA]/15 px-2 py-0.5 hover:bg-red-900/30"
+                        className="rounded-full border border-[#f8fafc]/15 px-2 py-0.5 hover:bg-red-900/30"
                       >
                         Borrar
                       </button>

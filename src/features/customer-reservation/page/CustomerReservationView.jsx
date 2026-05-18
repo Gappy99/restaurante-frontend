@@ -120,24 +120,24 @@ export default function CustomerReservationView() {
   }
 
   return (
-    <div className="min-h-full bg-[#2E160C] text-[#FCF0CA] px-4 py-8 sm:px-6 lg:px-10">
-      <section className="mx-auto max-w-7xl rounded-[2.5rem] border border-[#7F532C]/30 bg-[#5B300E]/20 px-6 py-8 shadow-2xl shadow-black/30 backdrop-blur-xl sm:px-8 lg:px-10">
-        <div className="flex flex-col gap-4 border-b border-[#FCF0CA]/10 pb-6 md:flex-row md:items-end md:justify-between">
+    <div className="min-h-full bg-[#111111] text-[#f8fafc] px-4 py-8 sm:px-6 lg:px-10">
+      <section className="mx-auto max-w-7xl rounded-[2.5rem] border border-[#6b7280]/30 bg-[#1f2937]/20 px-6 py-8 shadow-2xl shadow-black/30 backdrop-blur-xl sm:px-8 lg:px-10">
+        <div className="flex flex-col gap-4 border-b border-[#f8fafc]/10 pb-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#946841]">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af]">
               Mis Reservaciones
             </p>
-            <h1 className="mt-2 text-4xl font-black tracking-tight text-[#FCF0CA] sm:text-5xl">
+            <h1 className="mt-2 text-4xl font-black tracking-tight text-[#f8fafc] sm:text-5xl">
               Revisa tus reservaciones
             </h1>
-            <p className="mt-3 max-w-2xl text-sm text-[#F5D9A5]/80">
+            <p className="mt-3 max-w-2xl text-sm text-[#d1d5db]/80">
               Consulta el estado, fecha, mesa y notas de tus reservas registradas.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#FCF0CA]/10 bg-black/20 px-4 py-3 text-right">
-            <div className="text-2xl font-black text-[#FCF0CA]">{filteredReservations.length}</div>
-            <div className="text-[10px] uppercase tracking-[0.3em] text-[#946841]">reservaciones</div>
+          <div className="rounded-2xl border border-[#f8fafc]/10 bg-black/20 px-4 py-3 text-right">
+            <div className="text-2xl font-black text-[#f8fafc]">{filteredReservations.length}</div>
+            <div className="text-[10px] uppercase tracking-[0.3em] text-[#9ca3af]">reservaciones</div>
           </div>
         </div>
 
@@ -147,7 +147,7 @@ export default function CustomerReservationView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar, estado o fecha..."
-            className="w-full rounded-2xl border border-[#FCF0CA]/20 bg-black/25 px-4 py-3 text-sm text-[#FCF0CA] placeholder:text-[#F5D9A5]/50 outline-none"
+            className="w-full rounded-2xl border border-[#f8fafc]/20 bg-black/25 px-4 py-3 text-sm text-[#f8fafc] placeholder:text-[#d1d5db]/50 outline-none"
           />
         </div>
 

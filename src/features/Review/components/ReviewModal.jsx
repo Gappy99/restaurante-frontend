@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useReviewStore } from '../store/useReviewStore'
 import useAuthStore from '../../../shared/stores/useAuthStore'
+import { FiStar } from 'react-icons/fi'
 
 const StarSelector = ({ value, onChange }) => {
   return (
@@ -13,12 +14,12 @@ const StarSelector = ({ value, onChange }) => {
           onClick={() => onChange(star)}
           className={`rounded-full px-3 py-2 text-lg font-black transition ${
             star <= value
-              ? 'bg-amber-400 text-[#2E160C] shadow-sm'
-              : 'bg-[#FCF0CA] text-[#7F532C] hover:bg-[#F6E3B5]'
+              ? 'bg-zinc-700 text-white shadow-sm'
+              : 'bg-[#f8fafc] text-[#6b7280] hover:bg-zinc-200'
           }`}
           aria-label={`Seleccionar ${star} estrellas`}
         >
-          ★
+          <FiStar aria-hidden="true" />
         </button>
       ))}
     </div>
@@ -89,14 +90,14 @@ export const ReviewModal = ({ isOpen, onClose, review, restaurants = [] }) => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2E160C]/65 px-4 backdrop-blur-sm">
-      <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[#FCF0CA] bg-white shadow-[0_30px_80px_rgba(46,22,12,0.35)]">
-        <div className="bg-gradient-to-r from-[#2E160C] via-[#5B300E] to-[#7F532C] p-6 text-[#FCF0CA]">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#FCF0CA]/75">Review</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#111111]/65 px-4 backdrop-blur-sm">
+      <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[#f8fafc] bg-white shadow-[0_30px_80px_rgba(46,22,12,0.35)]">
+        <div className="bg-gradient-to-r from-[#111111] via-[#1f2937] to-[#6b7280] p-6 text-[#f8fafc]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#f8fafc]/75">Review</p>
           <h2 className="mt-2 text-2xl font-bold">
             {review ? 'Editar reseña' : 'Nueva reseña'}
           </h2>
-          <p className="mt-1 text-sm text-[#FCF0CA]/80">
+          <p className="mt-1 text-sm text-[#f8fafc]/80">
             {review
               ? 'Ajusta tu calificación o comentario.'
               : 'Registra tu experiencia en un restaurante.'}
@@ -106,9 +107,9 @@ export const ReviewModal = ({ isOpen, onClose, review, restaurants = [] }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 p-6">
           {!review && (
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-[#5B300E]">Restaurante</label>
+              <label className="text-sm font-semibold text-[#1f2937]">Restaurante</label>
               <select
-                className="w-full rounded-xl border border-[#E8D8B5] bg-[#FFFDF8] px-4 py-3 text-[#2E160C] outline-none transition focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/20"
+                className="w-full rounded-xl border border-[#E8D8B5] bg-[#ffffff] px-4 py-3 text-[#111111] outline-none transition focus:border-[#1f2937] focus:ring-2 focus:ring-[#9ca3af]/20"
                 {...register('restaurant_id', {
                   required: 'Selecciona un restaurante',
                 })}
@@ -130,16 +131,16 @@ export const ReviewModal = ({ isOpen, onClose, review, restaurants = [] }) => {
           )}
 
           {review && (
-            <div className="grid grid-cols-1 gap-4 rounded-2xl bg-[#FCF0CA]/40 p-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 rounded-2xl bg-[#f8fafc]/40 p-4 md:grid-cols-2">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7F532C]">Restaurante</p>
-                <p className="mt-1 text-sm font-semibold text-[#2E160C]">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b7280]">Restaurante</p>
+                <p className="mt-1 text-sm font-semibold text-[#111111]">
                   {review.restaurant_id?.restaurant_name || review.restaurant_id?.name || review.restaurant_id || 'Sin nombre'}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7F532C]">Usuario</p>
-                <p className="mt-1 text-sm font-semibold text-[#2E160C]">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b7280]">Usuario</p>
+                <p className="mt-1 text-sm font-semibold text-[#111111]">
                   {review.user_id?.nombre || review.user_id?.email || review.user_id || 'Sin usuario'}
                 </p>
               </div>
@@ -147,18 +148,18 @@ export const ReviewModal = ({ isOpen, onClose, review, restaurants = [] }) => {
           )}
 
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-[#5B300E]">Calificación</label>
+            <label className="text-sm font-semibold text-[#1f2937]">Calificación</label>
             <StarSelector value={Number(rating) || 5} onChange={(value) => setValue('rating', value, { shouldValidate: true })} />
             <input type="hidden" {...register('rating', { required: true, valueAsNumber: true, min: 1, max: 5 })} />
             {errors.rating && <p className="text-sm text-red-600">Selecciona una calificación válida</p>}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-[#5B300E]">Comentario</label>
+            <label className="text-sm font-semibold text-[#1f2937]">Comentario</label>
             <textarea
               rows={5}
               placeholder="Cuéntanos qué te pareció el restaurante"
-              className="w-full rounded-xl border border-[#E8D8B5] bg-[#FFFDF8] px-4 py-3 text-[#2E160C] outline-none transition placeholder:text-[#946841]/70 focus:border-[#5B300E] focus:ring-2 focus:ring-[#946841]/20"
+              className="w-full rounded-xl border border-[#E8D8B5] bg-[#ffffff] px-4 py-3 text-[#111111] outline-none transition placeholder:text-[#9ca3af]/70 focus:border-[#1f2937] focus:ring-2 focus:ring-[#9ca3af]/20"
               {...register('comment', {
                 maxLength: { value: 500, message: 'Máximo 500 caracteres' },
               })}
@@ -170,14 +171,14 @@ export const ReviewModal = ({ isOpen, onClose, review, restaurants = [] }) => {
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-[#E8D8B5] bg-white px-5 py-3 text-sm font-semibold text-[#5B300E] transition hover:bg-[#FCF0CA]"
+              className="rounded-xl border border-[#E8D8B5] bg-white px-5 py-3 text-sm font-semibold text-[#1f2937] transition hover:bg-[#f8fafc]"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-xl bg-[#5B300E] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#2E160C] disabled:cursor-not-allowed disabled:bg-[#946841]"
+              className="rounded-xl bg-[#1f2937] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#111111] disabled:cursor-not-allowed disabled:bg-[#9ca3af]"
             >
               {loading ? 'Guardando...' : review ? 'Actualizar reseña' : 'Crear reseña'}
             </button>

@@ -270,78 +270,78 @@ export default function CustomerReservationCreateView() {
   }
 
   return (
-    <div className="min-h-full bg-[#2E160C] text-[#FCF0CA] px-4 py-8 sm:px-6 lg:px-10">
-      <section className="mx-auto max-w-4xl rounded-[2.5rem] border border-[#7F532C]/30 bg-[#5B300E]/20 px-6 py-8 shadow-2xl shadow-black/30 backdrop-blur-xl sm:px-8 lg:px-10">
-        <div className="border-b border-[#FCF0CA]/10 pb-6">
-          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#946841]">{isEditing ? 'Editar Reservación' : 'Nueva Reservación'}</p>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight text-[#FCF0CA]">
+    <div className="min-h-full bg-[#111111] text-[#f8fafc] px-4 py-8 sm:px-6 lg:px-10">
+      <section className="mx-auto max-w-4xl rounded-[2.5rem] border border-[#6b7280]/30 bg-[#1f2937]/20 px-6 py-8 shadow-2xl shadow-black/30 backdrop-blur-xl sm:px-8 lg:px-10">
+        <div className="border-b border-[#f8fafc]/10 pb-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af]">{isEditing ? 'Editar Reservación' : 'Nueva Reservación'}</p>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight text-[#f8fafc]">
             {isEditing ? 'Editar reservación' : 'Crear reservación'}
           </h1>
-          <p className="mt-3 text-sm text-[#F5D9A5]/80">Los IDs de usuario y restaurante se asignan automáticamente por el flujo de cliente.</p>
+          <p className="mt-3 text-sm text-[#d1d5db]/80">Los IDs de usuario y restaurante se asignan automáticamente por el flujo de cliente.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-1">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Usuario</p>
-            <input id="reservation-user-name" value={userDisplayName} disabled className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]" />
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Usuario</p>
+            <input id="reservation-user-name" value={userDisplayName} disabled className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]" />
           </div>
 
           <div className="md:col-span-1">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">ID Usuario</p>
-            <input id="reservation-user-id" value={user?._id || ''} disabled className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]" />
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">ID Usuario</p>
+            <input id="reservation-user-id" value={user?._id || ''} disabled className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]" />
           </div>
 
           <div className="md:col-span-1">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Restaurante</p>
-            <input id="reservation-restaurant-name" value={restaurantContext?.name || ''} disabled className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]" />
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Restaurante</p>
+            <input id="reservation-restaurant-name" value={restaurantContext?.name || ''} disabled className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]" />
           </div>
 
           <div className="md:col-span-1">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">ID Restaurante</p>
-            <input id="reservation-restaurant-id" value={restaurantContext?.id || ''} disabled className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]" />
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">ID Restaurante</p>
+            <input id="reservation-restaurant-id" value={restaurantContext?.id || ''} disabled className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]" />
           </div>
 
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Fecha</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Fecha</p>
             <input
               id="reservation-date"
               type="date"
               value={formData.reservation_date}
               onChange={(e) => handleChange('reservation_date', e.target.value)}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]"
             />
           </div>
 
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Hora</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Hora</p>
             <input
               id="reservation-time"
               type="time"
               value={formData.reservation_time}
               onChange={(e) => handleChange('reservation_time', e.target.value)}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]"
             />
           </div>
 
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Personas</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Personas</p>
             <input
               id="reservation-people"
               type="number"
               min="1"
               value={formData.personas}
               onChange={(e) => handleChange('personas', e.target.value)}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]"
             />
           </div>
 
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Tipo</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Tipo</p>
             <select
               id="reservation-type"
               value={formData.reservation_type}
               onChange={(e) => handleChange('reservation_type', e.target.value)}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]"
             >
               <option value="mesa">Mesa</option>
               <option value="domicilio">Domicilio</option>
@@ -350,13 +350,13 @@ export default function CustomerReservationCreateView() {
 
           {formData.reservation_type === 'mesa' && (
             <div className="md:col-span-2">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Mesa</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Mesa</p>
               <select
                 id="reservation-table"
                 value={formData.table_id}
                 onChange={(e) => handleChange('table_id', e.target.value)}
                 disabled={loadingTables}
-                className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]"
+                className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]"
               >
                 <option value="">Selecciona una mesa</option>
                 {filteredTables.map((table) => {
@@ -370,7 +370,7 @@ export default function CustomerReservationCreateView() {
                 })}
               </select>
 
-              <p className="mt-2 text-xs text-[#F5D9A5]/70">
+              <p className="mt-2 text-xs text-[#d1d5db]/70">
                 Se mostrarán primero las mesas con capacidad exacta. Si hay menos de 2 disponibles, también se incluirán las mesas cercanas en un rango de 3 personas.
               </p>
 
@@ -379,12 +379,12 @@ export default function CustomerReservationCreateView() {
                   type="button"
                   onClick={() => setIsTablePlanOpen(true)}
                   disabled={loadingTables || loadingLayout || !restaurantContext?.id || Boolean(capacityWarning)}
-                  className="rounded-xl border border-[#FCF0CA]/25 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#FCF0CA] disabled:opacity-60"
+                  className="rounded-xl border border-[#f8fafc]/25 bg-black/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#f8fafc] disabled:opacity-60"
                 >
                   Ver mesas disponibles
                 </button>
                 {selectedTableName && (
-                  <span className="text-xs text-[#F5D9A5]/80">
+                  <span className="text-xs text-[#d1d5db]/80">
                     Seleccionada: {selectedTableName}
                   </span>
                 )}
@@ -393,19 +393,19 @@ export default function CustomerReservationCreateView() {
           )}
 
           <div className="md:col-span-2">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Notas</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Notas</p>
             <textarea
               id="reservation-notes"
               rows={4}
               value={formData.notes}
               onChange={(e) => handleChange('notes', e.target.value)}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-sm text-[#FCF0CA]"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-sm text-[#f8fafc]"
               placeholder="Opcional"
             />
           </div>
 
           {!restaurantContext?.id && (
-            <div className="md:col-span-2 rounded-xl border border-amber-400/50 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">
+            <div className="md:col-span-2 rounded-xl border border-zinc-400/50 bg-zinc-400/10 px-4 py-3 text-sm text-zinc-100">
               No hay restaurante seleccionado. Ve a Restaurantes, luego Ver detalles y despues Reservaciones para iniciar este flujo.
             </div>
           )}
@@ -420,14 +420,14 @@ export default function CustomerReservationCreateView() {
             <button
               type="button"
               onClick={() => navigate('/customer/reservations')}
-              className="rounded-2xl border border-[#FCF0CA]/25 bg-black/20 px-5 py-3 text-sm font-bold uppercase tracking-[0.2em] text-[#FCF0CA]"
+              className="rounded-2xl border border-[#f8fafc]/25 bg-black/20 px-5 py-3 text-sm font-bold uppercase tracking-[0.2em] text-[#f8fafc]"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={submitting || !restaurantContext?.id || !user?._id || Boolean(capacityWarning)}
-              className="rounded-2xl bg-[#FCF0CA] px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-[#5B300E] disabled:opacity-60"
+              className="rounded-2xl bg-[#f8fafc] px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-[#1f2937] disabled:opacity-60"
             >
               {submitting ? 'Guardando...' : isEditing ? 'Actualizar Reservación' : 'Crear Reservación'}
             </button>
@@ -437,24 +437,24 @@ export default function CustomerReservationCreateView() {
 
       {isTablePlanOpen && formData.reservation_type === 'mesa' && (
         <div className="fixed inset-0 z-50 bg-black/70 p-4 md:p-8">
-          <div className="mx-auto h-full max-w-6xl rounded-[2rem] border border-[#7F532C]/40 bg-[#1f120c] p-6 shadow-2xl">
+          <div className="mx-auto h-full max-w-6xl rounded-[2rem] border border-[#6b7280]/40 bg-[#0f172a] p-6 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-black uppercase tracking-wide text-[#FCF0CA]">Mesas disponibles</h2>
-                <p className="text-xs text-[#F5D9A5]/70">Haz clic en una mesa para seleccionarla</p>
+                <h2 className="text-xl font-black uppercase tracking-wide text-[#f8fafc]">Mesas disponibles</h2>
+                <p className="text-xs text-[#d1d5db]/70">Haz clic en una mesa para seleccionarla</p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsTablePlanOpen(false)}
-                className="rounded-xl border border-[#FCF0CA]/20 px-3 py-2 text-xs uppercase tracking-[0.2em] text-[#FCF0CA]"
+                className="rounded-xl border border-[#f8fafc]/20 px-3 py-2 text-xs uppercase tracking-[0.2em] text-[#f8fafc]"
               >
                 Cerrar
               </button>
             </div>
 
-            <div className="h-[78vh] overflow-auto rounded-2xl border border-[#7F532C]/30 bg-[#241007] p-4">
+            <div className="h-[78vh] overflow-auto rounded-2xl border border-[#6b7280]/30 bg-[#111827] p-4">
               {filteredTables.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-sm text-[#F5D9A5]/75">
+                <div className="flex h-full items-center justify-center text-sm text-[#d1d5db]/75">
                   {capacityWarning || 'No hay mesas disponibles para este restaurante.'}
                 </div>
               ) : Object.keys(layoutMap || {}).length > 0 ? (
@@ -469,7 +469,7 @@ export default function CustomerReservationCreateView() {
                         type="button"
                         key={tId}
                         onClick={() => handleSelectTableFromPlan(table)}
-                        className={`absolute rounded-xl border-2 px-2 py-2 text-left text-[#FCF0CA] ${isSelected ? 'border-emerald-300 bg-emerald-800/40' : 'border-[#7F532C]/70 bg-[#5B300E]/85 hover:border-[#FCF0CA]/60'}`}
+                        className={`absolute rounded-xl border-2 px-2 py-2 text-left text-[#f8fafc] ${isSelected ? 'border-emerald-300 bg-emerald-800/40' : 'border-[#6b7280]/70 bg-[#1f2937]/85 hover:border-[#f8fafc]/60'}`}
                         style={{
                           left: Number(p.x) || 0,
                           top: Number(p.y) || 0,
@@ -478,7 +478,7 @@ export default function CustomerReservationCreateView() {
                         }}
                       >
                         <p className="truncate text-xs font-bold">{tName}</p>
-                        <p className="mt-1 text-[10px] text-[#FCF0CA]/70">Capacidad: {table.table_capacity || '-'}</p>
+                        <p className="mt-1 text-[10px] text-[#f8fafc]/70">Capacidad: {table.table_capacity || '-'}</p>
                       </button>
                     )
                   })}
@@ -494,10 +494,10 @@ export default function CustomerReservationCreateView() {
                         type="button"
                         key={tId}
                         onClick={() => handleSelectTableFromPlan(table)}
-                        className={`rounded-xl border px-4 py-3 text-left ${isSelected ? 'border-emerald-300 bg-emerald-800/30 text-emerald-100' : 'border-[#7F532C]/50 bg-[#5B300E]/40 text-[#FCF0CA]'}`}
+                        className={`rounded-xl border px-4 py-3 text-left ${isSelected ? 'border-emerald-300 bg-emerald-800/30 text-emerald-100' : 'border-[#6b7280]/50 bg-[#1f2937]/40 text-[#f8fafc]'}`}
                       >
                         <p className="font-bold">{tName}</p>
-                        <p className="mt-1 text-xs text-[#F5D9A5]/75">Capacidad: {table.table_capacity || '-'}</p>
+                        <p className="mt-1 text-xs text-[#d1d5db]/75">Capacidad: {table.table_capacity || '-'}</p>
                       </button>
                     )
                   })}

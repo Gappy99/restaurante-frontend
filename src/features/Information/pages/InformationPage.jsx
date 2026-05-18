@@ -135,7 +135,7 @@ const InformationPage = () => {
           <button
             type="button"
             onClick={() => handleOpenModal()}
-            className="h-fit rounded-xl bg-[var(--primary)] px-5 py-3 font-medium text-[var(--surface)] transition hover:bg-[#446b5b]"
+            className="h-fit rounded-xl bg-[var(--primary)] px-5 py-3 font-medium text-[var(--surface)] transition hover:bg-[#000000]"
           >
             + Agregar información
           </button>

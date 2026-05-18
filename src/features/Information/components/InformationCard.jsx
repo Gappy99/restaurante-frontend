@@ -67,14 +67,14 @@ const InformationCard = ({ information, restaurantName, onEdit, onDelete }) => {
           <button
             type="button"
             onClick={() => onEdit(information)}
-            className="flex-1 rounded-xl bg-[var(--primary)] px-4 py-2.5 font-medium text-[var(--surface)] transition hover:bg-[#446b5b]"
+            className="flex-1 rounded-xl bg-[var(--primary)] px-4 py-2.5 font-medium text-[var(--surface)] transition hover:bg-[#000000]"
           >
             Editar
           </button>
           <button
             type="button"
             onClick={() => onDelete(information._id || information.id)}
-            className="flex-1 rounded-xl bg-[var(--accent)] px-4 py-2.5 font-medium text-[var(--surface)] transition hover:bg-[#8a5c4f]"
+            className="flex-1 rounded-xl bg-[var(--accent)] px-4 py-2.5 font-medium text-[var(--surface)] transition hover:bg-[#4b5563]"
           >
             Eliminar
           </button>

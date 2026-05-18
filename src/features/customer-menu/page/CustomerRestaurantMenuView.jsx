@@ -67,24 +67,24 @@ export default function CustomerRestaurantMenuView() {
   }
 
   return (
-    <div className="min-h-full bg-[#2E160C] text-[#FCF0CA] px-4 py-8 sm:px-6 lg:px-10">
-      <section className="mx-auto max-w-7xl rounded-[2.5rem] border border-[#7F532C]/30 bg-[#5B300E]/20 px-6 py-8 shadow-2xl shadow-black/30 backdrop-blur-xl sm:px-8 lg:px-10">
-        <div className="flex flex-col gap-4 border-b border-[#FCF0CA]/10 pb-6 md:flex-row md:items-end md:justify-between">
+    <div className="min-h-full bg-[#111111] text-[#f8fafc] px-4 py-8 sm:px-6 lg:px-10">
+      <section className="mx-auto max-w-7xl rounded-[2.5rem] border border-[#6b7280]/30 bg-[#1f2937]/20 px-6 py-8 shadow-2xl shadow-black/30 backdrop-blur-xl sm:px-8 lg:px-10">
+        <div className="flex flex-col gap-4 border-b border-[#f8fafc]/10 pb-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#946841]">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af]">
               Menú del restaurante
             </p>
-            <h1 className="mt-2 text-4xl font-black tracking-tight text-[#FCF0CA] sm:text-5xl">
+            <h1 className="mt-2 text-4xl font-black tracking-tight text-[#f8fafc] sm:text-5xl">
               {restaurantName || 'Platillos y bebidas del restaurante'}
             </h1>
-            <p className="mt-3 max-w-2xl text-sm text-[#F5D9A5]/80">
+            <p className="mt-3 max-w-2xl text-sm text-[#d1d5db]/80">
               Esta vista solo muestra los menús asociados al restaurante seleccionado.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#FCF0CA]/10 bg-black/20 px-4 py-3 text-right">
-            <div className="text-2xl font-black text-[#FCF0CA]">{filteredMenus.length}</div>
-            <div className="text-[10px] uppercase tracking-[0.3em] text-[#946841]">menús del restaurante</div>
+          <div className="rounded-2xl border border-[#f8fafc]/10 bg-black/20 px-4 py-3 text-right">
+            <div className="text-2xl font-black text-[#f8fafc]">{filteredMenus.length}</div>
+            <div className="text-[10px] uppercase tracking-[0.3em] text-[#9ca3af]">menús del restaurante</div>
           </div>
         </div>
 

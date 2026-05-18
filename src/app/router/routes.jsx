@@ -151,8 +151,6 @@ const router = createBrowserRouter([
         index: true,
         element: <RestaurantPage />,
       },
-        element: <RestaurantPage />,
-      },
       {
         path: ':id',
         element: <RestaurantMiniMenuPage />,

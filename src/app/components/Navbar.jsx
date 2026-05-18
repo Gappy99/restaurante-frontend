@@ -7,7 +7,7 @@ const Navbar = ({ isSidebarOpen = true, onToggleSidebar }) => {
   const { user } = useAuthStore()
 
   return (
-    <header className="bg-[#5B300E] border-b border-[#7F532C] px-6 py-4 flex items-center justify-between">
+    <header className="bg-[#1f2937] border-b border-[#6b7280] px-6 py-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
         <button
           type="button"

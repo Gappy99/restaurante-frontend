@@ -105,13 +105,13 @@ const TableInlineForm = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-2xl rounded-[2rem] border border-[#7F532C]/20 bg-[#2E160C] p-6 shadow-2xl shadow-black/50" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-2xl rounded-[2rem] border border-[#6b7280]/20 bg-[#111111] p-6 shadow-2xl shadow-black/50" onClick={(e) => e.stopPropagation()}>
         <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-2xl font-black uppercase italic text-[#FCF0CA]">
+          <h3 className="text-2xl font-black uppercase italic text-[#f8fafc]">
             {initialData ? 'Editar Mesa' : 'Agregar Mesa'}
           </h3>
-          <p className="mt-1 text-sm text-[#946841]">
+          <p className="mt-1 text-sm text-[#9ca3af]">
             {initialData
               ? 'Modifica los datos de la mesa sin salir del plano.'
               : 'Crea una nueva mesa y luego ubícala visualmente en el plano.'}
@@ -121,7 +121,7 @@ const TableInlineForm = ({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full border border-[#7F532C]/40 px-3 py-1.5 text-sm text-[#FCF0CA] hover:bg-[#5B300E]/30"
+          className="rounded-full border border-[#6b7280]/40 px-3 py-1.5 text-sm text-[#f8fafc] hover:bg-[#1f2937]/30"
         >
           Cerrar
         </button>
@@ -133,7 +133,7 @@ const TableInlineForm = ({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-[1.5rem] bg-[#2E160C]/60 p-5">
+      <form onSubmit={handleSubmit} className="space-y-4 rounded-[1.5rem] bg-[#111111]/60 p-5">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <input
@@ -144,7 +144,7 @@ const TableInlineForm = ({
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Ej: Mesa 1"
-              className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors placeholder:text-[#946841]/50 focus:border-[#FCF0CA]"
+              className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors placeholder:text-[#9ca3af]/50 focus:border-[#f8fafc]"
             />
             {errors.name && <p className="text-xs text-red-300">{errors.name}</p>}
           </div>
@@ -160,7 +160,7 @@ const TableInlineForm = ({
                 onChange={handleInputChange}
                 min="1"
                 placeholder="1"
-                className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors placeholder:text-[#946841]/50 focus:border-[#FCF0CA]"
+                className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors placeholder:text-[#9ca3af]/50 focus:border-[#f8fafc]"
               />
               {errors.number && <p className="text-xs text-red-300">{errors.number}</p>}
             </div>
@@ -175,7 +175,7 @@ const TableInlineForm = ({
                 onChange={handleInputChange}
                 min="1"
                 placeholder="4"
-                className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors placeholder:text-[#946841]/50 focus:border-[#FCF0CA]"
+                className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors placeholder:text-[#9ca3af]/50 focus:border-[#f8fafc]"
               />
               {errors.capacity && <p className="text-xs text-red-300">{errors.capacity}</p>}
             </div>
@@ -191,7 +191,7 @@ const TableInlineForm = ({
             value={formData.ubication}
             onChange={handleInputChange}
             placeholder="Ej: Terraza, Patio, Interior"
-            className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors placeholder:text-[#946841]/50 focus:border-[#FCF0CA]"
+            className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors placeholder:text-[#9ca3af]/50 focus:border-[#f8fafc]"
           />
           {errors.ubication && <p className="text-xs text-red-300">{errors.ubication}</p>}
         </div>
@@ -206,7 +206,7 @@ const TableInlineForm = ({
               value={formData.timeAvailable}
               onChange={handleInputChange}
               placeholder="Ej: 10:00 - 23:00"
-              className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors placeholder:text-[#946841]/50 focus:border-[#FCF0CA]"
+              className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors placeholder:text-[#9ca3af]/50 focus:border-[#f8fafc]"
             />
           </div>
 
@@ -217,10 +217,10 @@ const TableInlineForm = ({
               name="tableState"
               value={formData.tableState}
               onChange={handleInputChange}
-              className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors focus:border-[#FCF0CA]"
+              className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors focus:border-[#f8fafc]"
             >
               {TABLE_STATES.map((state) => (
-                <option key={state} value={state} className="bg-[#2E160C] text-[#FCF0CA]">
+                <option key={state} value={state} className="bg-[#111111] text-[#f8fafc]">
                   {state}
                 </option>
               ))}
@@ -240,10 +240,10 @@ const TableInlineForm = ({
               readOnly={Boolean(fixedRestaurantId)}
               disabled={Boolean(fixedRestaurantId)}
               placeholder="ObjectId del restaurante"
-              className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors placeholder:text-[#946841]/50 focus:border-[#FCF0CA] disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors placeholder:text-[#9ca3af]/50 focus:border-[#f8fafc] disabled:cursor-not-allowed disabled:opacity-70"
             />
             {fixedRestaurantId && (
-              <p className="text-xs text-[#946841]">Esta mesa se asignará al restaurante actual.</p>
+              <p className="text-xs text-[#9ca3af]">Esta mesa se asignará al restaurante actual.</p>
             )}
             {errors.restaurantId && <p className="text-xs text-red-300">{errors.restaurantId}</p>}
           </div>
@@ -257,7 +257,7 @@ const TableInlineForm = ({
               value={formData.reservationId}
               onChange={handleInputChange}
               placeholder="Opcional"
-              className="w-full rounded-xl border border-[#7F532C]/50 bg-[#5B300E]/20 px-4 py-3 text-[#FCF0CA] outline-none transition-colors placeholder:text-[#946841]/50 focus:border-[#FCF0CA]"
+              className="w-full rounded-xl border border-[#6b7280]/50 bg-[#1f2937]/20 px-4 py-3 text-[#f8fafc] outline-none transition-colors placeholder:text-[#9ca3af]/50 focus:border-[#f8fafc]"
             />
           </div>
         </div>
@@ -266,14 +266,14 @@ const TableInlineForm = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-2xl border border-[#7F532C]/50 px-5 py-3 font-semibold text-[#FCF0CA] transition-colors hover:bg-[#5B300E]/20"
+            className="rounded-2xl border border-[#6b7280]/50 px-5 py-3 font-semibold text-[#f8fafc] transition-colors hover:bg-[#1f2937]/20"
             disabled={loading}
           >
             Cancelar
           </button>
           <button
             type="submit"
-            className="rounded-2xl bg-[#7F532C] px-6 py-3 font-bold text-[#FCF0CA] transition-colors hover:bg-[#946841] disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-2xl bg-[#6b7280] px-6 py-3 font-bold text-[#f8fafc] transition-colors hover:bg-[#9ca3af] disabled:cursor-not-allowed disabled:opacity-60"
             disabled={loading}
           >
             {loading ? 'Guardando...' : initialData ? 'Actualizar mesa' : 'Guardar mesa'}

@@ -199,12 +199,12 @@ const DetallePedidosPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] p-4 md:p-8">
-      <header className="max-w-7xl mx-auto mb-8 rounded-[2rem] border border-[#7F532C]/30 bg-[#5B300E]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
+    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8">
+      <header className="max-w-7xl mx-auto mb-8 rounded-[2rem] border border-[#6b7280]/30 bg-[#1f2937]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[#946841]">Detalles de Pedidos</p>
-            <h1 className="mt-2 text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#FCF0CA] via-[#946841] to-[#7F532C] bg-clip-text text-transparent">
+            <p className="text-xs uppercase tracking-[0.3em] text-[#9ca3af]">Detalles de Pedidos</p>
+            <h1 className="mt-2 text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#f8fafc] via-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent">
               Gestión de detalles
             </h1>
           </div>
@@ -219,20 +219,20 @@ const DetallePedidosPage = () => {
                   handleFilterByOrder()
                 }
               }}
-              className="w-full md:w-80 rounded-2xl border border-[#7F532C]/40 bg-[#2E160C]/80 px-4 py-3 text-[#FCF0CA] placeholder:text-[#946841]/80 outline-none transition focus:border-[#FCF0CA]/60 focus:ring-2 focus:ring-[#946841]/25"
+              className="w-full md:w-80 rounded-2xl border border-[#6b7280]/40 bg-[#111111]/80 px-4 py-3 text-[#f8fafc] placeholder:text-[#9ca3af]/80 outline-none transition focus:border-[#f8fafc]/60 focus:ring-2 focus:ring-[#9ca3af]/25"
               placeholder="ID de orden"
             />
             <button
               type="button"
               onClick={handleFilterByOrder}
-              className="rounded-2xl bg-[#7F532C] px-5 py-3 font-bold text-[#FCF0CA] hover:bg-[#946841]"
+              className="rounded-2xl bg-[#6b7280] px-5 py-3 font-bold text-[#f8fafc] hover:bg-[#9ca3af]"
             >
               Filtrar
             </button>
             <button
               type="button"
               onClick={openCreate}
-              className="rounded-2xl bg-[#946841] px-5 py-3 font-bold text-[#FCF0CA] hover:bg-[#7F532C]"
+              className="rounded-2xl bg-[#9ca3af] px-5 py-3 font-bold text-[#f8fafc] hover:bg-[#6b7280]"
             >
               + Nuevo detalle
             </button>
@@ -244,10 +244,10 @@ const DetallePedidosPage = () => {
         {loading ? (
           <div className="flex justify-center py-20"><Spinner /></div>
         ) : (
-          <div className="overflow-hidden rounded-[1.75rem] border border-[#7F532C]/20 bg-[#FCF0CA] text-[#2E160C] shadow-2xl shadow-black/20">
+          <div className="overflow-hidden rounded-[1.75rem] border border-[#6b7280]/20 bg-[#f8fafc] text-[#111111] shadow-2xl shadow-black/20">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-[#7F532C]/20">
-                <thead className="bg-[#FCF0CA]/80 text-[#7F532C]">
+              <table className="min-w-full divide-y divide-[#6b7280]/20">
+                <thead className="bg-[#f8fafc]/80 text-[#6b7280]">
                   <tr>
                     <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-widest">Orden</th>
                     <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-widest">Producto</th>
@@ -258,7 +258,7 @@ const DetallePedidosPage = () => {
                     <th className="px-4 py-4 text-right text-xs font-bold uppercase tracking-widest">Acciones</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#7F532C]/10 bg-white/80">
+                <tbody className="divide-y divide-[#6b7280]/10 bg-white/80">
                   {rows.map((detail) => {
                     const id = asId(detail)
                     const quantity = Number(detail?.candidadproducto || 0)
@@ -266,16 +266,16 @@ const DetallePedidosPage = () => {
                     const total = Number(detail?.total ?? productPrice * quantity)
                     const unitPrice = quantity > 0 ? total / quantity : productPrice
                     return (
-                      <tr key={id} className="hover:bg-[#FCF0CA]/50 transition">
+                      <tr key={id} className="hover:bg-[#f8fafc]/50 transition">
                         <td className="px-4 py-4">
-                          <div className="text-xs text-[#7F532C]">{asId(detail?.orders_id) || '-'}</div>
+                          <div className="text-xs text-[#6b7280]">{asId(detail?.orders_id) || '-'}</div>
                         </td>
                         <td className="px-4 py-4">
-                          <div className="text-xs text-[#7F532C]">{getProductLabel(detail?.producto)}</div>
-                          <div className="text-[10px] text-[#946841]">{asId(detail?.producto) || '-'}</div>
+                          <div className="text-xs text-[#6b7280]">{getProductLabel(detail?.producto)}</div>
+                          <div className="text-[10px] text-[#9ca3af]">{asId(detail?.producto) || '-'}</div>
                         </td>
                         <td className="px-4 py-4">
-                          <span className="inline-flex rounded-full px-3 py-1 text-xs font-bold bg-[#7F532C]/20 text-[#5B300E]">
+                          <span className="inline-flex rounded-full px-3 py-1 text-xs font-bold bg-[#6b7280]/20 text-[#1f2937]">
                             {detail?.productType || '-'}
                           </span>
                         </td>
@@ -287,14 +287,14 @@ const DetallePedidosPage = () => {
                             <button
                               type="button"
                               onClick={() => openEdit(detail)}
-                              className="rounded-xl border border-[#7F532C]/30 px-4 py-2 text-sm font-semibold text-[#2E160C] hover:bg-[#FCF0CA]"
+                              className="rounded-xl border border-[#6b7280]/30 px-4 py-2 text-sm font-semibold text-[#111111] hover:bg-[#f8fafc]"
                             >
                               Editar
                             </button>
                             <button
                               type="button"
                               onClick={() => handleDelete(detail)}
-                              className="rounded-xl bg-[#5B300E] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2E160C]"
+                              className="rounded-xl bg-[#1f2937] px-4 py-2 text-sm font-semibold text-white hover:bg-[#111111]"
                             >
                               Eliminar
                             </button>
@@ -307,7 +307,7 @@ const DetallePedidosPage = () => {
               </table>
             </div>
             {!rows.length && (
-              <div className="p-8 text-center text-[#7F532C]">No hay detalles de pedidos para mostrar.</div>
+              <div className="p-8 text-center text-[#6b7280]">No hay detalles de pedidos para mostrar.</div>
             )}
           </div>
         )}
@@ -321,10 +321,10 @@ const DetallePedidosPage = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] border border-[#7F532C]/20 bg-[#FCF0CA] text-[#2E160C] shadow-2xl">
-            <div className="flex items-start justify-between border-b border-[#7F532C]/10 px-6 py-5">
+          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] border border-[#6b7280]/20 bg-[#f8fafc] text-[#111111] shadow-2xl">
+            <div className="flex items-start justify-between border-b border-[#6b7280]/10 px-6 py-5">
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-[#7F532C]">Formulario</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-[#6b7280]">Formulario</p>
                 <h2 className="text-2xl font-black uppercase italic">
                   {editingId ? 'Editar detalle' : 'Nuevo detalle de pedido'}
                 </h2>
@@ -332,7 +332,7 @@ const DetallePedidosPage = () => {
               <button
                 type="button"
                 onClick={closeModal}
-                className="rounded-xl border border-[#7F532C]/30 px-3 py-1 text-sm font-semibold hover:bg-[#FCF0CA]"
+                className="rounded-xl border border-[#6b7280]/30 px-3 py-1 text-sm font-semibold hover:bg-[#f8fafc]"
               >
                 Cerrar
               </button>
@@ -345,7 +345,7 @@ const DetallePedidosPage = () => {
                   value={formData.orders_id}
                   onChange={(e) => setFormData((prev) => ({ ...prev, orders_id: e.target.value }))}
                   placeholder="Orden ID *"
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                  className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                 />
               </div>
 
@@ -355,13 +355,13 @@ const DetallePedidosPage = () => {
                   value={formData.restaurant_id}
                   onChange={(e) => setFormData((prev) => ({ ...prev, restaurant_id: e.target.value }))}
                   placeholder="Restaurant ID *"
-                  className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                  className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                 />
               </div>
 
               {!editingId && (
                 <>
-                  <div className="md:col-span-2 rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3 text-sm text-[#5B300E]">
+                  <div className="md:col-span-2 rounded-xl border border-[#6b7280]/20 bg-[#6b7280]/10 px-4 py-3 text-sm text-[#1f2937]">
                     El precio unitario se toma automáticamente del producto seleccionado (dish o beverage).
                   </div>
 
@@ -372,13 +372,13 @@ const DetallePedidosPage = () => {
                       const subtotal = unitPrice * Number(item.candidadproducto || 0)
 
                       return (
-                        <div key={`item-${idx}`} className="rounded-2xl border border-[#7F532C]/20 bg-white/80 p-4">
+                        <div key={`item-${idx}`} className="rounded-2xl border border-[#6b7280]/20 bg-white/80 p-4">
                           <div className="mb-3 flex items-center justify-between">
-                            <p className="text-sm font-bold text-[#5B300E]">Producto {idx + 1}</p>
+                            <p className="text-sm font-bold text-[#1f2937]">Producto {idx + 1}</p>
                             <button
                               type="button"
                               onClick={() => removeItemRow(idx)}
-                              className="rounded-lg border border-[#7F532C]/30 px-3 py-1 text-xs font-semibold hover:bg-[#FCF0CA]"
+                              className="rounded-lg border border-[#6b7280]/30 px-3 py-1 text-xs font-semibold hover:bg-[#f8fafc]"
                             >
                               Quitar
                             </button>
@@ -391,7 +391,7 @@ const DetallePedidosPage = () => {
                                 aria-label="Tipo de producto"
                                 value={item.productType}
                                 onChange={(e) => updateItemRow(idx, { productType: e.target.value, producto: '' })}
-                                className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                                className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                               >
                                 <option value="dish">Dish</option>
                                 <option value="beverage">Beverage</option>
@@ -404,7 +404,7 @@ const DetallePedidosPage = () => {
                                 aria-label="Producto"
                                 value={item.producto}
                                 onChange={(e) => updateItemRow(idx, { producto: e.target.value })}
-                                className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                                className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                               >
                                 <option value="">Selecciona un producto</option>
                                 {options.map((option) => {
@@ -426,20 +426,20 @@ const DetallePedidosPage = () => {
                                 aria-label="Cantidad"
                                 value={item.candidadproducto}
                                 onChange={(e) => updateItemRow(idx, { candidadproducto: e.target.value })}
-                                className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                                className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                               />
                             </div>
 
                             <div className="space-y-1 text-sm">
                               <span>Precio Unitario</span>
-                              <div className="w-full rounded-xl border border-[#7F532C]/20 bg-[#FCF0CA] px-3 py-2 font-semibold text-[#5B300E]">
+                              <div className="w-full rounded-xl border border-[#6b7280]/20 bg-[#f8fafc] px-3 py-2 font-semibold text-[#1f2937]">
                                 Q{unitPrice.toFixed(2)}
                               </div>
                             </div>
 
                             <div className="space-y-1 text-sm">
                               <span>Total</span>
-                              <div className="w-full rounded-xl border border-[#7F532C]/20 bg-[#FCF0CA] px-3 py-2 font-semibold text-[#5B300E]">
+                              <div className="w-full rounded-xl border border-[#6b7280]/20 bg-[#f8fafc] px-3 py-2 font-semibold text-[#1f2937]">
                                 Q{subtotal.toFixed(2)}
                               </div>
                             </div>
@@ -451,7 +451,7 @@ const DetallePedidosPage = () => {
                     <button
                       type="button"
                       onClick={addItemRow}
-                      className="rounded-xl border border-[#7F532C]/30 px-4 py-2 text-sm font-semibold hover:bg-[#FCF0CA]"
+                      className="rounded-xl border border-[#6b7280]/30 px-4 py-2 text-sm font-semibold hover:bg-[#f8fafc]"
                     >
                       + Agregar otro producto
                     </button>
@@ -467,7 +467,7 @@ const DetallePedidosPage = () => {
                       aria-label="Tipo de Producto"
                       value={formData.productType}
                       onChange={(e) => setFormData((prev) => ({ ...prev, productType: e.target.value, producto: '' }))}
-                      className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                      className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                     >
                       <option value="dish">Dish</option>
                       <option value="beverage">Beverage</option>
@@ -480,7 +480,7 @@ const DetallePedidosPage = () => {
                       aria-label="Producto"
                       value={formData.producto}
                       onChange={(e) => setFormData((prev) => ({ ...prev, producto: e.target.value }))}
-                      className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                      className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                     >
                       <option value="">Selecciona un producto</option>
                       {getOptionsByType(formData.productType).map((option) => {
@@ -502,13 +502,13 @@ const DetallePedidosPage = () => {
                       aria-label="Cantidad"
                       value={formData.candidadproducto}
                       onChange={(e) => setFormData((prev) => ({ ...prev, candidadproducto: e.target.value }))}
-                      className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                      className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                     />
                   </div>
 
                   <div className="space-y-1 text-sm">
                     <span>Total estimado</span>
-                    <div className="w-full rounded-xl border border-[#7F532C]/20 bg-[#FCF0CA] px-3 py-2 font-semibold text-[#5B300E]">
+                    <div className="w-full rounded-xl border border-[#6b7280]/20 bg-[#f8fafc] px-3 py-2 font-semibold text-[#1f2937]">
                       Q{(
                         getItemUnitPrice(formData.productType, formData.producto) * Number(formData.candidadproducto || 0)
                       ).toFixed(2)}
@@ -521,13 +521,13 @@ const DetallePedidosPage = () => {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-[#7F532C]/30 px-4 py-2 font-semibold hover:bg-[#FCF0CA]"
+                  className="rounded-xl border border-[#6b7280]/30 px-4 py-2 font-semibold hover:bg-[#f8fafc]"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="rounded-xl bg-[#7F532C] px-5 py-2 font-bold text-[#FCF0CA] hover:bg-[#946841]"
+                  className="rounded-xl bg-[#6b7280] px-5 py-2 font-bold text-[#f8fafc] hover:bg-[#9ca3af]"
                 >
                   {editingId ? 'Guardar cambios' : 'Crear detalles'}
                 </button>

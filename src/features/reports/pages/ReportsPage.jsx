@@ -239,7 +239,7 @@ const ReportsPage = () => {
             <AnalysisCard
               title="Ingresos"
               description="Análisis de ingresos"
-              icon={<IconExcel className="h-8 w-8 text-amber-600" />}
+              icon={<IconExcel className="h-8 w-8 text-zinc-600" />}
               onClick={() => handleLoadAnalysis('ingresos')}
               loading={analysisLoading && selectedAnalysis === 'ingresos'}
             />

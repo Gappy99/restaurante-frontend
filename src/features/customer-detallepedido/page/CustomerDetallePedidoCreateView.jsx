@@ -169,7 +169,7 @@ export default function CustomerDetallePedidoCreateView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#111111] text-[#f8fafc] flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-lg">Cargando información de la orden...</p>
         </div>
@@ -179,12 +179,12 @@ export default function CustomerDetallePedidoCreateView() {
 
   if (!orderData) {
     return (
-      <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#111111] text-[#f8fafc] flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-lg">No se encontró información de la orden</p>
           <button
             onClick={() => navigate('/customer/orders')}
-            className="mt-4 rounded-xl bg-[#7F532C] px-5 py-2 font-bold text-[#FCF0CA] hover:bg-[#946841]"
+            className="mt-4 rounded-xl bg-[#6b7280] px-5 py-2 font-bold text-[#f8fafc] hover:bg-[#9ca3af]"
           >
             Volver a órdenes
           </button>
@@ -194,26 +194,26 @@ export default function CustomerDetallePedidoCreateView() {
   }
 
   return (
-    <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] p-4 md:p-8">
-      <div className="mx-auto max-w-4xl rounded-[2rem] border border-[#7F532C]/30 bg-[#5B300E]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
-        <div className="flex flex-col gap-3 border-b border-[#FCF0CA]/10 pb-6">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#946841]">Detalles del Pedido</p>
-          <h1 className="text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#FCF0CA] via-[#946841] to-[#7F532C] bg-clip-text text-transparent">
+    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8">
+      <div className="mx-auto max-w-4xl rounded-[2rem] border border-[#6b7280]/30 bg-[#1f2937]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
+        <div className="flex flex-col gap-3 border-b border-[#f8fafc]/10 pb-6">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#9ca3af]">Detalles del Pedido</p>
+          <h1 className="text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#f8fafc] via-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent">
             Completar pedido
           </h1>
-          <p className="text-sm text-[#F5D9A5]/80">
+          <p className="text-sm text-[#d1d5db]/80">
             Agrega los productos que deseas incluir en tu orden.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-1 gap-4">
-          <div className="md:col-span-2 rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[#FCF0CA]/70">Información de la orden</p>
-            <p className="mt-1 text-sm font-bold text-[#FCF0CA]">Orden ID: {orderId}</p>
-            <p className="mt-1 text-xs text-[#F5D9A5]/80">Los productos se cargarán automáticamente del restaurante.</p>
+          <div className="md:col-span-2 rounded-xl border border-[#6b7280]/20 bg-[#6b7280]/10 px-4 py-3">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#f8fafc]/70">Información de la orden</p>
+            <p className="mt-1 text-sm font-bold text-[#f8fafc]">Orden ID: {orderId}</p>
+            <p className="mt-1 text-xs text-[#d1d5db]/80">Los productos se cargarán automáticamente del restaurante.</p>
           </div>
 
-          <div className="rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3 text-sm text-[#5B300E]">
+          <div className="rounded-xl border border-[#6b7280]/20 bg-[#6b7280]/10 px-4 py-3 text-sm text-[#1f2937]">
             El precio unitario se toma automáticamente del producto seleccionado (dish o beverage).
           </div>
 
@@ -224,13 +224,13 @@ export default function CustomerDetallePedidoCreateView() {
               const subtotal = unitPrice * Number(item.candidadproducto || 0)
 
               return (
-                <div key={`item-${idx}`} className="rounded-2xl border border-[#7F532C]/20 bg-white/80 p-4">
+                <div key={`item-${idx}`} className="rounded-2xl border border-[#6b7280]/20 bg-white/80 p-4">
                   <div className="mb-3 flex items-center justify-between">
-                    <p className="text-sm font-bold text-[#5B300E]">Producto {idx + 1}</p>
+                    <p className="text-sm font-bold text-[#1f2937]">Producto {idx + 1}</p>
                     <button
                       type="button"
                       onClick={() => removeItemRow(idx)}
-                      className="rounded-lg border border-[#7F532C]/30 px-3 py-1 text-xs font-semibold hover:bg-[#FCF0CA]"
+                      className="rounded-lg border border-[#6b7280]/30 px-3 py-1 text-xs font-semibold hover:bg-[#f8fafc]"
                     >
                       Quitar
                     </button>
@@ -243,7 +243,7 @@ export default function CustomerDetallePedidoCreateView() {
                         aria-label="Tipo de producto"
                         value={item.productType}
                         onChange={(e) => updateItemRow(idx, { productType: e.target.value, producto: '' })}
-                        className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                        className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                       >
                         <option value="dish">Dish</option>
                         <option value="beverage">Beverage</option>
@@ -256,7 +256,7 @@ export default function CustomerDetallePedidoCreateView() {
                         aria-label="Producto"
                         value={item.producto}
                         onChange={(e) => updateItemRow(idx, { producto: e.target.value })}
-                        className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                        className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                       >
                         <option value="">Selecciona un producto</option>
                         {options.map((option) => {
@@ -278,20 +278,20 @@ export default function CustomerDetallePedidoCreateView() {
                         aria-label="Cantidad"
                         value={item.candidadproducto}
                         onChange={(e) => updateItemRow(idx, { candidadproducto: e.target.value })}
-                        className="w-full rounded-xl border border-[#7F532C]/30 bg-white px-3 py-2"
+                        className="w-full rounded-xl border border-[#6b7280]/30 bg-white px-3 py-2"
                       />
                     </div>
 
                     <div className="space-y-1 text-sm">
                       <span>Precio Unitario</span>
-                      <div className="w-full rounded-xl border border-[#7F532C]/20 bg-[#FCF0CA] px-3 py-2 font-semibold text-[#5B300E]">
+                      <div className="w-full rounded-xl border border-[#6b7280]/20 bg-[#f8fafc] px-3 py-2 font-semibold text-[#1f2937]">
                         Q{unitPrice.toFixed(2)}
                       </div>
                     </div>
 
                     <div className="space-y-1 text-sm">
                       <span>Total</span>
-                      <div className="w-full rounded-xl border border-[#7F532C]/20 bg-[#FCF0CA] px-3 py-2 font-semibold text-[#5B300E]">
+                      <div className="w-full rounded-xl border border-[#6b7280]/20 bg-[#f8fafc] px-3 py-2 font-semibold text-[#1f2937]">
                         Q{subtotal.toFixed(2)}
                       </div>
                     </div>
@@ -303,7 +303,7 @@ export default function CustomerDetallePedidoCreateView() {
             <button
               type="button"
               onClick={addItemRow}
-              className="rounded-xl border border-[#7F532C]/30 px-4 py-2 text-sm font-semibold hover:bg-[#FCF0CA]"
+              className="rounded-xl border border-[#6b7280]/30 px-4 py-2 text-sm font-semibold hover:bg-[#f8fafc]"
             >
               + Agregar otro producto
             </button>
@@ -319,7 +319,7 @@ export default function CustomerDetallePedidoCreateView() {
             </button>
             <button
               type="submit"
-              className="rounded-xl bg-[#7F532C] px-5 py-2 font-bold text-[#FCF0CA] hover:bg-[#946841]"
+              className="rounded-xl bg-[#6b7280] px-5 py-2 font-bold text-[#f8fafc] hover:bg-[#9ca3af]"
             >
               Guardar pedido
             </button>

@@ -3,6 +3,7 @@ import { useTableForm } from '../hooks/useTables.js'
 import { validateTableForm, formatTableData } from '../utils/tableUtils.js'
 import { TABLE_MESSAGES, TABLE_STATES } from '../constants/tableConstants.js'
 import toast from 'react-hot-toast'
+import { FiX } from 'react-icons/fi'
 
 /* eslint-disable react/prop-types */
 const TableModal = ({
@@ -94,7 +95,7 @@ const TableModal = ({
 				<div className="modal-header">
 					<h2>{initialData ? 'Editar Mesa' : 'Crear Mesa'}</h2>
 					<button className="btn-close" onClick={onClose} aria-label="Cerrar">
-						✕
+						<FiX aria-hidden="true" />
 					</button>
 				</div>
 
@@ -210,7 +211,7 @@ const TableModal = ({
 								className={errors.restaurantId ? 'input-error' : ''}
 							/>
 							{fixedRestaurantId && (
-								<p className="text-xs text-[#946841] mt-1">
+								<p className="text-xs text-[#9ca3af] mt-1">
 									Esta mesa quedará asignada a este restaurante.
 								</p>
 							)}

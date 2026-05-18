@@ -67,7 +67,7 @@ const UsersPage = () => {
         <h1 className="text-3xl font-bold text-[var(--text)]">Gestión de Usuarios</h1>
         <button
           onClick={() => handleOpenModal()}
-          className="px-6 py-2 bg-[var(--primary)] hover:bg-[#446b5b] text-[var(--surface)] rounded-lg font-semibold transition"
+          className="px-6 py-2 bg-[var(--primary)] hover:bg-[#000000] text-[var(--surface)] rounded-lg font-semibold transition"
         >
           + Nuevo Usuario
         </button>
@@ -166,7 +166,7 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
             Cancelar
           </button>
 
-          <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-[#5B300E] text-[#FCF0CA] rounded-lg">
+          <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-[#1f2937] text-[#f8fafc] rounded-lg">
             {isSubmitting ? 'Guardando...' : user ? 'Actualizar' : 'Crear'}
           </button>
         </div>

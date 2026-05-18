@@ -185,48 +185,48 @@ export default function CustomerOrderCreateView() {
   const goBack = () => navigate('/customer/orders')
 
   return (
-    <div className="min-h-screen bg-[#2E160C] text-[#FCF0CA] p-4 md:p-8">
-      <div className="mx-auto max-w-4xl rounded-[2rem] border border-[#7F532C]/30 bg-[#5B300E]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
-        <div className="flex flex-col gap-3 border-b border-[#FCF0CA]/10 pb-6">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#946841]">Customer Orders</p>
-          <h1 className="text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#FCF0CA] via-[#946841] to-[#7F532C] bg-clip-text text-transparent">
+    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8">
+      <div className="mx-auto max-w-4xl rounded-[2rem] border border-[#6b7280]/30 bg-[#1f2937]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
+        <div className="flex flex-col gap-3 border-b border-[#f8fafc]/10 pb-6">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#9ca3af]">Customer Orders</p>
+          <h1 className="text-3xl md:text-5xl font-black uppercase italic bg-gradient-to-r from-[#f8fafc] via-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent">
             Crear orden
           </h1>
-          <p className="text-sm text-[#F5D9A5]/80">
+          <p className="text-sm text-[#d1d5db]/80">
             El restaurante y el usuario se asignan automáticamente desde el flujo del cliente.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="md:col-span-2 rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[#FCF0CA]/70">Restaurante asignado</p>
-            <p className="mt-1 text-sm font-bold text-[#FCF0CA]">{selectedRestaurantName || 'Se tomará del último restaurante visitado'}</p>
-            <p className="mt-1 text-xs text-[#F5D9A5]/80">{selectedRestaurantId || 'Sin restaurante seleccionado'}</p>
+          <div className="md:col-span-2 rounded-xl border border-[#6b7280]/20 bg-[#6b7280]/10 px-4 py-3">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#f8fafc]/70">Restaurante asignado</p>
+            <p className="mt-1 text-sm font-bold text-[#f8fafc]">{selectedRestaurantName || 'Se tomará del último restaurante visitado'}</p>
+            <p className="mt-1 text-xs text-[#d1d5db]/80">{selectedRestaurantId || 'Sin restaurante seleccionado'}</p>
           </div>
 
-          <div className="md:col-span-2 rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[#FCF0CA]/70">Usuario asignado</p>
-            <p className="mt-1 text-sm font-bold text-[#FCF0CA]">{selectedUserName}</p>
-            <p className="mt-1 text-xs text-[#F5D9A5]/80">{selectedUserId || 'Sin usuario logeado'}</p>
+          <div className="md:col-span-2 rounded-xl border border-[#6b7280]/20 bg-[#6b7280]/10 px-4 py-3">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#f8fafc]/70">Usuario asignado</p>
+            <p className="mt-1 text-sm font-bold text-[#f8fafc]">{selectedUserName}</p>
+            <p className="mt-1 text-xs text-[#d1d5db]/80">{selectedUserId || 'Sin usuario logeado'}</p>
           </div>
 
           <div className="md:col-span-2">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Domicilio</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Domicilio</p>
             <input
               required
               value={formData.Orders_domicile}
               onChange={(e) => setFormData((prev) => ({ ...prev, Orders_domicile: e.target.value }))}
               placeholder="Domicilio de la orden *"
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-[#FCF0CA] outline-none"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-[#f8fafc] outline-none"
             />
           </div>
 
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Cupón</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Cupón</p>
             <select
               value={formData.Orders_cupon}
               onChange={(e) => setFormData((prev) => ({ ...prev, Orders_cupon: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-[#FCF0CA] outline-none"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-[#f8fafc] outline-none"
             >
               <option value="">Sin cupón</option>
               {validCouponOptions.map((coupon) => {
@@ -241,11 +241,11 @@ export default function CustomerOrderCreateView() {
           </div>
 
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Estado</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Estado</p>
             <select
               value={formData.Orders_status}
               onChange={(e) => setFormData((prev) => ({ ...prev, Orders_status: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-[#FCF0CA] outline-none"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-[#f8fafc] outline-none"
             >
               <option value="en_preparacion">en_preparacion</option>
               <option value="listo">listo</option>
@@ -255,13 +255,13 @@ export default function CustomerOrderCreateView() {
           </div>
 
           <div className="md:col-span-2">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F5D9A5]/70">Menú</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Menú</p>
             <select
               required
               value={formData.Menu_id}
               onChange={(e) => setFormData((prev) => ({ ...prev, Menu_id: e.target.value }))}
               disabled={!selectedRestaurantId}
-              className="mt-2 w-full rounded-xl border border-[#FCF0CA]/20 bg-black/20 px-4 py-3 text-[#FCF0CA] outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-[#f8fafc] outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">
                 {selectedRestaurantId ? 'Selecciona un menú *' : 'Selecciona primero un restaurante'}
@@ -277,7 +277,7 @@ export default function CustomerOrderCreateView() {
             </select>
           </div>
 
-          <div className="md:col-span-2 rounded-xl border border-[#7F532C]/20 bg-[#7F532C]/10 px-4 py-3 text-sm text-[#F5D9A5]/80">
+          <div className="md:col-span-2 rounded-xl border border-[#6b7280]/20 bg-[#6b7280]/10 px-4 py-3 text-sm text-[#d1d5db]/80">
             El restaurante y el usuario se asignan automáticamente desde el flujo del cliente.
           </div>
 
@@ -285,13 +285,13 @@ export default function CustomerOrderCreateView() {
             <button
               type="button"
               onClick={goBack}
-              className="rounded-xl border border-[#FCF0CA]/20 px-4 py-2 font-semibold text-[#FCF0CA] hover:bg-black/20"
+              className="rounded-xl border border-[#f8fafc]/20 px-4 py-2 font-semibold text-[#f8fafc] hover:bg-black/20"
             >
               Volver
             </button>
             <button
               type="submit"
-              className="rounded-xl bg-[#7F532C] px-5 py-2 font-bold text-[#FCF0CA] hover:bg-[#946841]"
+              className="rounded-xl bg-[#6b7280] px-5 py-2 font-bold text-[#f8fafc] hover:bg-[#9ca3af]"
             >
               Crear orden
             </button>

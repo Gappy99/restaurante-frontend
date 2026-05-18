@@ -5,7 +5,7 @@ const Coupons = ({ coupons, onEdit, onDelete, loading, restaurants = [] }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5B300E]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1f2937]"></div>
       </div>
     )
   }
