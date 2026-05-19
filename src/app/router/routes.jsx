@@ -5,6 +5,7 @@ import MainLayout from '../layouts/MainLayout'
 import UnauthorizedPage from '../../features/common/pages/UnauthorizedPage'
 import AuthLayout from '../layouts/AuthLayout'
 import FullLayout from '../layouts/FullLayout'
+import ErrorBoundary from '../ErrorBoundary'
 
 // Páginas públicas
 import LoginPage from '../../features/auth/pages/LoginPage'
@@ -80,7 +81,7 @@ const router = createBrowserRouter([
       </AuthLayout>
     ),
   },
-  // Rutas principales protegidas
+  // Rutas principales protegidas (ADMIN)
   {
     path: '/loby',
     element: (
@@ -88,10 +89,19 @@ const router = createBrowserRouter([
         <MainLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
         element: <DashboardPage />,
+      },
+      {
+        path: 'restaurants',
+        element: <RestaurantPage />,
+      },
+      {
+        path: 'restaurants/:id',
+        element: <RestaurantMiniMenuPage />,
       },
       {
         path: 'information',
@@ -137,32 +147,6 @@ const router = createBrowserRouter([
         path: 'reports',
         element: <ReportsPage />,
       },
-    ],
-  },
-  {
-    path: '/loby/restaurants',
-    element: (
-      <ProtectedRoute>
-        <MainLayout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        index: true,
-        element: <RestaurantPage />,
-      },
-      {
-        path: ':id',
-        element: <RestaurantMiniMenuPage />,
-      },
-      {
-        path: ':id/reviews',
-        element: <ReviewPage />,
-      },
-      {
-        path: ':id/tables',
-        element: <RestaurantTablesPage />,
-      },
       {
         path: 'inventory',
         element: <InventoryPage />,
@@ -174,6 +158,14 @@ const router = createBrowserRouter([
       {
         path: 'tables/all',
         element: <AllTablesPage />,
+      },
+      {
+        path: 'restaurants/:id/tables',
+        element: <RestaurantTablesPage />,
+      },
+      {
+        path: 'restaurants/:id/reviews',
+        element: <ReviewPage />,
       },
       {
         path: 'reservations',
@@ -205,6 +197,7 @@ const router = createBrowserRouter([
         <CustomerMainLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
@@ -213,6 +206,10 @@ const router = createBrowserRouter([
       {
         path: 'menu',
         element: <CustomerMenuView />,
+      },
+      {
+        path: 'restaurants',
+        element: <CustomerRestaurantView />,
       },
       {
         path: 'restaurants/:restaurantId/menu',
@@ -239,10 +236,6 @@ const router = createBrowserRouter([
         element: <CustomerOrderCreateView />,
       },
       {
-        path: 'restaurants',
-        element: <CustomerRestaurantView />,
-      },
-      {
         path: 'reservations',
         element: <CustomerReservationView />,
       },
@@ -250,11 +243,30 @@ const router = createBrowserRouter([
         path: 'reservations/new',
         element: <CustomerReservationCreateView />,
       },
+      {
+        path: 'profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: 'tables',
+        element: <TablesPage />,
+      },
+      {
+        path: 'coupons',
+        element: <CouponPage />,
+      },
     ],
   },
   {
     path: '/unauthorized',
     element: <UnauthorizedPage />,
+    errorElement: <ErrorBoundary />,
+  },
+  // 404 fallback - Debe estar al final
+  {
+    path: '*',
+    element: <NotFoundPage />,
+    errorElement: <ErrorBoundary />,
   },
 ])
 

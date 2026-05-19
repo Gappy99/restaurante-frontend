@@ -4,6 +4,10 @@ import { MenuCard } from '../components/MenuCard'
 import { MenuModal } from '../components/MenuModal'
 import { MenuViewModal } from '../components/MenuViewModal'
 import { FiPlus, FiCoffee } from 'react-icons/fi'
+import backgroundImage from '../../../shared/assets/img/menu.png'
+import '../../../styles/reservation.css'
+
+const reservationBackgroundImage = backgroundImage
 
 export default function MenuPage() {
   const { menus, fetchMenus, loading, removeMenu } = useMenuStore()
@@ -26,8 +30,15 @@ export default function MenuPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8 font-sans">
-      
+    <div
+      className="relative min-h-screen text-[#f8fafc] reservation-hero-bg p-4 md:p-8 font-sans"
+      style={{
+        backgroundImage: `url(${reservationBackgroundImage})`,
+      }}
+    >
+      <div className="absolute inset-0 bg-black/70 reservation-gradient-overlay" />
+      <div className="relative z-10">
+
       {/* Header monocromático y limpio */}
       <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-16 p-8 rounded-[2.5rem] bg-[#1f2937]/20 border border-[#6b7280]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
         <div className="text-center md:text-left">
@@ -99,6 +110,7 @@ export default function MenuPage() {
           menu={selectedMenu}
         />
       )}
+      </div>
     </div>
   )
 }

@@ -52,6 +52,7 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
   const [preview, setPreview] = useState(initialData?.restaurant_images?.[0] || null)
   const [geocoding, setGeocoding] = useState(false)
   const geocodeTimer = useRef(null)
+  const fileInputRef = useRef(null)
 
   useEffect(() => {
     if (!isOpen) return
@@ -114,6 +115,19 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
       const reader = new FileReader()
       reader.onloadend = () => setPreview(reader.result)
       reader.readAsDataURL(file)
+      return
+    }
+
+    // Si el usuario canceló la selección, conservar la imagen existente o eliminar la vista previa
+    setFormData((prev) => ({ ...prev, image: null }))
+    setPreview(initialData?.restaurant_images?.[0] || null)
+  }
+
+  const handleClearImage = () => {
+    setFormData((prev) => ({ ...prev, image: null }))
+    setPreview(initialData?.restaurant_images?.[0] || null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
     }
   }
 
@@ -298,24 +312,42 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
             
             <div className="flex flex-col gap-2">
               <label className="text-zinc-400 text-[10px] font-bold uppercase ml-1 text-left">
-
+                Imagen del restaurante
               </label>
               <div className="relative flex items-center gap-4 bg-zinc-900 p-3 rounded-2xl border border-zinc-700 overflow-hidden">
                 {preview && (
-                  <img src={preview} className="w-12 h-12 rounded-lg object-cover border border-zinc-600 flex-shrink-0" alt="Vista previa" />
+                  <img
+                    src={preview}
+                    className="w-12 h-12 rounded-lg object-cover border border-zinc-600 flex-shrink-0"
+                    alt="Vista previa de imagen"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null
+                      e.currentTarget.src = ''
+                    }}
+                  />
                 )}
-                <input 
-                  type="file" 
-                  name="image" 
-                  accept="image/*" 
-                  onChange={handleImageChange} 
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleImageChange}
                   className="flex-1 text-[10px] text-zinc-300 cursor-pointer
-                    file:mr-3 file:py-1 file:px-3 
-                    file:rounded-full file:border-0 
-                    file:bg-zinc-200 file:text-zinc-900 
+                    file:mr-3 file:py-1 file:px-3
+                    file:rounded-full file:border-0
+                    file:bg-zinc-200 file:text-zinc-900
                     file:font-bold file:text-[10px]"
                 />
               </div>
+              {preview && (
+                <button
+                  type="button"
+                  onClick={handleClearImage}
+                  className="self-start text-xs text-zinc-300 hover:text-white transition-colors"
+                >
+                  Quitar imagen
+                </button>
+              )}
             </div>
           </div>
 
