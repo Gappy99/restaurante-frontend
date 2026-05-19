@@ -31,7 +31,7 @@ const TablesDisplay = ({ tables, loading }) => {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between">
-				<h2 className="text-xl font-bold text-[#f8fafc]">Mesas ({tables.length})</h2>
+				<h2 className="text-xl font-[900] text-white">Mesas ({tables.length})</h2>
 			</div>
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

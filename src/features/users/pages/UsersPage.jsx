@@ -92,17 +92,49 @@ const UsersPage = () => {
   ]
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-[var(--text)]">Gestión de Usuarios</h1>
-        <button
-          onClick={() => handleOpenModal()}
-          className="px-6 py-2 bg-[var(--primary)] hover:bg-[#000000] text-[var(--surface)] rounded-lg font-semibold transition"
-        >
-          + Nuevo Usuario
-        </button>
+    <div className="min-h-screen">
+      <div className="mb-8 rounded-[1.75rem] border border-[#e2e8f0] bg-white/95 p-6 shadow-sm relative overflow-hidden">
+        <span
+          className="pointer-events-none absolute -left-10 top-0 h-28 w-28 rounded-full bg-slate-100 opacity-80 blur-2xl"
+          aria-hidden="true"
+        />
+        <span
+          className="pointer-events-none absolute -right-10 bottom-0 h-36 w-36 rounded-full bg-slate-100 opacity-80 blur-2xl"
+          aria-hidden="true"
+        />
+        <span
+          className="absolute top-0 left-0 h-1 w-full rounded-t-[1.75rem]"
+          style={{ background: 'linear-gradient(90deg, #1e293b, #475569, #cbd5e1)' }}
+          aria-hidden="true"
+        />
+        <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-[900] tracking-[-0.3px] text-[var(--text)]">Gestión de Usuarios</h1>
+            <p className="mt-2 text-sm text-slate-500">Administra cuentas, roles y asignaciones de restaurante desde un solo lugar.</p>
+          </div>
+          <button
+            onClick={() => handleOpenModal()}
+            className="inline-flex items-center justify-center rounded-full bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--surface)] transition hover:bg-[#000000]"
+          >
+            + Nuevo Usuario
+          </button>
+        </div>
       </div>
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+
+      <div className="relative overflow-hidden rounded-[2rem] border border-[#e2e8f0] bg-white shadow-sm">
+        <span
+          className="pointer-events-none absolute -left-8 top-8 h-28 w-28 rounded-full bg-slate-100 opacity-80 blur-2xl"
+          aria-hidden="true"
+        />
+        <span
+          className="pointer-events-none absolute -right-8 bottom-8 h-32 w-32 rounded-full bg-slate-100 opacity-80 blur-2xl"
+          aria-hidden="true"
+        />
+        <span
+          className="absolute top-0 left-0 h-1 w-full rounded-t-[2rem]"
+          style={{ background: 'linear-gradient(90deg, #1e293b, #475569, #cbd5e1)' }}
+          aria-hidden="true"
+        />
         {loading ? (
           <div className="p-6 text-center text-[var(--muted)]">Cargando usuarios...</div>
         ) : users.length === 0 ? (
@@ -110,12 +142,15 @@ const UsersPage = () => {
             No hay usuarios registrados
           </div>
         ) : (
-          <Table
-            columns={columns}
-            data={users}
-            onEdit={handleOpenModal}
-            onDelete={handleDelete}
-          />
+          <div className="overflow-x-auto">
+            <Table
+              columns={columns}
+              data={users}
+              onEdit={handleOpenModal}
+              onDelete={handleDelete}
+              accent
+            />
+          </div>
         )}
       </div>
 
