@@ -9,6 +9,10 @@ import { restaurantService } from '../../restaurant/services/restaurantService'
 import { tableService } from '../../tables/services/tableService'
 import Modal from '../../../shared/components/Modal'
 import Table from '../../../shared/components/Table'
+import backgroundImage from '../../../shared/assets/img/reservadas.png'
+import '../../../styles/reservation.css'
+
+const reservationBackgroundImage = backgroundImage
 
 const ReservationsPage = () => {
   const { user } = useAuthStore()
@@ -79,39 +83,61 @@ const ReservationsPage = () => {
   ]
 
   return (
-    <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reservaciones</h1>
-          <p className="text-gray-600 mt-2 max-w-2xl">
-            Administra reservaciones de clientes y confirma estados en tiempo real.
+    <div
+      className="relative min-h-screen text-white reservation-hero-bg"
+      style={{
+        backgroundImage: `url(${reservationBackgroundImage})`,
+      }}
+    >
+      <div className="absolute inset-0 bg-black/70 reservation-gradient-overlay" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 reservation-container">
+        <div className="reservation-header text-center mb-12">
+          <p className="text-sm uppercase tracking-[0.35em] text-slate-200/80 mb-3">
+            Reservaciones
+          </p>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black reservation-title">
+            Reservaciones
+          </h1>
+          <p className="mt-4 text-base md:text-lg text-slate-200/80 max-w-3xl mx-auto">
+            Administra reservaciones de clientes y confirma estados en tiempo real con un diseño limpio, balanceado y elegante.
           </p>
         </div>
 
-        <button
-          onClick={() => handleOpenModal()}
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
-        >
-          + Nueva Reservación
-        </button>
-      </div>
+        <div className="reservation-dotted-divider">
+          <span className="reservation-dot" />
+          <span className="reservation-dot center" />
+          <span className="reservation-dot" />
+        </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        {loading ? (
-          <div className="p-6 text-center text-gray-500">Cargando reservaciones...</div>
-        ) : reservations.length === 0 ? (
-          <div className="p-6 text-center text-gray-500">
-            No se encontraron reservaciones.
+        <div className="reservation-glass-card">
+          <div className="flex justify-end px-6 py-6 border-b border-white/10">
+            <button
+              onClick={() => handleOpenModal()}
+              className="reservation-btn-primary px-6 py-3 rounded-2xl text-sm uppercase tracking-[0.18em]"
+            >
+              + Nueva Reservación
+            </button>
           </div>
-        ) : (
-          <Table
-            columns={columns}
-            data={reservations}
-            onEdit={handleOpenModal}
-            onDelete={handleCancel}
-            actionLabels={{ edit: 'Editar', delete: 'Cancelar' }}
-          />
-        )}
+
+          <div className="bg-slate-950/80 p-6">
+            {loading ? (
+              <div className="p-6 text-center text-slate-300">Cargando reservaciones...</div>
+            ) : reservations.length === 0 ? (
+              <div className="p-6 text-center text-slate-300">
+                No se encontraron reservaciones.
+              </div>
+            ) : (
+              <Table
+                columns={columns}
+                data={reservations}
+                onEdit={handleOpenModal}
+                onDelete={handleCancel}
+                actionLabels={{ edit: 'Editar', delete: 'Cancelar' }}
+              />
+            )}
+          </div>
+        </div>
       </div>
 
       <ReservationModal

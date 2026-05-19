@@ -1,4 +1,3 @@
-import adminClient from '../adminClient'
 import authClient from '../authClient'
 
 const normalizeUser = (user) => ({
@@ -14,7 +13,7 @@ const normalizeUser = (user) => ({
 // Servicio para obtener usuarios desde el backend
 export const getUsers = async () => {
   try {
-    const response = await adminClient.get('/users')
+    const response = await authClient.get('/users')
     const users =
       response.data?.users ||
       response.data?.data ||
@@ -37,7 +36,7 @@ export const createUser = async (userData) => {
       telefono: userData.telefono || userData.phone || userData.contact_phone_number || '',
       rol: userData.rol || userData.role || userData.contact_position || 'CLIENTE',
     }
-    const response = await adminClient.post('/users', payload)
+    const response = await authClient.post('/users', payload)
     return normalizeUser(response.data?.user || response.data?.data || response.data)
   } catch (error) {
     console.error('Error al crear usuario:', error)
@@ -54,7 +53,7 @@ export const updateUser = async (id, userData) => {
       telefono: userData.telefono || userData.phone || userData.contact_phone_number || '',
       rol: userData.rol || userData.role || userData.contact_position || 'CLIENTE',
     }
-    const response = await adminClient.put(`/users/${id}`, payload)
+    const response = await authClient.put(`/users/${id}`, payload)
     return normalizeUser(response.data?.user || response.data?.data || response.data)
   } catch (error) {
     console.error('Error al actualizar usuario:', error)
@@ -65,7 +64,7 @@ export const updateUser = async (id, userData) => {
 // Servicio para eliminar un usuario
 export const deleteUser = async (id) => {
   try {
-    const response = await adminClient.delete(`/users/${id}`)
+    const response = await authClient.delete(`/users/${id}`)
     return response.data
   } catch (error) {
     console.error('Error al eliminar usuario:', error)

@@ -35,8 +35,11 @@ authClient.interceptors.response.use(
       try {
         const refreshToken = useAuthStore.getState().refreshToken
         if (refreshToken) {
+          const refreshUrl =
+            import.meta.env.VITE_AUTH_URL ||
+            'http://localhost:3000/GestorRestaurante/v1/auth'
           const response = await axios.post(
-            `${import.meta.env.VITE_AUTH_URL}/refresh`,
+            `${refreshUrl}/refresh`,
             { refreshToken }
           )
 

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
+import adminClient from '../../../shared/api/adminClient.js'
 
-// Minimal hook used by CustomerMenuView. Tries to fetch from '/menu' and falls
-// back to an empty array on error. Keeps API calls optional and safe.
+// Minimal hook used by CustomerMenuView. Fetches menus from backend API.
 export function useMenus() {
   const [menus, setMenus] = useState([])
   const [loading, setLoading] = useState(false)
@@ -9,9 +9,8 @@ export function useMenus() {
   const fetchMenus = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/menu')
-      if (!res.ok) throw new Error('network')
-      const data = await res.json()
+      const response = await adminClient.get('/menu')
+      const data = response.data
       setMenus(Array.isArray(data) ? data : [])
     } catch (e) {
       setMenus([])

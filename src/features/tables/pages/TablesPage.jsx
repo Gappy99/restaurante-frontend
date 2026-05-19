@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRestaurants } from '../../restaurant/hooks/index.js'
 import toast from 'react-hot-toast'
+import backgroundImage from '../../../shared/assets/img/mesas.jpg'
+import '../../../styles/reservation.css'
+
+const reservationBackgroundImage = backgroundImage
 
 const TablesPage = () => {
 	const { restaurants, loading, error, fetchRestaurants } = useRestaurants()
@@ -28,9 +32,16 @@ const TablesPage = () => {
 	})
 
 	return (
-		<div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8 font-sans">
+		<div
+			className="relative min-h-screen text-[#f8fafc] reservation-hero-bg p-4 md:p-8 font-sans"
+			style={{
+				backgroundImage: `url(${reservationBackgroundImage})`,
+			}}
+		>
+			<div className="absolute inset-0 bg-black/70 reservation-gradient-overlay" />
+			<div className="relative z-10">
 
-			<header className="max-w-7xl mx-auto mb-12 p-8 rounded-[2.5rem] bg-[#1f2937]/20 border border-[#6b7280]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
+				<header className="max-w-7xl mx-auto mb-12 p-8 rounded-[2.5rem] bg-[#1f2937]/20 border border-[#6b7280]/30 backdrop-blur-xl shadow-2xl shadow-black/40">
 				<div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
 					<div className="text-center md:text-left">
 					<h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic bg-gradient-to-r from-[#f8fafc] via-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent">
@@ -107,6 +118,7 @@ const TablesPage = () => {
 				</section>
 
 			</main>
+			</div>
 		</div>
 	)
 }

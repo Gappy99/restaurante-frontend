@@ -4,6 +4,10 @@ import { Spinner } from '../../../shared/components/Spinner'
 import useRestaurantStore from '../../restaurant/store/useRestaurantStore'
 import useMenuStore from '../../menus/store/useMenuStore'
 import useCouponStore from '../../coupon/store/useCouponStore'
+import backgroundImage from '../../../shared/assets/img/ordenes.png'
+import '../../../styles/reservation.css'
+
+const reservationBackgroundImage = backgroundImage
 
 const statusOptions = ['en_preparacion', 'listo', 'entregado', 'cancelado']
 
@@ -212,8 +216,15 @@ const OrdersPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#111111] text-[#f8fafc] p-4 md:p-8">
-      <header className="max-w-7xl mx-auto mb-8 rounded-[2rem] border border-[#6b7280]/30 bg-[#1f2937]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
+    <div
+      className="relative min-h-screen text-[#f8fafc] reservation-hero-bg p-4 md:p-8"
+      style={{
+        backgroundImage: `url(${reservationBackgroundImage})`,
+      }}
+    >
+      <div className="absolute inset-0 bg-black/70 reservation-gradient-overlay" />
+      <div className="relative z-10">
+        <header className="max-w-7xl mx-auto mb-8 rounded-[2rem] border border-[#6b7280]/30 bg-[#1f2937]/20 p-6 md:p-8 backdrop-blur-xl shadow-2xl shadow-black/40">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-[#9ca3af]">Orders</p>
@@ -483,6 +494,7 @@ const OrdersPage = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }

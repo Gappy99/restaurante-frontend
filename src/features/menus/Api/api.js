@@ -2,7 +2,9 @@ import axios from "axios";
 import useAuthStore from "../../../shared/stores/useAuthStore";
 
 const axiosAuth = axios.create({
-    baseURL: import.meta.env.VITE_AUTH_URL,
+    baseURL:
+        import.meta.env.VITE_AUTH_URL ||
+        'http://localhost:3000/GestorRestaurante/v1/auth',
     timeout: 8000,
     headers: {
         "Content-Type": "application/json"
@@ -10,23 +12,26 @@ const axiosAuth = axios.create({
 });
 
 const axiosAdmin = axios.create({
-    baseURL: import.meta.env.VITE_ADMIN_URL,
+    baseURL:
+        import.meta.env.VITE_ADMIN_URL ||
+        'http://localhost:3000/GestorRestaurante/v1',
     timeout: 10000,
     headers: {
         "Content-Type": "application/json"
     }
 });
 
-const addTokenToRequest = (config) => {
+const addTokenToRequest = (config, clientType) => {
     const token = useAuthStore.getState().token;
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+    config._axiosClient = clientType
     return config;
 };
 
-axiosAuth.interceptors.request.use(addTokenToRequest);
-axiosAdmin.interceptors.request.use(addTokenToRequest);
+axiosAuth.interceptors.request.use((config) => addTokenToRequest(config, 'auth'));
+axiosAdmin.interceptors.request.use((config) => addTokenToRequest(config, 'admin'));
 
 let _isRefreshing = false;
 let failedQueue = [];
@@ -70,7 +75,8 @@ const handleRefreshToken = async function (_error) {
             return Promise.reject(_error);
         }
         try {
-            const response = await axiosAuth.post("/auth/refresh", { refreshToken });
+            const refreshUrl = import.meta.env.VITE_AUTH_URL || 'http://localhost:3000/GestorRestaurante/v1/auth';
+            const response = await axiosAuth.post(`${refreshUrl}/refresh`, { refreshToken });
             const { accessToken, refreshToken: newRefreshToken, expiresIn, userDetails } = response.data;
             useAuthStore.setState({
                 token: accessToken,
