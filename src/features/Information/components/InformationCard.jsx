@@ -10,14 +10,20 @@ const InformationCard = ({ information, restaurantName, onEdit, onDelete }) => {
   const statistics = formatStatistics(information.statistics)
 
   return (
-    <article className="overflow-hidden rounded-3xl border border-[var(--accent-soft)] bg-[var(--surface)] shadow-lg transition hover:shadow-2xl">
+    <article className="relative overflow-hidden rounded-3xl border border-[var(--accent-soft)] bg-[var(--surface)] shadow-lg transition hover:shadow-2xl pl-6">
+      <span className="absolute left-0 top-6 h-full w-[3px] rounded-r-full bg-slate-900/20" aria-hidden="true" />
+      <span
+        className="absolute top-0 left-0 h-1 w-full"
+        style={{ background: 'linear-gradient(90deg, #1e293b, #475569, #cbd5e1)' }}
+        aria-hidden="true"
+      />
       <div className="bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] p-5 text-[var(--surface)]">
         <div className="flex items-start justify-between gap-4">
           <div>
             <span className="inline-flex rounded-full bg-white/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em]">
               {information.type || 'General'}
             </span>
-            <h3 className="mt-3 text-2xl font-semibold leading-tight">
+            <h3 className="mt-3 text-2xl font-[900] leading-tight tracking-[-0.3px]">
               {information.title}
             </h3>
           </div>
@@ -85,8 +91,14 @@ const InformationCard = ({ information, restaurantName, onEdit, onDelete }) => {
 }
 
 const InfoValue = ({ label, value }) => (
-  <div className="rounded-2xl border border-[var(--accent-soft)] bg-[var(--bg)] p-4">
-    <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{label}</p>
+  <div className="relative overflow-hidden rounded-2xl border border-[var(--accent-soft)] bg-[var(--bg)] p-4 pl-6">
+    <span className="absolute left-0 top-0 h-full w-[3px] rounded-r-full bg-slate-900/20" aria-hidden="true" />
+    <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)] flex items-center gap-2">
+      {label}
+      {label === 'Estado' && value === 'Activo' ? (
+        <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#22c55e] shadow-sm" aria-hidden="true" />
+      ) : null}
+    </p>
     <p className="mt-1 font-semibold text-[var(--text)]">{value || 'No disponible'}</p>
   </div>
 )

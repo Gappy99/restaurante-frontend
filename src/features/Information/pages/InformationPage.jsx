@@ -101,44 +101,59 @@ const InformationPage = () => {
 
   return (
     <div className="p-4 md:p-6 space-y-6">
-      <div className="flex flex-col gap-4 rounded-3xl border border-[var(--accent-soft)] bg-[var(--surface)] p-6 shadow-sm lg:flex-row lg:items-end lg:justify-between">
-        <div className="space-y-2">
-          <span className="inline-flex rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text)]">
-            Information
-          </span>
-          <h1 className="text-3xl font-bold text-[var(--text)]">Información por restaurante</h1>
-          <p className="text-sm text-[var(--muted)]">
-            El backend exige restaurantId, así que aquí puedes crear, filtrar y administrar la información por restaurante.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <div className="min-w-72">
-            <label className="mb-1 block text-sm font-semibold text-[var(--text)]">Filtrar por restaurante</label>
-            <select
-              value={restaurantId}
-              onChange={handleFilterChange}
-              className="w-full rounded-xl border border-[var(--accent-soft)] bg-[var(--surface)] px-4 py-3 text-[var(--text)] outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20"
-            >
-              <option value="">Todos los restaurantes</option>
-              {restaurants.map((restaurant) => {
-                const id = restaurant._id || restaurant.id
-                return (
-                  <option key={id} value={id}>
-                    {restaurant.restaurant_name || restaurant.nombre || restaurant.name || 'Restaurante sin nombre'}
-                  </option>
-                )
-              })}
-            </select>
+      <div className="relative overflow-hidden rounded-[1.75rem] border border-[#e2e8f0] bg-white/95 p-6 shadow-sm">
+        <span
+          className="pointer-events-none absolute -left-10 top-0 h-28 w-28 rounded-full bg-slate-100 opacity-80 blur-2xl"
+          aria-hidden="true"
+        />
+        <span
+          className="pointer-events-none absolute -right-10 bottom-0 h-36 w-36 rounded-full bg-slate-100 opacity-80 blur-2xl"
+          aria-hidden="true"
+        />
+        <span
+          className="absolute top-0 left-0 h-1 w-full rounded-t-[1.75rem]"
+          style={{ background: 'linear-gradient(90deg, #1e293b, #475569, #cbd5e1)' }}
+          aria-hidden="true"
+        />
+        <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-2">
+            <span className="inline-flex rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text)]">
+              Information
+            </span>
+            <h1 className="text-3xl font-[900] tracking-[-0.3px] text-[var(--text)]">Información por restaurante</h1>
+            <p className="text-sm text-[var(--muted)]">
+              El backend exige restaurantId, así que aquí puedes crear, filtrar y administrar la información por restaurante.
+            </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleOpenModal()}
-            className="h-fit rounded-xl bg-[var(--primary)] px-5 py-3 font-medium text-[var(--surface)] transition hover:bg-[#000000]"
-          >
-            + Agregar información
-          </button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="min-w-72">
+              <label className="mb-1 block text-sm font-semibold text-[var(--text)]">Filtrar por restaurante</label>
+              <select
+                value={restaurantId}
+                onChange={handleFilterChange}
+                className="w-full rounded-xl border border-[var(--accent-soft)] bg-[var(--surface)] px-4 py-3 text-[var(--text)] outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20"
+              >
+                <option value="">Todos los restaurantes</option>
+                {restaurants.map((restaurant) => {
+                  const id = restaurant._id || restaurant.id
+                  return (
+                    <option key={id} value={id}>
+                      {restaurant.restaurant_name || restaurant.nombre || restaurant.name || 'Restaurante sin nombre'}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handleOpenModal()}
+              className="h-fit rounded-full bg-[var(--primary)] px-5 py-3 font-semibold text-[var(--surface)] transition hover:bg-[#000000]"
+            >
+              + Agregar información
+            </button>
+          </div>
         </div>
       </div>
 
