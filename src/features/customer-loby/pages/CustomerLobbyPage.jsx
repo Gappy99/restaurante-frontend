@@ -1,25 +1,27 @@
 import { useNavigate } from 'react-router-dom'
 
 /**
- * CustomerLobbyPage - Contenedor Hero con URL externa para la imagen de fondo
+ * CustomerLobbyPage - Contenedor Hero con fondo local animado
  */
 const CustomerLobbyPage = () => {
   const navigate = useNavigate()
-
-  // URL externa de la imagen del restaurante proporcionada
   const externalBackgroundImage = 'https://static.wixstatic.com/media/00fb00_858f44146f614385a542ac5de52678a4~mv2.jpg'
 
   return (
     <div 
-      className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${externalBackgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
+      className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 overflow-hidden"
     >
-      {/* Filtro sutil oscuro sobre la imagen para resaltar las tipografías */}
+      <div
+        className="absolute inset-0 lobby-bg-motion pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)), url(${externalBackgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+
+      {/* Capa extra para mejorar contraste del texto */}
       <div className="absolute inset-0 bg-black/10 pointer-events-none" />
 
       {/* Bloque Central de Título y Llamada a la acción */}

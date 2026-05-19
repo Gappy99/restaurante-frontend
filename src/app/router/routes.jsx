@@ -56,6 +56,7 @@ import CustomerDetallePedidoCreateView from '../../features/customer-detallepedi
 import CustomerRestaurantMapView from '../../features/customer-mapa/page/CustomerRestaurantMapView'
 import CustomerMapaGeneralView from '../../features/customer-mapa/page/CustomerMapaGeneralView'
 import CustomerFacturaView from '../../features/customer-factura/page/CustomerFacturaView'
+import CustomerFacturaPrintView from '../../features/customer-factura/page/CustomerFacturaPrintView'
 
 /**
  * Configuración de rutas
@@ -236,6 +237,10 @@ const router = createBrowserRouter([
       {
         path: 'factura',
         element: <CustomerFacturaView />,
+      },
+      {
+        path: 'factura/print',
+        element: <CustomerFacturaPrintView />,
       },
       {
         path: 'orders/:orderId/details',

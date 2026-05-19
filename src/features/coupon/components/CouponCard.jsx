@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { FiCheckCircle, FiXCircle } from 'react-icons/fi'
 
-const CouponCard = ({ coupon, onEdit, onDelete, restaurants = [] }) => {
+const CouponCard = ({ coupon, onEdit, onDelete, restaurants = [], showActions = true }) => {
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('es-ES')
   }
@@ -94,22 +94,24 @@ const CouponCard = ({ coupon, onEdit, onDelete, restaurants = [] }) => {
           </span>
         </div>
         
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => onEdit(coupon)}
-            className="flex-1 rounded-lg bg-[#1f2937] px-3 py-2 text-xs font-semibold text-[#f8fafc] transition hover:bg-[#111111]"
-          >
-            Editar
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(coupon._id || coupon.id)}
-            className="flex-1 rounded-lg border border-[#1f2937] bg-white px-3 py-2 text-xs font-semibold text-[#1f2937] transition hover:bg-[#f8fafc]/20"
-          >
-            Eliminar
-          </button>
-        </div>
+        {showActions && (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => onEdit(coupon)}
+              className="flex-1 rounded-lg bg-[#1f2937] px-3 py-2 text-xs font-semibold text-[#f8fafc] transition hover:bg-[#111111]"
+            >
+              Editar
+            </button>
+            <button
+              type="button"
+              onClick={() => onDelete(coupon._id || coupon.id)}
+              className="flex-1 rounded-lg border border-[#1f2937] bg-white px-3 py-2 text-xs font-semibold text-[#1f2937] transition hover:bg-[#f8fafc]/20"
+            >
+              Eliminar
+            </button>
+          </div>
+        )}
       </div>
     </article>
   )
@@ -120,6 +122,7 @@ CouponCard.propTypes = {
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   restaurants: PropTypes.array,
+  showActions: PropTypes.bool,
 }
 
 export default CouponCard

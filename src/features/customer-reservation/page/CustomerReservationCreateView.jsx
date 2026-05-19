@@ -85,7 +85,7 @@ export default function CustomerReservationCreateView() {
         editingReservation?.number_of_people ||
         editingReservation?.guest_count ||
         1,
-      reservation_type: editingReservation?.tipo || editingReservation?.reservation_type || 'mesa',
+      reservation_type: 'mesa',
       table_id:
         editingReservation?.table_id ||
         editingReservation?.mesa ||
@@ -249,8 +249,8 @@ export default function CustomerReservationCreateView() {
       reservation_date: formData.reservation_date,
       reservation_time: formData.reservation_time,
       personas: String(formData.personas || 1),
-      reservation_type: formData.reservation_type,
-      table_id: formData.reservation_type === 'mesa' ? formData.table_id : null,
+      reservation_type: 'mesa',
+      table_id: formData.table_id,
       restaurant_id: restaurantContext.id,
       notes: formData.notes,
       reservation_history: formData.notes,
@@ -289,7 +289,7 @@ export default function CustomerReservationCreateView() {
           {/* Header centrado y simétrico */}
           <div className="text-center mb-10 space-y-3">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af]">
-              {isEditing ? '✎ Editar Reservación' : '+ Nueva Reservación'}
+              {isEditing ? ' Editar Reservación' : '+ Nueva Reservación'}
             </p>
             <h1 className="text-5xl md:text-6xl font-black tracking-tight text-[#f8fafc] drop-shadow-lg">
               {isEditing ? 'Editar reservación' : 'Tu Reservación'}
@@ -363,62 +363,55 @@ export default function CustomerReservationCreateView() {
 
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af] mb-2">Tipo</p>
-                  <select
-                    id="reservation-type"
-                    value={formData.reservation_type}
-                    onChange={(e) => handleChange('reservation_type', e.target.value)}
-                    className="w-full rounded-lg border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-[#f8fafc] focus:border-white/30 focus:bg-black/40 outline-none transition backdrop-blur-sm"
-                  >
-                    <option value="mesa">🍽️ Mesa</option>
-                    <option value="domicilio">🏠 Domicilio</option>
-                  </select>
+                  <div className="w-full rounded-lg border border-white/10 bg-black/30 px-4 py-2.5 text-sm font-bold uppercase tracking-[0.2em] text-[#f8fafc] backdrop-blur-sm">
+                    Mesa
+                  </div>
+                  <p className="mt-2 text-xs text-[#d1d5db]/60">El tipo se asigna automáticamente y no puede modificarse.</p>
                 </div>
               </div>
 
               {/* Mesa (si es reservación de mesa) */}
-              {formData.reservation_type === 'mesa' && (
-                <div className="md:col-span-2 pb-8 border-b border-white/5">
-                  <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af] mb-2">Seleccionar Mesa</p>
-                  <select
-                    id="reservation-table"
-                    value={formData.table_id}
-                    onChange={(e) => handleChange('table_id', e.target.value)}
-                    disabled={loadingTables}
-                    className="w-full rounded-lg border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-[#f8fafc] focus:border-white/30 focus:bg-black/40 outline-none transition backdrop-blur-sm disabled:opacity-50"
+              <div className="md:col-span-2 pb-8 border-b border-white/5">
+                <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#9ca3af] mb-2">Seleccionar Mesa</p>
+                <select
+                  id="reservation-table"
+                  value={formData.table_id}
+                  onChange={(e) => handleChange('table_id', e.target.value)}
+                  disabled={loadingTables}
+                  className="w-full rounded-lg border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-[#f8fafc] focus:border-white/30 focus:bg-black/40 outline-none transition backdrop-blur-sm disabled:opacity-50"
+                >
+                  <option value="">Selecciona una mesa</option>
+                  {filteredTables.map((table) => {
+                    const tId = getTableId(table)
+                    const tName = table.table_name || table.name || `Mesa ${table.table_number || ''}`
+                    return (
+                      <option key={tId} value={tId}>
+                        {tName}
+                      </option>
+                    )
+                  })}
+                </select>
+
+                <p className="mt-2 text-xs text-[#d1d5db]/60">
+                  Se mostrarán primero las mesas con capacidad exacta. Si hay menos de 2 disponibles, también se incluirán las mesas cercanas.
+                </p>
+
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsTablePlanOpen(true)}
+                    disabled={loadingTables || loadingLayout || !restaurantContext?.id || Boolean(capacityWarning)}
+                    className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#f8fafc] hover:bg-white/10 transition disabled:opacity-50 backdrop-blur-sm"
                   >
-                    <option value="">Selecciona una mesa</option>
-                    {filteredTables.map((table) => {
-                      const tId = getTableId(table)
-                      const tName = table.table_name || table.name || `Mesa ${table.table_number || ''}`
-                      return (
-                        <option key={tId} value={tId}>
-                          {tName}
-                        </option>
-                      )
-                    })}
-                  </select>
-
-                  <p className="mt-2 text-xs text-[#d1d5db]/60">
-                    Se mostrarán primero las mesas con capacidad exacta. Si hay menos de 2 disponibles, también se incluirán las mesas cercanas.
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setIsTablePlanOpen(true)}
-                      disabled={loadingTables || loadingLayout || !restaurantContext?.id || Boolean(capacityWarning)}
-                      className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#f8fafc] hover:bg-white/10 transition disabled:opacity-50 backdrop-blur-sm"
-                    >
-                      📋 Ver mesas disponibles
-                    </button>
-                    {selectedTableName && (
-                      <span className="text-xs text-[#a1d8f7] font-medium">
-                        ✓ {selectedTableName}
-                      </span>
-                    )}
-                  </div>
+                    Ver mesas disponibles
+                  </button>
+                  {selectedTableName && (
+                    <span className="text-xs text-[#a1d8f7] font-medium">
+                      ✓ {selectedTableName}
+                    </span>
+                  )}
                 </div>
-              )}
+              </div>
 
               {/* Notas */}
               <div className="mb-8">
@@ -436,13 +429,13 @@ export default function CustomerReservationCreateView() {
               {/* Avisos y errores */}
               {!restaurantContext?.id && (
                 <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-                  ⚠️ No hay restaurante seleccionado. Selecciona uno en la sección de Restaurantes.
+                   No hay restaurante seleccionado. Selecciona uno en la sección de Restaurantes.
                 </div>
               )}
 
               {capacityWarning && (
                 <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-                  🚫 {capacityWarning}
+                   {capacityWarning}
                 </div>
               )}
 
@@ -453,14 +446,14 @@ export default function CustomerReservationCreateView() {
                   onClick={() => navigate('/customer/reservations')}
                   className="rounded-lg border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-[0.2em] text-[#f8fafc] hover:bg-white/10 transition backdrop-blur-sm order-2 sm:order-1"
                 >
-                  ← Cancelar
+                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={submitting || !restaurantContext?.id || !user?._id || Boolean(capacityWarning)}
                   className="rounded-lg bg-white text-black px-8 py-3 text-sm font-black uppercase tracking-[0.2em] hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2 shadow-lg"
                 >
-                  {submitting ? '⏳ Guardando...' : isEditing ? '✎ Actualizar' : '✓ Reservar'}
+                  {submitting ? ' Guardando...' : isEditing ? ' Actualizar' : 'Reservar'}
                 </button>
               </div>
             </form>

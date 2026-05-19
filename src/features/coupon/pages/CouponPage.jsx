@@ -7,7 +7,7 @@ import {
 } from '../hooks/index.js'
 import { Coupons, CouponModal, DeleteConfirmModal } from '../components/index.js'
 import { restaurantService } from '../../restaurant/services/restaurantService.js'
-import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
+import { getAssignedRestaurantId, isClientRole, isManagerRole } from '../../../shared/utils/roles'
 import toast from 'react-hot-toast'
 
 const CouponPage = () => {
@@ -23,6 +23,7 @@ const CouponPage = () => {
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const user = useAuthStore((state) => state.user)
+  const isClient = isClientRole(user?.rol)
   const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
 
   useEffect(() => {
@@ -167,12 +168,14 @@ const CouponPage = () => {
               Controla la creación, edición y estado de cupones activos devueltos por el backend.
             </p>
           </div>
-          <button
-            onClick={handleCreateNew}
-            className="inline-flex items-center justify-center rounded-2xl bg-[#1f2937] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#1f2937]/20 transition hover:-translate-y-0.5 hover:bg-[#111111]"
-          >
-            + Nuevo cupón
-          </button>
+          {!isClient && (
+            <button
+              onClick={handleCreateNew}
+              className="inline-flex items-center justify-center rounded-2xl bg-[#1f2937] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#1f2937]/20 transition hover:-translate-y-0.5 hover:bg-[#111111]"
+            >
+              + Nuevo cupón
+            </button>
+          )}
         </div>
       </section>
 
@@ -229,6 +232,7 @@ const CouponPage = () => {
           onEdit={handleEdit}
           onDelete={handleDeleteClick}
           loading={loading}
+          showActions={!isClient}
         />
 
         {!loading && filteredCoupons.length === 0 && (

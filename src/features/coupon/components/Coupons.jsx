@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import CouponCard from './CouponCard'
 
-const Coupons = ({ coupons, onEdit, onDelete, loading, restaurants = [] }) => {
+const Coupons = ({ coupons, onEdit, onDelete, loading, restaurants = [], showActions = true }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -45,6 +45,7 @@ const Coupons = ({ coupons, onEdit, onDelete, loading, restaurants = [] }) => {
           onEdit={onEdit}
           onDelete={onDelete}
           restaurants={restaurants}
+          showActions={showActions}
         />
       ))}
     </div>
@@ -57,6 +58,7 @@ Coupons.propTypes = {
   onDelete: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   restaurants: PropTypes.array,
+  showActions: PropTypes.bool,
 }
 
 export default Coupons

@@ -137,7 +137,7 @@ export default function CustomerOrderCreateView() {
     const payload = {
       Orders_domicile: sanitize(formData.Orders_domicile),
       Orders_cupon: sanitize(formData.Orders_cupon) || null,
-      Orders_status: sanitize(formData.Orders_status) || 'en_preparacion',
+      Orders_status: 'en_preparacion',
       Restaurant_id: sanitize(selectedRestaurantId),
       Menu_id: sanitize(formData.Menu_id),
       User_id: sanitize(selectedUserId),
@@ -240,18 +240,10 @@ export default function CustomerOrderCreateView() {
             </select>
           </div>
 
-          <div>
+          <div className="rounded-xl border border-[#6b7280]/20 bg-[#6b7280]/10 px-4 py-3">
             <p className="text-xs uppercase tracking-[0.2em] text-[#d1d5db]/70">Estado</p>
-            <select
-              value={formData.Orders_status}
-              onChange={(e) => setFormData((prev) => ({ ...prev, Orders_status: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-[#f8fafc]/20 bg-black/20 px-4 py-3 text-[#f8fafc] outline-none"
-            >
-              <option value="en_preparacion">en_preparacion</option>
-              <option value="listo">listo</option>
-              <option value="entregado">entregado</option>
-              <option value="cancelado">cancelado</option>
-            </select>
+            <p className="mt-2 text-sm font-bold uppercase tracking-wide text-[#f8fafc]">en_preparacion</p>
+            <p className="mt-1 text-xs text-[#d1d5db]/80">Se asigna automáticamente al crear la orden.</p>
           </div>
 
           <div className="md:col-span-2">

@@ -1,17 +1,21 @@
-import backgroundImage from '../../shared/assets/img/logo-restaurant.jpeg'
+import backgroundImage from '../../shared/assets/img/img-login.png'
 
 const AuthLayout = ({ children }) => {
   return (
     <div
-      className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-8"
-      style={{
-        backgroundImage: `linear-gradient(135deg, rgba(91,48,14,0.75) 0%, rgba(91,48,14,0.75) 100%), url(${backgroundImage})`,
-        backgroundSize: '96% auto',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
+      className="relative flex min-h-screen w-full items-center justify-center overflow-hidden"
     >
-      <div className="relative w-full max-w-xs sm:max-w-sm">{children}</div>
+      <div
+        className="absolute inset-0 lobby-bg-motion pointer-events-none"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-xs sm:max-w-sm px-4 py-8">{children}</div>
     </div>
   )
 }

@@ -4,43 +4,13 @@ import useOrderStore from '../../orders/store/useOrderStore'
 import { getDetallePedidosByOrderService } from '../../detallepedido/services/DetallePedidoService'
 import { getDishByIdService } from '../../dishes/services/DishService'
 import { getBeverageByIdService } from '../../beverages/services/BeverageService'
-
-const asId = (value) => {
-  if (!value) return ''
-  if (typeof value === 'string') return value
-  return value?._id || value?.id || value?.Orders_id || ''
-}
-
-const formatDateTime = (value) => {
-  if (!value) return 'Sin fecha'
-  const date = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Sin fecha'
-  return date.toLocaleString('es-ES')
-}
-
-const extractDetalleList = (resp) => {
-  if (!resp) return []
-  if (Array.isArray(resp)) return resp
-  if (Array.isArray(resp?.data)) return resp.data
-  if (Array.isArray(resp?.detallePedidos)) return resp.detallePedidos
-  return []
-}
-
-const getInvoiceStatusLabel = (status) => {
-  const normalized = String(status || 'pendiente').toLowerCase()
-  if (normalized === 'pagada') return 'Pagada'
-  if (normalized === 'cancelada') return 'Cancelada'
-  if (normalized === 'emitida') return 'Emitida'
-  return 'Pendiente'
-}
-
-const getInvoiceStatusClass = (status) => {
-  const normalized = String(status || 'pendiente').toLowerCase()
-  if (normalized === 'pagada') return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200'
-  if (normalized === 'cancelada') return 'border-rose-500/30 bg-rose-500/10 text-rose-200'
-  if (normalized === 'emitida') return 'border-sky-500/30 bg-sky-500/10 text-sky-200'
-  return 'border-zinc-500/30 bg-zinc-500/10 text-zinc-200'
-}
+import {
+  asId,
+  formatDateTime,
+  extractDetalleList,
+  getInvoiceStatusLabel,
+  getInvoiceStatusClass,
+} from '../utils/invoiceHelpers'
 
 const CustomerFacturaView = () => {
   const navigate = useNavigate()
@@ -184,8 +154,55 @@ const CustomerFacturaView = () => {
     setSearchParams(value ? { orderId: value } : {})
   }
 
+  const handlePrintInvoice = () => {
+    if (!selectedOrderId) return
+    window.open(`/customer/factura/print?orderId=${selectedOrderId}`, '_blank', 'noopener,noreferrer')
+  }
+
   return (
-    <div className="min-h-full bg-[#111113] text-zinc-100 px-4 py-8 md:px-8">
+    <div className="invoice-print-root min-h-full bg-[#111113] text-zinc-100 px-4 py-8 md:px-8">
+      <style>{`
+        @media print {
+          @page {
+            size: auto;
+            margin: 12mm;
+          }
+
+          body {
+            background: #ffffff !important;
+          }
+
+          .invoice-print-root {
+            background: #ffffff !important;
+            color: #111111 !important;
+            padding: 0 !important;
+          }
+
+          .invoice-print-root > div {
+            box-shadow: none !important;
+            background: #ffffff !important;
+            border-color: #d1d5db !important;
+          }
+
+          .invoice-print-root .no-print {
+            display: none !important;
+          }
+
+          .invoice-print-root .print-keep-dark {
+            background: #ffffff !important;
+            color: #111111 !important;
+            border-color: #d1d5db !important;
+          }
+
+          .invoice-print-root .print-keep-dark * {
+            color: #111111 !important;
+          }
+
+          .invoice-print-root .print-border {
+            border-color: #d1d5db !important;
+          }
+        }
+      `}</style>
       <div className="mx-auto max-w-6xl rounded-3xl border border-zinc-800 bg-[#17171b] p-6 md:p-10 shadow-2xl shadow-black/30">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
@@ -197,16 +214,26 @@ const CustomerFacturaView = () => {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => navigate('/customer/orders')}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-xs font-bold uppercase tracking-widest text-zinc-200 hover:bg-zinc-800 transition"
-          >
-            Ver órdenes
-          </button>
+          <div className="flex flex-col gap-3 sm:flex-row no-print">
+            <button
+              type="button"
+              onClick={handlePrintInvoice}
+              className="rounded-xl border border-zinc-700 bg-zinc-100 px-4 py-2 text-xs font-bold uppercase tracking-widest text-zinc-900 hover:bg-white transition"
+            >
+              Abrir vista de impresión
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate('/customer/orders')}
+              className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-xs font-bold uppercase tracking-widest text-zinc-200 hover:bg-zinc-800 transition"
+            >
+              Ver órdenes
+            </button>
+          </div>
         </div>
 
-        <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-zinc-800 bg-black/20 p-4 md:flex-row md:items-center md:justify-between">
+        <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-zinc-800 bg-black/20 p-4 md:flex-row md:items-center md:justify-between print-keep-dark print-border">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">Orden seleccionada</p>
             <p className="mt-1 text-sm text-zinc-300">
@@ -214,7 +241,7 @@ const CustomerFacturaView = () => {
             </p>
           </div>
 
-          <div className="w-full md:w-96">
+          <div className="w-full md:w-96 no-print">
             <select
               value={selectedOrderId}
               onChange={(e) => handleSelectOrder(e.target.value)}
@@ -250,7 +277,7 @@ const CustomerFacturaView = () => {
 
         {selectedOrder && (
           <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-            <section className="rounded-2xl border border-zinc-800 bg-[#111113] p-5 md:p-6">
+            <section className="rounded-2xl border border-zinc-800 bg-[#111113] p-5 md:p-6 print-keep-dark print-border">
               <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">Invoice</p>
@@ -322,7 +349,7 @@ const CustomerFacturaView = () => {
               </div>
             </section>
 
-            <aside className="rounded-2xl border border-zinc-800 bg-[#111113] p-5 md:p-6">
+            <aside className="rounded-2xl border border-zinc-800 bg-[#111113] p-5 md:p-6 print-keep-dark print-border">
               <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-100">Resumen de factura</h3>
 
               <div className="mt-5 space-y-3">
