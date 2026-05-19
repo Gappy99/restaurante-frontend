@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react'
 import useDetallePedidoStore from '../../detallepedido/store/useDetallePedidoStore'
 import useOrderStore from '../../orders/store/useOrderStore'
+import notificationService from '../../../shared/api/services/notificationService'
 
 const MAX_MINUTES = 30
 
@@ -90,7 +91,29 @@ export default function OrderTimerBadge({ orderId, createdAt, status }) {
       const updateStatus = async () => {
         try {
           // Actualizar orden con estado compatible con el resto del flujo
-          await updateOrderStatus(orderId, 'entregado')
+          const res = await updateOrderStatus(orderId, 'entregado')
+
+          // Si la actualización fue exitosa, crear una notificación para el usuario de la orden
+          if (res?.success) {
+            try {
+              const fetched = await useOrderStore.getState().fetchOrderById(orderId)
+              const order = fetched?.data || null
+              const userId = order?.User_id?._id || order?.User_id || null
+              const orderNumber = order?.Orders_number || order?.Orders_number || order?._id || orderId
+
+              if (userId) {
+                await notificationService.createNotification({
+                  userId,
+                  type: 'order',
+                  title: 'Tu orden está lista',
+                  message: `Tu orden ${orderNumber} ha sido marcada como completada.`,
+                  data: { orderId },
+                })
+              }
+            } catch (nerr) {
+              console.error('Error creating notification after order update:', nerr)
+            }
+          }
         } catch (error) {
           console.error('Error updating order status:', error)
         }

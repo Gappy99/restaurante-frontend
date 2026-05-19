@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom'
 // Datos del Menú Principal del Cliente
 const menuItems = [
   { id: 1, label: 'Restaurantes', path: '/customer/restaurants', specialClass: 'font-bold text-lg' },
-  { id: 2, label: 'Mesas', path: '/customer/tables' },
-  { id: 3, label: 'Mis Reservaciones', path: '/customer/reservations' },
-  { id: 4, label: 'Menú', path: '/customer/menu', specialClass: 'italic' },
-  { id: 5, label: 'Mi Perfil', path: '/customer/profile' },
-  { id: 6, label: 'Cupones', path: '/customer/coupons', specialClass: 'italic' },
+  { id: 2, label: 'Mapa General', path: '/customer/mapa-general' },
+  { id: 3, label: 'Mesas', path: '/customer/tables' },
+  { id: 4, label: 'Mis Reservaciones', path: '/customer/reservations' },
+  { id: 5, label: 'Menú', path: '/customer/menu', specialClass: 'italic' },
+  { id: 6, label: 'Mi Perfil', path: '/customer/profile' },
+  { id: 7, label: 'Orders', path: '/customer/orders', specialClass: 'italic' },
 ]
 
 const NAVBAR_TITLE = 'Conozca nuestras ramas'

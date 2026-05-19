@@ -94,7 +94,7 @@ const CustomerOrdersView = () => {
       )
     }
     if (activeTab === 'Completadas') {
-      return rows.filter(order => order?.Orders_status === 'completada' || order?.Orders_status === 'entregada')
+      return rows.filter(order => order?.Orders_status === 'completada' || order?.Orders_status === 'entregado')
     }
     return rows
   }, [rows, activeTab])
@@ -196,7 +196,7 @@ const CustomerOrdersView = () => {
   // Helper dinámico para renderizar estilos de badges basados en el estado
   const getStatusBadgeStyles = (status) => {
     const s = status?.toLowerCase() || 'en_preparacion'
-    if (s === 'completada' || s === 'entregada') {
+    if (s === 'completada' || s === 'entregado') {
         return 'bg-emerald-500 text-black'
       }
       return 'bg-zinc-300 text-black'

@@ -59,8 +59,9 @@ export default function CustomerRestaurantMapView() {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white p-4">
-      <div className="max-w-7xl mx-auto rounded-2xl overflow-hidden border border-white/10 bg-black p-4" style={{height: 'calc(100vh - 120px)'}}>
+    <div className="min-h-screen bg-black text-white p-3 md:p-4">
+      <div className="max-w-7xl mx-auto rounded-xl overflow-hidden border border-white/10 bg-black p-3 md:p-4 relative z-0" 
+      style={{ height: 'calc(100vh - 160px)', zIndex: 0 }}>
         <Suspense fallback={<MapLoader />}>
           <GeneralMap restaurants={restaurants} />
         </Suspense>

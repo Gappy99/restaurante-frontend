@@ -54,6 +54,8 @@ import CustomerOrdersView from '../../features/customer-orders/page/CustomerOrde
 import CustomerOrderCreateView from '../../features/customer-orders/page/CustomerOrderCreateView'
 import CustomerDetallePedidoCreateView from '../../features/customer-detallepedido/page/CustomerDetallePedidoCreateView'
 import CustomerRestaurantMapView from '../../features/customer-mapa/page/CustomerRestaurantMapView'
+import CustomerMapaGeneralView from '../../features/customer-mapa/page/CustomerMapaGeneralView'
+import CustomerFacturaView from '../../features/customer-factura/page/CustomerFacturaView'
 
 /**
  * Configuración de rutas
@@ -220,12 +222,20 @@ const router = createBrowserRouter([
         element: <CustomerRestaurantMapView />,
       },
       {
+        path: 'mapa-general',
+        element: <CustomerMapaGeneralView />,
+      },
+      {
         path: 'restaurants/:restaurantId/orders/new',
         element: <CustomerOrderCreateView />,
       },
       {
         path: 'orders',
         element: <CustomerOrdersView />,
+      },
+      {
+        path: 'factura',
+        element: <CustomerFacturaView />,
       },
       {
         path: 'orders/:orderId/details',

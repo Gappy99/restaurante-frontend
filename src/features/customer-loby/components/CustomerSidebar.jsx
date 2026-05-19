@@ -53,6 +53,13 @@ const CustomerSidebar = ({ isOpen = true }) => {
         >
           <span>Restaurantes</span>
         </Link>
+
+        <Link
+          to="/customer/mapa-general"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
+        >
+          <span>Mapa General</span>
+        </Link>
  
         <Link
           to="/customer/tables"
@@ -66,6 +73,27 @@ const CustomerSidebar = ({ isOpen = true }) => {
           className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
         >
           <span>Menú</span>
+        </Link>
+
+        <Link
+          to="/customer/coupons"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
+        >
+          <span>Cupones</span>
+        </Link>
+
+        <Link
+          to="/customer/orders"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
+        >
+          <span>Órdenes</span>
+        </Link>
+
+        <Link
+          to="/customer/factura"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
+        >
+          <span>Factura</span>
         </Link>
  
         <Link
