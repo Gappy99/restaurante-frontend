@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRestaurants } from '../../restaurant/hooks/index.js'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { filterByRestaurant } from '../../../shared/utils/restaurantScope'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 import toast from 'react-hot-toast'
 
 const TablesPage = () => {
 	const { restaurants, loading, error, fetchRestaurants } = useRestaurants()
 	const [searchTerm, setSearchTerm] = useState('')
+	const user = useAuthStore((state) => state.user)
+	const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
 
 	useEffect(() => {
 		fetchRestaurants()
@@ -18,7 +23,11 @@ const TablesPage = () => {
 	}, [error])
 
 	const normalizedSearch = searchTerm.trim().toLowerCase()
-	const filteredRestaurants = restaurants.filter((restaurant) => {
+	const scopedRestaurants = managerRestaurantId
+		? filterByRestaurant(restaurants, managerRestaurantId)
+		: restaurants
+	const managerWithoutAssignment = isManagerRole(user?.rol) && !managerRestaurantId
+	const filteredRestaurants = scopedRestaurants.filter((restaurant) => {
 		if (!normalizedSearch) return true
 
 		const name = (restaurant.restaurant_name || restaurant.name || '').toLowerCase()
@@ -37,6 +46,11 @@ const TablesPage = () => {
 						Mesas por Restaurante
 					</h1>
 					<p className="text-[#9ca3af] mt-2 font-medium tracking-widest text-xs uppercase">Elige un restaurante para administrar su plano de mesas</p>
+						{managerRestaurantId && (
+							<p className="text-[#9ca3af] mt-3 text-sm">
+								Estás viendo solo el restaurante asignado a tu cuenta.
+							</p>
+						)}
 					</div>
 
 					<div className="relative w-full md:w-96">
@@ -60,7 +74,14 @@ const TablesPage = () => {
 				)}
 
 				<section className="relative z-10">
-					{loading ? (
+					{managerWithoutAssignment ? (
+						<div className="flex items-center justify-center py-24">
+							<div className="text-center max-w-xl">
+								<h3 className="text-[#f8fafc] text-xl font-bold mb-2">Gerente sin restaurante asignado</h3>
+								<p className="text-[#9ca3af]">Tu cuenta tiene rol de gerente, pero no tiene un restaurante vinculado todavía. No se muestran restaurantes hasta que se asigne uno.</p>
+							</div>
+						</div>
+					) : loading ? (
 						<div className="flex items-center justify-center py-24">
 							<div className="text-center">
 								<div className="inline-block animate-spin">

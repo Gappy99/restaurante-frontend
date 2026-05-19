@@ -6,13 +6,15 @@ import useAuthStore from '../../../shared/stores/useAuthStore'
 import useNotificationStore from '../../../shared/stores/useNotificationStore'
 import notificationService from '../../../shared/api/services/notificationService'
 import Modal from '../../../shared/components/Modal'
+import { getAssignedRestaurantId, isPrivilegedRole } from '../../../shared/utils/roles'
 
 const NotificationsPage = () => {
   const { user } = useAuthStore()
   const { notifications, loading } = useNotificationStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingNotification, setEditingNotification] = useState(null)
-  const isAdmin = user?.rol === 'ADMIN'
+  const canManageNotifications = isPrivilegedRole(user?.rol)
+  const assignedRestaurantId = getAssignedRestaurantId(user)
 
   useEffect(() => {
     loadNotifications()
@@ -20,7 +22,9 @@ const NotificationsPage = () => {
 
   const loadNotifications = async () => {
     useNotificationStore.getState().setLoading(true)
-    const params = isAdmin ? {} : { userId: user?._id }
+    const params = canManageNotifications
+      ? (assignedRestaurantId ? { restaurantId: assignedRestaurantId } : {})
+      : { userId: user?._id }
     const data = await notificationService.getNotifications(params)
     if (data) {
       useNotificationStore.getState().setNotifications(data)
@@ -61,7 +65,7 @@ const NotificationsPage = () => {
           </p>
         </div>
 
-        {isAdmin && (
+        {canManageNotifications && (
           <button
             onClick={() => handleOpenModal()}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
@@ -109,7 +113,7 @@ const NotificationsPage = () => {
                       >
                         {notification.read ? 'Marcar pendiente' : 'Marcar leída'}
                       </button>
-                      {isAdmin && (
+                      {canManageNotifications && (
                         <button
                           onClick={() => handleOpenModal(notification)}
                           className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm font-semibold transition"

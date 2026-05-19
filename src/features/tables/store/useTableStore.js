@@ -2,6 +2,12 @@ import { create } from 'zustand'
 import { tableService } from '../services/tableService.js'
 import { TABLE_DEFAULTS } from '../constants/tableConstants.js'
 import { filterTables, sortTables, resolveTableId } from '../utils/tableUtils.js'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { filterByRestaurant } from '../../../shared/utils/restaurantScope'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
+
+const resolveRequestedRestaurantId = (params = {}) =>
+	params.restaurantId || params.restaurant_id || ''
 
 const useTableStore = create((set, get) => ({
 	tables: [],
@@ -40,11 +46,27 @@ const useTableStore = create((set, get) => ({
 
 	fetchTables: async (params = {}) => {
 		set({ loading: true, error: null })
-		const result = await tableService.getTables(params)
+		const user = useAuthStore.getState().user
+		const isManager = isManagerRole(user?.rol)
+		const managerRestaurantId = isManager ? getAssignedRestaurantId(user) : ''
+		if (isManager && !managerRestaurantId) {
+			const error = 'El gerente no tiene un restaurante asignado'
+			set({ tables: [], error, loading: false })
+			return { success: false, error }
+		}
+		const requestedRestaurantId = resolveRequestedRestaurantId(params)
+		const scopedRestaurantId = managerRestaurantId || requestedRestaurantId
+		const scopedParams = scopedRestaurantId
+			? { ...params, restaurant_id: scopedRestaurantId, restaurantId: scopedRestaurantId }
+			: params
+		const result = await tableService.getTables(scopedParams)
 
 		if (result.success) {
+			const scopedTables = scopedRestaurantId
+				? filterByRestaurant(result.data || [], scopedRestaurantId)
+				: (result.data || [])
 			set({
-				tables: result.data,
+				tables: scopedTables,
 				loading: false,
 			})
 		} else {
@@ -60,8 +82,25 @@ const useTableStore = create((set, get) => ({
 	fetchTableById: async (id) => {
 		set({ loading: true, error: null })
 		const result = await tableService.getTableById(id)
+		const user = useAuthStore.getState().user
+		const isManager = isManagerRole(user?.rol)
+		const managerRestaurantId = isManager ? getAssignedRestaurantId(user) : ''
+		if (isManager && !managerRestaurantId) {
+			const error = 'El gerente no tiene un restaurante asignado'
+			set({ currentTable: null, error, loading: false })
+			return { success: false, error }
+		}
 
 		if (result.success) {
+			const tableRestaurantId = result.data?.restaurant_id?._id || result.data?.restaurant_id || ''
+			if (managerRestaurantId && String(tableRestaurantId) !== String(managerRestaurantId)) {
+				set({
+					error: 'No tienes acceso a esta mesa',
+					loading: false,
+					currentTable: null,
+				})
+				return { success: false, error: 'No tienes acceso a esta mesa' }
+			}
 			set({
 				currentTable: result.data,
 				loading: false,
@@ -78,7 +117,12 @@ const useTableStore = create((set, get) => ({
 
 	createTable: async (tableData) => {
 		set({ loading: true, error: null })
-		const result = await tableService.createTable(tableData)
+		const user = useAuthStore.getState().user
+		const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+		const scopedTableData = managerRestaurantId
+			? { ...tableData, restaurant_id: managerRestaurantId }
+			: tableData
+		const result = await tableService.createTable(scopedTableData)
 
 		if (result.success) {
 			set((state) => ({
@@ -97,7 +141,12 @@ const useTableStore = create((set, get) => ({
 
 	updateTable: async (id, tableData) => {
 		set({ loading: true, error: null })
-		const result = await tableService.updateTable(id, tableData)
+		const user = useAuthStore.getState().user
+		const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+		const scopedTableData = managerRestaurantId
+			? { ...tableData, restaurant_id: managerRestaurantId }
+			: tableData
+		const result = await tableService.updateTable(id, scopedTableData)
 
 		if (result.success) {
 			set((state) => ({

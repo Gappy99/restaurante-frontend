@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import useAuthStore from '../../../shared/stores/useAuthStore'
 import {
   useCoupons,
   useCouponForm,
@@ -6,6 +7,7 @@ import {
 } from '../hooks/index.js'
 import { Coupons, CouponModal, DeleteConfirmModal } from '../components/index.js'
 import { restaurantService } from '../../restaurant/services/restaurantService.js'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 import toast from 'react-hot-toast'
 
 const CouponPage = () => {
@@ -20,6 +22,8 @@ const CouponPage = () => {
   const [couponToDelete, setCouponToDelete] = useState(null)
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const user = useAuthStore((state) => state.user)
+  const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
 
   useEffect(() => {
     fetchCoupons()
@@ -35,12 +39,17 @@ const CouponPage = () => {
     const loadRestaurants = async () => {
       const result = await restaurantService.getRestaurants()
       if (result.success) {
-        setRestaurants(Array.isArray(result.data) ? result.data : [])
+        const list = Array.isArray(result.data) ? result.data : []
+        setRestaurants(
+          managerRestaurantId
+            ? list.filter((restaurant) => (restaurant._id || restaurant.id) === managerRestaurantId)
+            : list
+        )
       }
     }
 
     loadRestaurants()
-  }, [])
+  }, [managerRestaurantId])
 
   const handleCreateNew = () => {
     setSelectedCoupon(null)

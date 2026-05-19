@@ -1,7 +1,7 @@
 import { axiosAdmin } from "../Api/api.js"
 
-export const getMenus = async () => {
-    const response = await axiosAdmin.get("/menu");
+export const getMenus = async (params = {}) => {
+    const response = await axiosAdmin.get("/menu", { params });
     return response.data;
 }
 

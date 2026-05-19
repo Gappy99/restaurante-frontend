@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { filterByRestaurant } from '../../../shared/utils/restaurantScope'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 import { 
     getMenusRequest, 
     createMenuRequest, 
@@ -42,11 +45,17 @@ export const useMenuStore = create((set, get) => ({
     resolveMenuId: (menu) => menu?._id || menu?.id,
 
     // Async Actions
-    fetchMenus: async () => {
+    fetchMenus: async (params = {}) => {
         try {
             set({ loading: true, error: null });
-            const response = await getMenusRequest();
-            const menus = normalizeMenuList(response);
+            const user = useAuthStore.getState().user
+            const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+            const scopedParams = managerRestaurantId && !params?.restaurantId
+                ? { ...params, restaurantId: managerRestaurantId }
+                : params
+
+            const response = await getMenusRequest(scopedParams);
+            const menus = filterByRestaurant(normalizeMenuList(response), managerRestaurantId);
             set({ menus, loading: false });
             return { success: true, data: menus };
         } catch (err) {

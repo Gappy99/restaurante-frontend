@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 
 import useAuthStore from '../../../shared/stores/useAuthStore'
 import userService from '../../../shared/api/services/userService'
+import { getAssignedRestaurantName } from '../../../shared/utils/roles'
 
 /**
  * Página de perfil del usuario autenticado
@@ -26,6 +27,10 @@ const ProfilePage = () => {
       email: source.email || '',
       telefono: source.telefono || source.phone || source.contact_phone_number || 'No registrado',
       rol: source.rol || source.role || 'No registrado',
+      restauranteAsignadoNombre:
+        source.restauranteAsignadoNombre ||
+        getAssignedRestaurantName(source) ||
+        'No asignado',
     }
   }, [profile, sessionUser])
 
@@ -84,6 +89,10 @@ const ProfilePage = () => {
 
         <p>
           <strong>Rol:</strong> {mergedProfile.rol}
+        </p>
+
+        <p>
+          <strong>Restaurante asignado:</strong> {mergedProfile.restauranteAsignadoNombre}
         </p>
       </div>
     </div>

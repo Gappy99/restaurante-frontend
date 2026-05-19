@@ -1,6 +1,18 @@
 import { create } from 'zustand'
 import { restaurantService } from '../services/restaurantService.js'
 import { RESTAURANT_DEFAULTS } from '../constants/restaurantConstants.js'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
+
+const filterRestaurantsByAssignedId = (restaurants, assignedRestaurantId) => {
+  if (!Array.isArray(restaurants)) return []
+  if (!assignedRestaurantId) return restaurants
+
+  return restaurants.filter((restaurant) => {
+    const restaurantId = restaurant?._id || restaurant?.id
+    return String(restaurantId || '') === String(assignedRestaurantId)
+  })
+}
 
 const useRestaurantStore = create((set, get) => ({
   // State
@@ -45,11 +57,28 @@ const useRestaurantStore = create((set, get) => ({
   // Async Actions
   fetchRestaurants: async (params = {}) => {
     set({ loading: true, error: null })
-    const result = await restaurantService.getRestaurants(params)
+    const user = useAuthStore.getState().user
+    const isManager = isManagerRole(user?.rol)
+    const managerRestaurantId = isManager ? getAssignedRestaurantId(user) : ''
+
+    if (isManager && !managerRestaurantId) {
+      const error = 'El gerente no tiene un restaurante asignado'
+      set({ restaurants: [], error, loading: false })
+      return { success: false, error }
+    }
+
+    const scopedParams = managerRestaurantId && !params?.restaurantId
+      ? { ...params, restaurantId: managerRestaurantId }
+      : params
+
+    const result = await restaurantService.getRestaurants(scopedParams)
 
     if (result.success) {
+      const scopedRestaurants = managerRestaurantId
+        ? filterRestaurantsByAssignedId(result.data || [], managerRestaurantId)
+        : (result.data || [])
       set({
-        restaurants: result.data,
+        restaurants: scopedRestaurants,
         loading: false,
       })
     } else {
@@ -156,11 +185,24 @@ const useRestaurantStore = create((set, get) => ({
 
   searchRestaurants: async (searchTerm) => {
     set({ loading: true, error: null })
+    const user = useAuthStore.getState().user
+    const isManager = isManagerRole(user?.rol)
+    const managerRestaurantId = isManager ? getAssignedRestaurantId(user) : ''
+
+    if (isManager && !managerRestaurantId) {
+      const error = 'El gerente no tiene un restaurante asignado'
+      set({ restaurants: [], error, loading: false })
+      return { success: false, error }
+    }
+
     const result = await restaurantService.searchRestaurants(searchTerm)
 
     if (result.success) {
+      const scopedRestaurants = managerRestaurantId
+        ? filterRestaurantsByAssignedId(result.data || [], managerRestaurantId)
+        : (result.data || [])
       set({
-        restaurants: result.data,
+        restaurants: scopedRestaurants,
         filters: { ...get().filters, search: searchTerm },
         loading: false,
       })

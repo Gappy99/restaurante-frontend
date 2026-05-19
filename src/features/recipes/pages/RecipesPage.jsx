@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useRecipes } from '../hooks'
 import { Spinner } from '../../../shared/components/Spinner'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 
 const RecipesPage = () => {
   const { recipes, loading, error, getRecipesByRestaurant, clearError } = useRecipes()
   const [restaurantId, setRestaurantId] = useState('')
+  const user = useAuthStore((state) => state.user)
+  const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+  const effectiveRestaurantId = managerRestaurantId || restaurantId
 
   useEffect(() => {
     return () => {
@@ -12,9 +17,16 @@ const RecipesPage = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (managerRestaurantId && !restaurantId) {
+      setRestaurantId(managerRestaurantId)
+      getRecipesByRestaurant(managerRestaurantId)
+    }
+  }, [managerRestaurantId, restaurantId, getRecipesByRestaurant])
+
   const handleFetch = async () => {
-    if (!restaurantId) return
-    await getRecipesByRestaurant(restaurantId)
+    if (!effectiveRestaurantId) return
+    await getRecipesByRestaurant(effectiveRestaurantId)
   }
 
   return (
@@ -25,8 +37,12 @@ const RecipesPage = () => {
         <input
           type="text"
           placeholder="Restaurant ID"
-          value={restaurantId}
-          onChange={(e) => setRestaurantId(e.target.value)}
+          value={effectiveRestaurantId}
+          onChange={(e) => {
+            if (managerRestaurantId) return
+            setRestaurantId(e.target.value)
+          }}
+          readOnly={Boolean(managerRestaurantId)}
           className="px-3 py-2 border rounded-md w-80"
         />
         <button

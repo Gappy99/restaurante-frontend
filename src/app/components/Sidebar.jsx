@@ -20,6 +20,7 @@ import {
   FiTag,
   FiUser,
 } from 'react-icons/fi'
+import { isPrivilegedRole } from '../../shared/utils/roles'
 /**
  * Componente Sidebar - Navegación lateral
  */
@@ -32,7 +33,7 @@ const Sidebar = ({ isOpen = true }) => {
     navigate('/login')
   }
  
-  const isAdmin = user?.rol === 'ADMIN'
+  const isAdmin = isPrivilegedRole(user?.rol)
  
   return (
     <aside

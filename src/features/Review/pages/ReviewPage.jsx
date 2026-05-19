@@ -5,6 +5,7 @@ import { useReviewStore } from '../store/useReviewStore'
 import { ReviewCard } from '../components/ReviewCard'
 import { ReviewModal } from '../components/ReviewModal'
 import { restaurantService } from '../../restaurant/services/restaurantService'
+import { getAssignedRestaurantId, isPrivilegedRole } from '../../../shared/utils/roles'
 
 const StarSummary = ({ label, value, accent = 'bg-[#1f2937]' }) => (
   <div className="rounded-2xl border border-[#f8fafc] bg-white p-4 shadow-sm">
@@ -19,7 +20,9 @@ const StarSummary = ({ label, value, accent = 'bg-[#1f2937]' }) => (
 export default function ReviewPage() {
   const { id: restaurantIdParam } = useParams()
   const user = useAuthStore((state) => state.user)
-  const isAdmin = user?.rol === 'ADMIN'
+  const isAdmin = isPrivilegedRole(user?.rol)
+  const assignedRestaurantId = getAssignedRestaurantId(user)
+  const activeRestaurantId = restaurantIdParam || assignedRestaurantId
   const currentUserId = user?._id || user?.id || user?.user_id || ''
   const { reviews, loading, fetchReviews, removeReview } = useReviewStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -31,18 +34,25 @@ export default function ReviewPage() {
   const safeReviews = Array.isArray(reviews) ? reviews : []
 
   useEffect(() => {
-    fetchReviews(restaurantIdParam || '')
-  }, [fetchReviews, restaurantIdParam])
+    fetchReviews(activeRestaurantId || '')
+  }, [fetchReviews, activeRestaurantId])
 
   useEffect(() => {
     const loadRestaurants = async () => {
       const result = await restaurantService.getRestaurants()
       if (result.success) {
         const list = Array.isArray(result.data) ? result.data : []
-        setRestaurants(list)
+        if (assignedRestaurantId && !restaurantIdParam) {
+          setRestaurants(list.filter((restaurant) => (restaurant._id || restaurant.id) === assignedRestaurantId))
+        } else {
+          setRestaurants(list)
+        }
 
         if (restaurantIdParam) {
           const match = list.find((restaurant) => (restaurant._id || restaurant.id) === restaurantIdParam)
+          setSelectedRestaurant(match || null)
+        } else if (assignedRestaurantId) {
+          const match = list.find((restaurant) => (restaurant._id || restaurant.id) === assignedRestaurantId)
           setSelectedRestaurant(match || null)
         } else {
           setSelectedRestaurant(null)

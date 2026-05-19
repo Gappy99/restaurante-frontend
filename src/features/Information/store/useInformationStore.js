@@ -1,6 +1,9 @@
 import { create } from 'zustand'
 import { informationService } from '../services/informationService.js'
 import { restaurantService } from '../../restaurant/services/restaurantService.js'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { filterByRestaurant } from '../../../shared/utils/restaurantScope'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 
 const useInformationStore = create((set, get) => ({
   informations: [],
@@ -26,10 +29,17 @@ const useInformationStore = create((set, get) => ({
   clearCurrentInformation: () => set({ currentInformation: null }),
 
   loadRestaurants: async () => {
-    const result = await restaurantService.getRestaurants()
+    const user = useAuthStore.getState().user
+    const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+    const result = await restaurantService.getRestaurants(
+      managerRestaurantId ? { restaurantId: managerRestaurantId } : {}
+    )
 
     if (result.success) {
-      set({ restaurants: result.data || [] })
+      const scopedRestaurants = managerRestaurantId
+        ? filterByRestaurant(result.data || [], managerRestaurantId)
+        : (result.data || [])
+      set({ restaurants: scopedRestaurants })
     }
 
     return result
@@ -37,12 +47,18 @@ const useInformationStore = create((set, get) => ({
 
   loadInformations: async (restaurantId = '') => {
     set({ loading: true, error: null })
-    const result = await informationService.getInformations({ restaurantId })
+    const user = useAuthStore.getState().user
+    const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+    const scopedRestaurantId = restaurantId || managerRestaurantId || ''
+    const result = await informationService.getInformations({ restaurantId: scopedRestaurantId })
 
     if (result.success) {
+      const scopedInformations = scopedRestaurantId
+        ? filterByRestaurant(result.data || [], scopedRestaurantId)
+        : (result.data || [])
       set({
-        informations: result.data || [],
-        filters: { ...get().filters, restaurantId },
+        informations: scopedInformations,
+        filters: { ...get().filters, restaurantId: scopedRestaurantId },
         loading: false,
       })
     } else {

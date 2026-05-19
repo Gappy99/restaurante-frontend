@@ -1,5 +1,8 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { filterByRestaurant } from '../../../shared/utils/restaurantScope'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 import {
     createOrderService,
     getOrdersService,
@@ -56,11 +59,17 @@ export const useOrderStore = create((set, get) => ({
     resolveOrderId: (order) => orderId(order),
 
     // Async actions
-    fetchOrders: async () => {
+    fetchOrders: async (params = {}) => {
         try {
             set({ loading: true, error: null });
-            const response = await getOrdersService();
-            const orders = normalizeOrderList(response);
+            const user = useAuthStore.getState().user
+            const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+            const scopedParams = managerRestaurantId && !params?.restaurantId
+                ? { ...params, restaurantId: managerRestaurantId }
+                : params
+
+            const response = await getOrdersService(scopedParams);
+            const orders = filterByRestaurant(normalizeOrderList(response), managerRestaurantId);
             set({ orders, loading: false });
             return { success: true, data: orders };
         } catch (err) {

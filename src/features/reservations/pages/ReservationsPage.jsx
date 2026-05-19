@@ -9,6 +9,7 @@ import { restaurantService } from '../../restaurant/services/restaurantService'
 import { tableService } from '../../tables/services/tableService'
 import Modal from '../../../shared/components/Modal'
 import Table from '../../../shared/components/Table'
+import { getAssignedRestaurantId, isPrivilegedRole } from '../../../shared/utils/roles'
 
 const ReservationsPage = () => {
   const { user } = useAuthStore()
@@ -16,7 +17,8 @@ const ReservationsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingReservation, setEditingReservation] = useState(null)
   const [restaurants, setRestaurants] = useState([])
-  const isAdmin = user?.rol === 'ADMIN'
+  const canManageReservations = isPrivilegedRole(user?.rol)
+  const assignedRestaurantId = getAssignedRestaurantId(user)
 
   useEffect(() => {
     loadReservations()
@@ -25,7 +27,9 @@ const ReservationsPage = () => {
 
   const loadReservations = async () => {
     useReservationStore.getState().setLoading(true)
-    const params = isAdmin ? {} : { userId: user?._id }
+    const params = canManageReservations
+      ? (assignedRestaurantId ? { restaurantId: assignedRestaurantId } : {})
+      : { userId: user?._id }
     const data = await reservationService.getReservations(params)
     if (data) {
       useReservationStore.getState().setReservations(data)
@@ -35,7 +39,15 @@ const ReservationsPage = () => {
 
   const loadRestaurants = async () => {
     const result = await restaurantService.getRestaurants()
-    setRestaurants(result.success ? result.data : [])
+    const restaurantList = result.success ? result.data : []
+    if (canManageReservations && assignedRestaurantId) {
+      setRestaurants(
+        restaurantList.filter((restaurant) => (restaurant._id || restaurant.id) === assignedRestaurantId)
+      )
+      return
+    }
+
+    setRestaurants(restaurantList)
   }
 
   const loadTables = async (restaurantId) => {
@@ -119,7 +131,7 @@ const ReservationsPage = () => {
         onClose={handleCloseModal}
         reservation={editingReservation}
         currentUser={user}
-        isAdmin={isAdmin}
+        canManage={canManageReservations}
         restaurants={restaurants}
         onSuccess={async () => {
           await loadReservations()
@@ -130,8 +142,8 @@ const ReservationsPage = () => {
   )
 }
 
-const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, restaurants, onSuccess }) => {
-  console.log('ReservationModal render:', { isOpen, currentUser, isAdmin, reservation })
+const ReservationModal = ({ isOpen, onClose, reservation, currentUser, canManage, restaurants, onSuccess }) => {
+  console.log('ReservationModal render:', { isOpen, currentUser, canManage, reservation })
   const {
     register,
     handleSubmit,
@@ -262,11 +274,11 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
     try {
       console.log('onSubmit function called with data:', data)
       console.log('Current user:', currentUser)
-      console.log('Is admin:', isAdmin)
+      console.log('Can manage reservations:', canManage)
 
-      if (!isAdmin) {
-        console.log('User is not admin - blocking submission')
-        toast.error('Solo los administradores pueden crear reservaciones')
+      if (!canManage) {
+        console.log('User is not privileged - blocking submission')
+        toast.error('Solo administradores y gerentes pueden crear reservaciones')
         return
       }
 
@@ -279,7 +291,7 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
       console.log('Submitting reservation with data:', data)
       setIsSubmitting(true)
 
-    const payload = {
+      const payload = {
       cliente: data.cliente || currentUser?.nombre,
       client_name: data.cliente || currentUser?.nombre,
       email: data.email || currentUser?.email,
@@ -375,7 +387,7 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
               {...register('cliente', { required: 'Nombre requerido' })}
               className="w-full px-4 py-2 border rounded-lg"
               placeholder="Nombre del cliente"
-              disabled={!isAdmin && !!currentUser?.nombre}
+              disabled={!canManage && !!currentUser?.nombre}
             />
             {errors.cliente && <p className="text-red-500 text-sm">{errors.cliente.message}</p>}
           </div>
@@ -387,7 +399,7 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
               type="email"
               className="w-full px-4 py-2 border rounded-lg"
               placeholder="correo@cliente.com"
-              disabled={!isAdmin && !!currentUser?.email}
+              disabled={!canManage && !!currentUser?.email}
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
@@ -476,7 +488,7 @@ const ReservationModal = ({ isOpen, onClose, reservation, currentUser, isAdmin, 
             </div>
           )}
 
-          {isAdmin && (
+            {canManage && (
               <div>
               <select
                 aria-label="Estado"

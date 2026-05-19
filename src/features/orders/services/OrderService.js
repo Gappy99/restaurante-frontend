@@ -17,9 +17,9 @@ export const createOrderService = async (data) => {
     }
 };
 
-export const getOrdersService = async () => {
+export const getOrdersService = async (params = {}) => {
     try {
-        const response = await getOrdersRequest();
+        const response = await getOrdersRequest(params);
         return response;
     } catch (error) {
         throw error;

@@ -1,8 +1,8 @@
 import { axiosAdmin } from "../Api/api.js";
 
-export const getMenusRequest = async () => {
+export const getMenusRequest = async (params = {}) => {
     try {
-        const response = await axiosAdmin.get("/menu");
+        const response = await axiosAdmin.get("/menu", { params });
         return response.data;
     } catch (error) {
         throw error.response?.data?.message || "Error al obtener menús";

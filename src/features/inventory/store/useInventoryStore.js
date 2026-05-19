@@ -1,5 +1,8 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { filterByRestaurant } from '../../../shared/utils/restaurantScope'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 import {
     createInventoryService,
     getInventoryService,
@@ -55,14 +58,21 @@ export const useInventoryStore = create((set, get) => ({
     fetchInventory: async (restaurantId = null) => {
         try {
             set({ loading: true, error: null });
-            const response = await getInventoryService(restaurantId);
+            const user = useAuthStore.getState().user
+            const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+            const scopedRestaurantId = restaurantId || managerRestaurantId || null
+
+            const response = await getInventoryService(scopedRestaurantId);
             const items = normalizeInventoryList(response);
+            const scopedItems = scopedRestaurantId
+                ? filterByRestaurant(items, scopedRestaurantId)
+                : items;
             set({
-                items,
-                filters: { ...get().filters, restaurant: restaurantId || get().filters.restaurant },
+                items: scopedItems,
+                filters: { ...get().filters, restaurant: scopedRestaurantId || get().filters.restaurant },
                 loading: false,
             });
-            return { success: true, data: items };
+            return { success: true, data: scopedItems };
         } catch (err) {
             const message = err.response?.data?.message || "Error al cargar inventario";
             set({ error: message, loading: false, items: [] });
@@ -74,10 +84,17 @@ export const useInventoryStore = create((set, get) => ({
     fetchInventoryByRestaurant: async (restaurantId) => {
         try {
             set({ loading: true, error: null });
-            const response = await getInventoryByRestaurantService(restaurantId);
+            const user = useAuthStore.getState().user
+            const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+            const scopedRestaurantId = restaurantId || managerRestaurantId || null
+
+            const response = await getInventoryByRestaurantService(scopedRestaurantId);
             const items = normalizeInventoryList(response);
-            set({ items, filters: { ...get().filters, restaurant: restaurantId }, loading: false });
-            return { success: true, data: items };
+            const scopedItems = scopedRestaurantId
+                ? filterByRestaurant(items, scopedRestaurantId)
+                : items;
+            set({ items: scopedItems, filters: { ...get().filters, restaurant: scopedRestaurantId }, loading: false });
+            return { success: true, data: scopedItems };
         } catch (err) {
             const message = err.response?.data?.message || "Error al cargar inventario del restaurante";
             set({ error: message, loading: false, items: [] });
@@ -188,14 +205,21 @@ export const useInventoryStore = create((set, get) => ({
     searchInventoryByName: async (restaurantId, name) => {
         try {
             set({ loading: true, error: null });
-            const response = await searchInventoryByNameService(restaurantId, name);
+            const user = useAuthStore.getState().user
+            const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+            const scopedRestaurantId = restaurantId || managerRestaurantId || null
+
+            const response = await searchInventoryByNameService(scopedRestaurantId, name);
             const items = normalizeInventoryList(response);
+            const scopedItems = scopedRestaurantId
+                ? filterByRestaurant(items, scopedRestaurantId)
+                : items;
             set({
-                items,
-                filters: { ...get().filters, search: name, restaurant: restaurantId },
+                items: scopedItems,
+                filters: { ...get().filters, search: name, restaurant: scopedRestaurantId },
                 loading: false,
             });
-            return { success: true, data: items };
+            return { success: true, data: scopedItems };
         } catch (err) {
             const message = err.response?.data?.message || "Error al buscar inventario";
             set({ error: message, loading: false });

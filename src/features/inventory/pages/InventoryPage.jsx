@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Spinner } from '../../../shared/components/Spinner'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 import {
   useDeleteInventoryItem,
   useInventory,
@@ -26,9 +28,12 @@ const INVENTORY_RESTAURANT_KEY = 'inventory:lastRestaurantId'
 
 const InventoryPage = () => {
   const [restaurantId, setRestaurantId] = useState(() => localStorage.getItem(INVENTORY_RESTAURANT_KEY) || '')
+  const user = useAuthStore((state) => state.user)
+  const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+  const effectiveRestaurantId = managerRestaurantId || restaurantId
 
-  const { items, loading, error, fetchInventory } = useInventory(restaurantId || null)
-  const { search } = useSearchInventory(restaurantId || null)
+  const { items, loading, error, fetchInventory } = useInventory(effectiveRestaurantId || null)
+  const { search } = useSearchInventory(effectiveRestaurantId || null)
   const { handleSave, loading: saving, isEditing } = useSaveInventoryItem()
   const { handleDelete, loading: deleting } = useDeleteInventoryItem()
   const { decreaseStock, increaseStock, loading: stockLoading } = useInventoryStockActions()
@@ -39,10 +44,10 @@ const InventoryPage = () => {
   const [formData, setFormData] = useState(emptyForm(''))
 
   useEffect(() => {
-    if (!restaurantId.trim()) return
-    localStorage.setItem(INVENTORY_RESTAURANT_KEY, restaurantId.trim())
+    if (!effectiveRestaurantId.trim()) return
+    localStorage.setItem(INVENTORY_RESTAURANT_KEY, effectiveRestaurantId.trim())
     fetchInventory()
-  }, [fetchInventory, restaurantId])
+  }, [fetchInventory, effectiveRestaurantId])
 
   useEffect(() => {
     if (error) {
@@ -54,7 +59,7 @@ const InventoryPage = () => {
 
   const openCreateModal = () => {
     setSelectedItem(null)
-    setFormData(emptyForm(restaurantId))
+    setFormData(emptyForm(effectiveRestaurantId))
     setIsModalOpen(true)
   }
 
@@ -67,7 +72,7 @@ const InventoryPage = () => {
       unit: item?.unit || 'unidades',
       price: Number(item?.price ?? 0),
       provider: item?.provider || '',
-      restaurant_id: item?.restaurant_id?._id || item?.restaurant_id || restaurantId,
+      restaurant_id: item?.restaurant_id?._id || item?.restaurant_id || effectiveRestaurantId,
       estado: item?.estado ?? true,
     })
     setIsModalOpen(true)
@@ -90,7 +95,7 @@ const InventoryPage = () => {
     const value = event.target.value
     setSearchTerm(value)
 
-    if (!restaurantId) return
+    if (!effectiveRestaurantId) return
 
     if (!value.trim()) {
       await fetchInventory()
@@ -103,10 +108,10 @@ const InventoryPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    const effectiveRestaurantId = formData.restaurant_id || restaurantId
+    const payloadRestaurantId = formData.restaurant_id || effectiveRestaurantId
     const payload = {
       ...formData,
-      restaurant_id: effectiveRestaurantId,
+      restaurant_id: payloadRestaurantId,
       quantity: Number(formData.quantity),
       price: Number(formData.price),
       estado: Boolean(formData.estado),
@@ -119,8 +124,8 @@ const InventoryPage = () => {
 
     const result = await handleSave(payload, selectedItem?._id || selectedItem?.id || null)
     if (result?.success) {
-      if (effectiveRestaurantId !== restaurantId) {
-        setRestaurantId(effectiveRestaurantId)
+      if (payloadRestaurantId !== restaurantId) {
+        setRestaurantId(payloadRestaurantId)
       }
       closeModal()
       await refreshInventory()
@@ -154,7 +159,7 @@ const InventoryPage = () => {
     }
 
     const action = mode === 'increase' ? increaseStock : decreaseStock
-    const result = await action(id, quantity, restaurantId)
+    const result = await action(id, quantity, effectiveRestaurantId)
     if (result?.success) {
       await refreshInventory()
     }
@@ -185,19 +190,23 @@ const InventoryPage = () => {
           <div className="flex flex-col gap-3 md:min-w-[420px]">
             <input
               type="text"
-              value={restaurantId}
+              value={effectiveRestaurantId}
               onChange={(event) => {
+                if (managerRestaurantId) return
                 const nextRestaurantId = event.target.value
                 setRestaurantId(nextRestaurantId)
                 if (nextRestaurantId.trim()) {
                   localStorage.setItem(INVENTORY_RESTAURANT_KEY, nextRestaurantId.trim())
                 }
               }}
+              readOnly={Boolean(managerRestaurantId)}
               placeholder="ID del restaurante"
               className="w-full rounded-2xl border border-[#6b7280]/40 bg-[#111111]/80 px-4 py-3 text-[#f8fafc] placeholder:text-[#9ca3af]/80 outline-none transition focus:border-[#f8fafc]/60 focus:ring-2 focus:ring-[#9ca3af]/25"
             />
             <p className="text-xs text-[#f8fafc]/70">
-              Escribe el ID del restaurante para cargar y guardar su inventario.
+              {managerRestaurantId
+                ? 'Estás usando automáticamente el restaurante asignado a tu cuenta.'
+                : 'Escribe el ID del restaurante para cargar y guardar su inventario.'}
             </p>
             <input
               type="search"

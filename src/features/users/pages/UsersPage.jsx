@@ -4,6 +4,9 @@ import toast from 'react-hot-toast'
 
 import useUserStore from '../../../shared/stores/useUserStore'
 import userService from '../../../shared/api/services/userService'
+import { restaurantService } from '../../restaurant/services/restaurantService'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { getAssignedRestaurantId } from '../../../shared/utils/roles'
 
 import Modal from '../../../shared/components/Modal'
 import Table from '../../../shared/components/Table'
@@ -15,15 +18,33 @@ const UsersPage = () => {
   const { users, loading } = useUserStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
-
-  useEffect(() => {
-    loadUsers()
-  }, [])
+  const [restaurants, setRestaurants] = useState([])
+  const currentUser = useAuthStore((state) => state.user)
+  const assignedRestaurantId = getAssignedRestaurantId(currentUser)
 
   const loadUsers = async () => {
     const usersData = await userService.getUsers()
     useUserStore.getState().setUsers(usersData) // Guarda los usuarios en el store
   }
+
+  const loadRestaurants = async () => {
+    const result = await restaurantService.getRestaurants()
+    const restaurantList = result.success ? result.data : []
+
+    if (assignedRestaurantId) {
+      setRestaurants(
+        restaurantList.filter((restaurant) => (restaurant._id || restaurant.id) === assignedRestaurantId)
+      )
+      return
+    }
+
+    setRestaurants(restaurantList)
+  }
+
+  useEffect(() => {
+    loadUsers()
+    loadRestaurants()
+  }, [assignedRestaurantId])
 
   const handleOpenModal = (user = null) => {
     if (user) {
@@ -31,9 +52,17 @@ const UsersPage = () => {
       setEditingUser({
         _id: user._id || user.contact_id,
         nombre: user.contact_name || user.nombre || '',
+        username: user.username || user.user_name || '',
         email: user.contact_email || user.email || '',
         telefono: user.contact_phone_number || user.telefono || '',
         rol: user.contact_position || user.rol || 'CLIENTE',
+        restauranteAsignado:
+          user.restauranteAsignadoId ||
+          user.restauranteAsignado?._id ||
+          user.restauranteAsignado?.id ||
+          user.restaurant_id ||
+          user.restaurantId ||
+          '',
         contact_type: user.contact_type || 'CLIENTE'
       })
     } else {
@@ -58,6 +87,7 @@ const UsersPage = () => {
     { key: 'nombre', label: 'Nombre' },
     { key: 'email', label: 'Email' },
     { key: 'rol', label: 'Rol' },
+    { key: 'restauranteAsignadoNombre', label: 'Restaurante' },
     { key: 'telefono', label: 'Teléfono' },
   ]
 
@@ -97,15 +127,17 @@ const UsersPage = () => {
           await loadUsers()
           handleCloseModal()
         }}
+        restaurants={restaurants}
       />
     </div>
   )
 }
 
-const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+const UserModal = ({ isOpen, onClose, user, onSuccess, restaurants }) => {
+  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
     defaultValues: user || {},
   })
+  const selectedRole = watch('rol')
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -117,13 +149,19 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
     setIsSubmitting(true)
 
     try {
+      if (!user && data.password !== data.confirmPassword) {
+        throw new Error('Las contraseñas no coinciden')
+      }
+
       if (user?._id) {
         await userService.updateUser(user._id, data)
       } else {
-        await userService.createUser({ ...data, rol: 'CLIENTE' })
+        await userService.createUser(data)
       }
 
       onSuccess()
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message || 'No se pudo guardar el usuario')
     } finally {
       setIsSubmitting(false)
     }
@@ -145,7 +183,13 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
         <div>
           <input
             aria-label="Email"
-            {...register('email', { required: 'Email requerido' })}
+            {...register('email', {
+              required: 'Email requerido',
+              pattern: {
+                value: /^\S+@\S+\.\S+$/,
+                message: 'Email inválido',
+              },
+            })}
             placeholder="Email"
             className="w-full px-4 py-2 border rounded-lg"
           />
@@ -155,10 +199,105 @@ const UserModal = ({ isOpen, onClose, user, onSuccess }) => {
         <div>
           <input
             aria-label="Teléfono"
-            {...register('telefono')}
+            {...register('telefono', {
+              required: 'Teléfono requerido',
+              pattern: {
+                value: /^\d{8}$/,
+                message: 'El teléfono debe tener 8 dígitos',
+              },
+            })}
             placeholder="Teléfono"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.telefono && <p className="text-red-500 text-sm">{errors.telefono.message}</p>}
+        </div>
+
+        <div>
+          <input
+            aria-label="Usuario"
+            {...register('username', {
+              required: user ? false : 'Usuario requerido',
+              minLength: {
+                value: 3,
+                message: 'Mínimo 3 caracteres',
+              },
+            })}
+            placeholder="Usuario"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
+        </div>
+
+        {!user && (
+          <>
+            <div>
+              <input
+                aria-label="Contraseña"
+                type="password"
+                {...register('password', {
+                  required: 'Contraseña requerida',
+                  minLength: {
+                    value: 8,
+                    message: 'Mínimo 8 caracteres',
+                  },
+                })}
+                placeholder="Contraseña"
+                className="w-full px-4 py-2 border rounded-lg"
+              />
+              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+            </div>
+
+            <div>
+              <input
+                aria-label="Confirmar contraseña"
+                type="password"
+                {...register('confirmPassword', {
+                  required: 'Confirmar contraseña requerida',
+                  validate: (value, formValues) => value === formValues.password || 'Las contraseñas no coinciden',
+                })}
+                placeholder="Confirmar contraseña"
+                className="w-full px-4 py-2 border rounded-lg"
+              />
+              {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+            </div>
+          </>
+        )}
+
+        <div>
+          <select
+            aria-label="Rol"
+            {...register('rol', { required: 'Rol requerido' })}
+            className="w-full px-4 py-2 border rounded-lg"
+          >
+            <option value="CLIENTE">Cliente</option>
+            <option value="GERENTE">Gerente</option>
+            {user?.rol === 'ADMIN' && <option value="ADMIN">Admin</option>}
+          </select>
+          {errors.rol && <p className="text-red-500 text-sm">{errors.rol.message}</p>}
+        </div>
+
+        <div>
+          <select
+            aria-label="Restaurante asignado"
+            {...register('restauranteAsignado', {
+              validate: (value) => {
+                if ((selectedRole || user?.rol || 'CLIENTE') !== 'GERENTE') return true
+                return value ? true : 'Debes asignar un restaurante al gerente'
+              },
+            })}
+            className="w-full px-4 py-2 border rounded-lg"
+          >
+            <option value="">Selecciona un restaurante</option>
+            {restaurants.map((restaurant) => {
+              const id = restaurant._id || restaurant.id
+              return (
+                <option key={id} value={id}>
+                  {restaurant.restaurant_name || restaurant.name || `Restaurante ${id}`}
+                </option>
+              )
+            })}
+          </select>
+          <p className="text-xs text-gray-500 mt-1">Obligatorio para el rol Gerente.</p>
         </div>
 
         <div className="flex justify-end gap-3">

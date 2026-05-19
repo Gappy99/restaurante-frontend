@@ -40,14 +40,14 @@ export const getReservationStatusStyles = (status) => {
   const normalized = normalizeStatus(status)
 
   const styles = {
-    PENDIENTE: 'border-amber-400/40 bg-amber-400/10 text-amber-200',
-    CONFIRMADA: 'border-emerald-400/40 bg-emerald-400/10 text-emerald-200',
-    LISTA: 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200',
-    CANCELADA: 'border-red-400/40 bg-red-400/10 text-red-200',
-    COMPLETADA: 'border-blue-400/40 bg-blue-400/10 text-blue-200',
+    PENDIENTE: 'border-zinc-400/40 bg-zinc-400/10 text-black',
+    CONFIRMADA: 'border-emerald-400/40 bg-emerald-400/10 text-black',
+    LISTA: 'border-cyan-400/40 bg-cyan-400/10 text-black',
+    CANCELADA: 'border-red-400/40 bg-red-400/10 text-black',
+    COMPLETADA: 'border-blue-400/40 bg-blue-400/10 text-black',
   }
 
-  return styles[normalized] || 'border-[#FCF0CA]/30 bg-black/20 text-[#FCF0CA]'
+  return styles[normalized] || 'border-[#FCF0CA]/30 bg-black/20 text-black'
 }
 
 export const normalizeReservationStatus = normalizeStatus

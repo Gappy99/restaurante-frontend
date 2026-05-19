@@ -5,8 +5,8 @@ export const createOrder = async (data) => {
     return response.data;
 };
 
-export const getOrders = async () => {
-    const response = await adminClient.get('/order')
+export const getOrders = async (params = {}) => {
+    const response = await adminClient.get('/order', { params })
     return response.data;
 };
 

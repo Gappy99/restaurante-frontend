@@ -1,4 +1,7 @@
 import { create } from 'zustand'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { filterByRestaurant } from '../../../shared/utils/restaurantScope'
+import { getAssignedRestaurantId, isManagerRole } from '../../../shared/utils/roles'
 import { couponService } from '../services/couponService.js'
 import { COUPON_DEFAULTS } from '../constants/couponConstants.js'
 
@@ -44,15 +47,25 @@ const useCouponStore = create((set, get) => ({
   // Async Actions
   fetchCoupons: async (params = {}) => {
     set({ loading: true, error: null })
-    const result = await couponService.getCoupons(params)
+    const user = useAuthStore.getState().user
+    const managerRestaurantId = isManagerRole(user?.rol) ? getAssignedRestaurantId(user) : ''
+    const scopedParams = managerRestaurantId && !params?.restaurantId
+      ? { ...params, restaurantId: managerRestaurantId }
+      : params
+
+    const result = await couponService.getCoupons(scopedParams)
 
     if (result.success) {
+      const scopedCoupons = managerRestaurantId
+        ? filterByRestaurant(result.data, managerRestaurantId)
+        : result.data
+
       set({
-        coupons: result.data,
+        coupons: scopedCoupons,
         loading: false,
         error: null,
       })
-      return result
+      return { ...result, data: scopedCoupons }
     } else {
       set({
         loading: false,

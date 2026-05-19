@@ -1,10 +1,13 @@
 import authClient from '../authClient'
 import toast from 'react-hot-toast'
+import { getAssignedRestaurantId } from '../../utils/roles'
 
 export const authService = {
   login: async (email, password) => {
     try {
       const response = await authClient.post('/login', { email, password })
+      // TEMP LOG: inspeccionar respuesta del backend en la consola del cliente
+      console.debug('authService.login response.data:', response?.data)
       const data = response.data || {}
       const token = data.token || data.accessToken || data.access_token
       const userDetails =
@@ -37,7 +40,25 @@ export const authService = {
           userDetails.telefono || userDetails.phone || userDetails.contact_phone_number || '',
         profilePicture: userDetails.profilePicture || null,
         rol: userDetails.role || userDetails.rol || 'USER_ROLE',
+        // Normalize assigned restaurant: prefer object/string fields, fallback to helper
+        restauranteAsignado:
+          userDetails.restauranteAsignado ||
+          userDetails.restaurantAsignado ||
+          userDetails.restaurant_id ||
+          userDetails.restaurantId ||
+          // accept explicit id fields if backend sends them
+          userDetails.restauranteAsignadoId ||
+          userDetails.restaurante_asignado_id ||
+          null ||
+          getAssignedRestaurantId(userDetails),
+        restauranteAsignadoId: getAssignedRestaurantId(userDetails) ||
+          (typeof (userDetails.restauranteAsignado || userDetails.restaurantAsignado) === 'string'
+            ? (userDetails.restauranteAsignado || userDetails.restaurantAsignado)
+            : null),
       }
+
+      // TEMP LOG: inspeccionar usuario normalizado antes de devolverlo
+      console.debug('authService.login normalized user:', user)
 
       return {
         success: true,

@@ -5,17 +5,21 @@ import {
 } from '../hooks/index.js'
 import { Restaurants, RestaurantModal, DeleteConfirmModal } from '../components/index.js'
 import toast from 'react-hot-toast'
+import useAuthStore from '../../../shared/stores/useAuthStore'
 
 const RestaurantPage = () => {
   const { restaurants, loading, error, fetchRestaurants } = useRestaurants()
   const { handleDelete, loading: deleteLoading } = useRestaurantDelete()
+  const { user } = useAuthStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedRestaurant, setSelectedRestaurant] = useState(null)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const [restaurantToDelete, setRestaurantToDelete] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
 
-  useEffect(() => { fetchRestaurants() }, [fetchRestaurants])
+  useEffect(() => {
+    fetchRestaurants()
+  }, [fetchRestaurants, user?.id, user?.rol])
   useEffect(() => { if (error) { toast.error(error) } }, [error])
 
   const handleCreateNew = () => {
