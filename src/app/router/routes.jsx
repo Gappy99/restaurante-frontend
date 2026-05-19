@@ -152,7 +152,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'inventory',
-        element: <InventoryPage />,
+        element: (
+          <ProtectedRoute requiredRole={'ADMIN'}>
+            <InventoryPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'tables',
