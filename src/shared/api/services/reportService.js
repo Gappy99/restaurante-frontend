@@ -31,6 +31,35 @@ const normalizeReport = (report) => {
   return normalized
 }
 
+const REPORT_ENDPOINTS = ['/reports', '/reportes']
+
+const isNotFoundError = (error) => error?.response?.status === 404
+
+const requestReport = async ({ method, url = '', data, params }) => {
+  let lastError = null
+
+  for (let index = 0; index < REPORT_ENDPOINTS.length; index += 1) {
+    const endpoint = `${REPORT_ENDPOINTS[index]}${url}`
+
+    try {
+      return await adminClient.request({
+        method,
+        url: endpoint,
+        data,
+        params,
+      })
+    } catch (error) {
+      lastError = error
+
+      if (!isNotFoundError(error) || index === REPORT_ENDPOINTS.length - 1) {
+        throw error
+      }
+    }
+  }
+
+  throw lastError
+}
+
 /**
  * Servicio de Reportes
  * Incluye endpoints de análisis del backend:
@@ -46,7 +75,7 @@ const normalizeReport = (report) => {
  */
 
 const fetchReportById = async (id) => {
-  const response = await adminClient.get(`/reports/${id}`)
+  const response = await requestReport({ method: 'get', url: `/${id}` })
   // Backend puede retornar { success: true, report: {...} } o directamente el objeto
   const report = response.data?.report || response.data?.data || response.data
   return normalizeReport(report)
@@ -59,7 +88,7 @@ export const reportService = {
   getReports: async () => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get('/reports')
+      const response = await requestReport({ method: 'get' })
       console.log('getReports response:', {
         status: response.status,
         data: response.data,
@@ -98,7 +127,7 @@ export const reportService = {
   createReport: async (reportData) => {
     try {
       console.log('createReport sending:', reportData)
-      const response = await adminClient.post('/reports', reportData)
+      const response = await requestReport({ method: 'post', data: reportData })
       console.log('createReport response:', {
         status: response.status,
         data: response.data,
@@ -128,7 +157,7 @@ export const reportService = {
   // Actualizar reporte
   updateReport: async (id, reportData) => {
     try {
-      const response = await adminClient.put(`/reports/${id}`, reportData)
+      const response = await requestReport({ method: 'put', url: `/${id}`, data: reportData })
       const reportResult = response.data?.data || response.data
       const normalizedReport = normalizeReport(reportResult)
       useReportStore.getState().updateReport(id, normalizedReport)
@@ -149,7 +178,7 @@ export const reportService = {
   // Eliminar reporte
   deleteReport: async (id) => {
     try {
-      await adminClient.delete(`/reports/${id}`)
+      await requestReport({ method: 'delete', url: `/${id}` })
       useReportStore.getState().deleteReport(id)
       toast.success('Reporte eliminado exitosamente')
       return { success: true }
@@ -176,8 +205,10 @@ export const reportService = {
   getDemandaRestaurantes: async (params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get('/reports/demanda-restaurantes', { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: '/demanda-restaurantes', params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener demanda de restaurantes:', error)
       return { success: false, error: error.message }
@@ -190,8 +221,10 @@ export const reportService = {
   getTopPlatos: async (params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get('/reports/top-platos', { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: '/top-platos', params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener top platos:', error)
       return { success: false, error: error.message }
@@ -204,8 +237,10 @@ export const reportService = {
   getIngresos: async (params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get('/reports/ingresos', { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: '/ingresos', params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener ingresos:', error)
       return { success: false, error: error.message }
@@ -218,8 +253,10 @@ export const reportService = {
   getHorasPico: async (params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get('/reports/horas-pico', { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: '/horas-pico', params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener horas pico:', error)
       return { success: false, error: error.message }
@@ -232,8 +269,10 @@ export const reportService = {
   getReservaciones: async (params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get('/reports/reservaciones', { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: '/reservaciones', params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener reservaciones:', error)
       return { success: false, error: error.message }
@@ -246,8 +285,10 @@ export const reportService = {
   getDesempenoRestaurante: async (restaurantID, params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get(`/reports/desempeno-restaurante/${restaurantID}`, { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: `/desempeno-restaurante/${restaurantID}`, params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener desempeño del restaurante:', error)
       return { success: false, error: error.message }
@@ -260,8 +301,10 @@ export const reportService = {
   getOcupacion: async (restaurantID, params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get(`/reports/ocupacion/${restaurantID}`, { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: `/ocupacion/${restaurantID}`, params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener ocupación:', error)
       return { success: false, error: error.message }
@@ -274,8 +317,10 @@ export const reportService = {
   getClientesFrecuentes: async (restaurantID, params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get(`/reports/clientes-frecuentes/${restaurantID}`, { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: `/clientes-frecuentes/${restaurantID}`, params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener clientes frecuentes:', error)
       return { success: false, error: error.message }
@@ -288,8 +333,10 @@ export const reportService = {
   getPedidosRecurrentes: async (restaurantID, params = {}) => {
     try {
       useReportStore.getState().setLoading(true)
-      const response = await adminClient.get(`/reports/pedidos-recurrentes/${restaurantID}`, { params })
-      return { success: true, data: response.data }
+      const response = await requestReport({ method: 'get', url: `/pedidos-recurrentes/${restaurantID}`, params })
+      const payload = response.data
+      const data = payload?.data ?? payload?.report ?? payload
+      return { success: true, data }
     } catch (error) {
       console.error('Error al obtener pedidos recurrentes:', error)
       return { success: false, error: error.message }
