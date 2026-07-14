@@ -219,6 +219,54 @@ VITE_API_URL=https://api.tudominio.com
 VITE_AUTH_URL=https://api.tudominio.com/GestorRestaurante/v1/auth
 VITE_ADMIN_URL=https://api.tudominio.com/GestorRestaurante/v1
 VITE_ENVIRONMENT=production
+```
+
+---
+
+## 🚀 Levantar el proyecto
+
+### Opción 1: Docker directo
+1. Abre PowerShell en `c:\restaurante-frontend`
+2. Construye la imagen:
+```powershell
+docker build -t restaurante-frontend .
+```
+3. Ejecuta el contenedor:
+```powershell
+docker run -p 5173:5173 restaurante-frontend
+```
+4. Abre en el navegador:
+```text
+http://localhost:5173
+```
+
+> Si quieres ejecutarlo en segundo plano:
+> ```powershell
+docker run -d -p 5173:5173 restaurante-frontend
+> ```
+
+### Opción 2: Docker Compose
+1. Abre PowerShell en `c:\restaurante-frontend`
+2. Ejecuta:
+```powershell
+docker compose up -d
+```
+3. Abre en el navegador:
+```text
+http://localhost:5173
+```
+
+> Para detenerlo:
+> ```powershell
+docker compose down
+> ```
+
+---
+
+## ✅ Notas rápidas
+- `Dockerfile` se usa con la opción 1.
+- `docker-compose.yml` se usa con la opción 2.
+- Ambas opciones sirven si ya has creado la imagen y el archivo de configuración.
 
 ## 🚨 Troubleshooting
 
