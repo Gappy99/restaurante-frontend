@@ -7,6 +7,8 @@ import { createBeverageService, updateBeverageService } from "../../beverages/se
 import { Spinner } from "./layouts/Spinner.jsx";
 import { RecipeModal } from "../../recipes/components/RecipeModal";
 import { FiBookOpen, FiCoffee } from 'react-icons/fi'
+import useAuthStore from '../../../shared/stores/useAuthStore'
+import { isManagerRole, getAssignedRestaurantId } from '../../../shared/utils/roles'
 
 export const MenuModal = ({ isOpen, onClose, menu }) => {
     const {
@@ -20,6 +22,10 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
 
     const saveMenu = useMenuStore((state) => state.saveMenu);
     const loading = useMenuStore((state) => state.loading);
+
+    const user = useAuthStore((state) => state.user)
+    const isManager = isManagerRole(user?.rol)
+    const managerRestaurantId = isManager ? getAssignedRestaurantId(user) : ''
 
     const menuId = menu?._id || menu?.id || menu?.Menu_id || ""
 
@@ -168,7 +174,7 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                 Menu_Promotion: "",
                 Menu_description_plate: "",
                 Menu_available: true,
-                Restaurant_id: "",
+                Restaurant_id: isManager ? managerRestaurantId : "",
             });
         } else if (isOpen && menu) {
             reset({
@@ -176,10 +182,10 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                 Menu_Promotion: menu.Menu_Promotion || "",
                 Menu_description_plate: menu.Menu_description_plate || menu.description || "",
                 Menu_available: menu.Menu_available ?? true,
-                Restaurant_id: menu.Restaurant_id || menu.restaurant_id || "",
+                Restaurant_id: menu.Restaurant_id || menu.restaurant_id || (isManager ? managerRestaurantId : ""),
             });
         }
-    }, [isOpen, menu, reset, menuId]);
+    }, [isOpen, menu, reset, menuId, isManager, managerRestaurantId]);
 
     // No longer loading existing dishes/beverages here; creation handled via dynamic forms
 
@@ -534,10 +540,14 @@ export const MenuModal = ({ isOpen, onClose, menu }) => {
                                     <option value="Promoción_de_Aniversario">Promoción de aniversario</option>
                                 </select>
                             </div>
-                            <div>
-                                <input aria-label="Restaurant ID" {...register("Restaurant_id", { required: "El restaurante es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#f8fafc] focus:border-[#1f2937] outline-none transition bg-gray-50/50" placeholder="ID del restaurante" />
-                                {errors.Restaurant_id && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Restaurant_id.message}</p>}
-                            </div>
+                            {isManager ? (
+                                <input type="hidden" {...register("Restaurant_id")} />
+                            ) : (
+                                <div>
+                                    <input aria-label="Restaurant ID" {...register("Restaurant_id", { required: "El restaurante es obligatorio" })} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#f8fafc] focus:border-[#1f2937] outline-none transition bg-gray-50/50" placeholder="ID del restaurante" />
+                                    {errors.Restaurant_id && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.Restaurant_id.message}</p>}
+                                </div>
+                            )}
 
                             <div>
                                 <textarea aria-label="Descripción del Menú" rows="3" {...register("Menu_description_plate")} className="w-full px-4 py-2.5 rounded-xl border-2 border-[#f8fafc] focus:border-[#1f2937] outline-none transition bg-gray-50/50 resize-none" placeholder="Describe el menú..." />
